@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import worker from "../worker/index.js";
 
@@ -114,4 +114,12 @@ test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/_redirects", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
+});
+
+test("keeps the mobile menu visible and ticker moving with reduced motion", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.ok(css.includes(".nav.open > button, .nav.open .mobile-nav-actions { opacity: 1; transform: none; }"));
+  assert.ok(css.includes("@media (max-width: 820px) and (prefers-reduced-motion: reduce)"));
+  assert.ok(css.includes("animation: ticker-run 18s linear infinite !important"));
 });
