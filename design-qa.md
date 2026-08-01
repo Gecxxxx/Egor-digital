@@ -139,6 +139,20 @@
 
 final result: passed
 
+**Desktop Portrait +20% and Responsive Verification — 2026-08-01**
+
+- Source request: the attached desktop HERO crop `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 215831.png`; the approved mobile composition remains unchanged.
+- Desktop scale: above `1100px`, the portrait height increased exactly 20% from `min(82vh, 780px)` to `min(98.4vh, 936px)`, with the maximum width increased from `126%` to `151.2%`.
+- Composition: the enlarged portrait is top-anchored so Egor's head remains fully visible; the lower body crops cleanly at the HERO/ticker boundary without touching the heading, subtitle, or controls.
+- Responsive coverage: verified at `430`, `768`, `820`, `1024`, `1100`, `1101`, `1280`, and `1363px`. Every tested viewport reported matching document/client widths and no horizontal overflow.
+- Mobile preservation: the approved compact upper-right portrait treatment at `≤520px` is unchanged. Tablet widths continue to use the existing lower portrait frame, while desktop widths retain the two-column HERO.
+- Mobile interactions: at `430`, `768`, and `820px`, the menu opened with `aria-expanded=true`, the visible `.nav.open` state, and all seven navigation items. The ticker transform changed during observation, confirming continuous movement.
+- Runtime: no application-originated console errors were observed; the only recorded errors came from the unrelated browser-extension metadata bridge.
+- Checks: `npm run build` passed; `npm run test:sites` passed `7/7`; `git diff --check` passed.
+- Findings: no actionable P0, P1, or P2 responsive, interaction, clipping, or overflow issues remain.
+
+final result: passed
+
 **Cyrillic Typography and Mobile Motion Verification — 2026-08-01**
 
 - Source visual truth: the six user-provided failure captures at `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 165337.png`, `165353.png`, `165410.png`, `165435.png`, `165520.png`, and `165534.png`.
