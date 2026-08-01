@@ -115,4 +115,16 @@
 - Checks: `npm run build` passed; `npm run test:sites` passed `4/4`.
 - Findings: no actionable P0, P1, or P2 differences remain for the requested portrait/background and loading changes.
 
+**Direct Contact and 16:9 Case Verification — 2026-08-01**
+
+- User requirement: keep the lead form and a direct contact route available on the Contacts page and in the footer; display case imagery in 16:9 without cropping.
+- Contacts route evidence: the browser-rendered `/contacts` page contains one inline lead form plus three visible direct Telegram links across the header, dedicated contact block, and footer. The footer also exposes “Оставить заявку”, which opens the shared form modal from every route.
+- Form interaction evidence: required name and contact fields accepted input, submission reached the “Заявка подготовлена” success state, and the direct “Открыть Telegram” continuation remained visible.
+- Case-image evidence: all six `.case-image` frames measured `1.778` (`16:9`) in the rendered desktop page; every image computed to `object-fit: contain`, so no source pixels are cropped.
+- Loading evidence: after the lazy-loaded rows entered the viewport, all six case images completed with non-zero natural dimensions. The one 1536 × 960 source is letterboxed inside the 16:9 frame rather than cropped.
+- Layout evidence: the Contacts page and footer rendered without horizontal overflow at the available desktop viewport; the new contact hub collapses to one column at the existing tablet breakpoint.
+- Console evidence: no application-originated errors were found. The only logged errors came from an unrelated Chrome extension metadata bridge.
+- Checks: `npm run build` passed; `npm run test:sites` passed `4/4`.
+- Findings: no actionable P0, P1, or P2 differences remain for this update.
+
 final result: passed
