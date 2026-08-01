@@ -115,11 +115,24 @@ function IntroLoader({ ready }) {
 
 function Header({ path, go, onLead }) {
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    document.body.classList.toggle("mobile-menu-open", open);
+    return () => document.body.classList.remove("mobile-menu-open");
+  }, [open]);
+
+  useEffect(() => { setOpen(false); }, [path]);
+
+  useEffect(() => {
+    const closeOnEscape = (event) => event.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
   return <header className="site-header">
     <button className="brand" onClick={() => go("/")} aria-label="На главную"><img src="/assets/images/egor-digital-e.webp" alt="" width="43" height="43" decoding="async" /><span><b>Digital Tools by Egor</b><small>Сайты · CRM · Автоматизация</small></span></button>
-    <nav className={open ? "nav open" : "nav"} aria-label="Главное меню">{nav.map(([href, label]) => <button key={href} className={path === href ? "active" : ""} onClick={() => { go(href); setOpen(false); }}>{label}</button>)}</nav>
+    <nav id="main-nav" className={open ? "nav open" : "nav"} aria-label="Главное меню">{nav.map(([href, label]) => <button key={href} className={path === href ? "active" : ""} onClick={() => { go(href); setOpen(false); }}>{label}</button>)}<div className="mobile-nav-actions"><a href="https://t.me/egecxxxx" target="_blank" rel="noreferrer">Написать в Telegram</a><button onClick={() => { setOpen(false); onLead(); }}>Получить разбор</button></div></nav>
     <a className="header-telegram" href="https://t.me/egecxxxx" target="_blank" rel="noreferrer">Telegram</a>
-    <button className="menu-toggle" onClick={() => setOpen(!open)} aria-expanded={open}>{open ? "Закрыть" : "Меню"}</button>
+    <button className="menu-toggle" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="main-nav">{open ? "Закрыть" : "Меню"}</button>
     <button className="header-cta" onClick={onLead}>Получить разбор</button>
   </header>;
 }

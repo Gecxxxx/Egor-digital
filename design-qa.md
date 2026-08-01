@@ -139,6 +139,51 @@
 
 final result: passed
 
+**Mobile Responsive Verification — 2026-08-01**
+
+- Source visual truth: the deployed pre-mobile-adjustment build at `https://egor-digital.pages.dev/`, captured inside a `390 × 844` CSS-pixel viewport at `/workspace/scratch/egor-mobile-source-390x844.png`.
+- Implementation screenshot: the local revised home route at the same `390 × 844` CSS viewport and 1× density, saved at `/workspace/scratch/egor-mobile-final-390x844.png`.
+- Combined same-state comparison input: `/workspace/scratch/egor-mobile-qa-comparison.png` (`780 × 844` pixels), with the source on the left and revised implementation on the right.
+- Additional focused evidence: full-height navigation at `/workspace/scratch/egor-mobile-menu-390x844.png`; first 16:9 case card at `/workspace/scratch/egor-mobile-case-390x844.png`.
+- State: Russian dark-theme home route, completed intro animation, sticky header visible, menu closed for the full-view comparison. Focused captures use the open navigation and the Cases route respectively.
+
+**Comparison History**
+
+- Initial [P1] — the mobile HERO grid item expanded to its max-content width. `Автоматизация.`, both HERO buttons, and related copy extended past the usable viewport and were visibly clipped. Fix: applied `min-width: 0`, explicit mobile content widths, a narrower display scale for the accent line, and responsive CTA sizing. Post-fix evidence: the entire third line, gradient rule, both actions, and both fact blocks fit inside the `390px` frame; body/document scroll widths equal the usable client width.
+- Initial [P1] — the menu used `position: fixed` inside a backdrop-filtered sticky header, which created an unintended containing block and collapsed the visible menu to one row. Fix: changed it to an explicit absolute panel below the header with `height: calc(100dvh - 72px)`. Post-fix evidence: all seven routes plus Telegram and lead-form actions are visible in a stable one-column full-height panel.
+- Initial [P2] — page HERO headings at 18vw created overly tall five-line headings and horizontal overflow on About and Contacts. Fix: reduced the mobile display scale, removed the desktop max-width constraint, and set min-width guards on both grid children. Post-fix evidence: all seven routes report matching body/document widths and no offending heading or CTA bounds.
+- Initial [P2] — mobile forms could trigger iOS input zoom and the modal was taller than short phone viewports. Fix: set inputs/textareas to `16px`, limited the modal to `100dvh`, and enabled internal vertical scrolling. Post-fix evidence: the full lead form fits in the `390 × 844` capture with a persistent close control and accessible fields.
+
+**Required Fidelity Surfaces**
+
+- Fonts and typography: Oswald/Inter are preserved. Display headings use responsive clamps and remain uppercase without clipping; UI labels remain readable at 10–12px and form fields use 16px on mobile.
+- Spacing and layout rhythm: desktop sections reflow to one column, vertical section padding is reduced to `76px`, cards use `20px` gaps, and the sticky 72px header remains stable. Measurements at 320, 390, and 430px found no actionable horizontal overflow.
+- Colors and visual tokens: the black/charcoal grid, low-contrast borders, white/gray type, and violet-to-cyan accent system are unchanged.
+- Image quality and asset fidelity: natural-color optimized WebP portraits remain uncropped and fully decoded. Every case frame measures `1.777777` and uses `object-fit: contain`.
+- Copy and content: all seven routes, prices, promises, four direct contacts, case content, and forms remain present; nothing was removed for mobile.
+
+**Primary Interactions Tested**
+
+- Opened the mobile menu and navigated to `/contacts`; the panel closed after route selection.
+- Selected the Cases `CRM` filter; one matching card remained.
+- Switched the FAQ open state from item one to item two (`aria-expanded` changed from `true/false` to `false/true`).
+- Opened and closed the lead modal on mobile.
+- Inspected all seven routes at 320px and 430px; body/document widths matched their viewports and no tracked content surface overflowed.
+
+**Console and Runtime Checks**
+
+- No application-originated warnings or errors were found. Logged errors were limited to the unrelated Chrome-extension metadata bridge.
+- `npm run build`: passed.
+- `npm run test:sites`: 4/4 passed.
+- `git diff --check`: passed.
+
+**Findings**
+
+- No actionable P0, P1, or P2 findings remain.
+- [P3] Long pages still rely on the browser scrollbar rather than a custom progress indicator. This is intentional and keeps the mobile experience familiar and lightweight.
+
+final result: passed
+
 **Selected Motion System Verification — 2026-08-01**
 
 - Requested set: optimized branded loading, blur-to-sharp and masked HERO lines, staged HERO cascade, continuous ticker, viewport section reveals, metric count-up, masked CTA copy swap, moving arrow/border hover, 16:9 case-image reveal/hover, and animated FAQ accordions.
