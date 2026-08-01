@@ -139,6 +139,44 @@
 
 final result: passed
 
+**Cyrillic Typography and Mobile Motion Verification — 2026-08-01**
+
+- Source visual truth: the six user-provided failure captures at `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 165337.png`, `165353.png`, `165410.png`, `165435.png`, `165520.png`, and `165534.png`.
+- Desktop implementation evidence: `/workspace/scratch/egor-typography-home-final-1024.png`, `/workspace/scratch/egor-typography-services-1024.png`, and `/workspace/scratch/egor-typography-about-final-1024.png`, captured at a `1024px` iframe width and 1× density.
+- Same-state comparison input: `/workspace/scratch/egor-typography-qa-comparison.png` (`2048 × 501`), with the submitted broken home heading on the left and the revised home heading on the right.
+- Mobile implementation evidence: `/workspace/scratch/egor-mobile-loader-final-390x844.png`, `/workspace/scratch/egor-mobile-typography-final-390x844.png`, `/workspace/scratch/egor-mobile-menu-motion-final-390x844.png`, and `/workspace/scratch/egor-mobile-contacts-typography-final-390x844.png`.
+
+**Comparison History**
+
+- Initial [P1] — display headings used a `.89–.95` line-height, causing Cyrillic diacritics (Й/Ё) and descenders (Д/Ц/Щ) to touch masks, collide with neighboring lines, or meet accent rules. Fix: introduced a shared `1.04–1.06` display rhythm, reduced negative tracking, and added safe mask padding above and below animated glyphs.
+- Initial [P1] — the `1024px` home HERO allowed `Автоматизация.` to extend beyond the copy column. Fix: added a dedicated mid-width display scale. Post-fix measurement: heading client and scroll widths are both `482px`, and the accent line width is `459px` inside the copy column.
+- Initial [P1] — inner-page title animation depended on a parent overflow mask that could trim tall Cyrillic glyphs. Fix: moved the reveal to a self-contained `clip-path` animation and made the heading container overflow visible.
+- Initial [P2] — a hard `320px` body minimum created a scrollbar-width overflow in browsers with non-overlay scrollbars. Fix: removed the body minimum while preserving the supported layout floor. Seven routes now match their available document/client widths at `320px`.
+
+**Typography and Layout Evidence**
+
+- Audited all seven routes at `320px`, `390px`, `430px`, and `1024px` widths. Every tracked display/component heading has a computed line-height ratio of at least `1.04`, remains within the viewport, and creates no horizontal document overflow.
+- Home HERO at `1024px`: consecutive rendered glyph boxes have visible vertical separation; the accent rule is below the glyphs and the subtitle begins with additional clearance.
+- Contacts mobile HERO at `390px`: display line-height is `55.809px` for `52.65px` type, and the supporting copy begins `26.6px` below the heading.
+- About accent title at `1024px`: the following paragraph begins `16px` below the bordered title span; the Й diacritic and all descenders remain fully visible.
+
+**Mobile Motion and Loading Evidence**
+
+- The branded loader remains fully visible during the new `520ms` mobile minimum and waits briefly for both the display font and priority portrait, with a `760ms` safety ceiling.
+- After completion, the loader resolves to hidden/zero opacity, the app exposes its ready state, the HERO portrait uses `hero-person-in`, and the ticker keeps `ticker-run`.
+- The mobile menu uses the same entrance language as desktop: panel opacity/translate transition plus staggered `mobile-nav-item-in` animation for routes and actions.
+- Scroll reveals use lighter mobile values (`20px` travel, `2px` blur) while retaining the same visual sequence; reduced-motion users still receive a static experience.
+
+**Console and Runtime Checks**
+
+- No application-originated warnings or errors were found during route, loader, heading, and menu checks.
+- `npm run build`: passed.
+- `npm run test:sites`: 4/4 passed.
+- `git diff --check`: passed.
+- Findings: no actionable P0, P1, or P2 typography, overflow, loading, or mobile-motion issues remain.
+
+final result: passed
+
 **Mobile Responsive Verification — 2026-08-01**
 
 - Source visual truth: the deployed pre-mobile-adjustment build at `https://egor-digital.pages.dev/`, captured inside a `390 × 844` CSS-pixel viewport at `/workspace/scratch/egor-mobile-source-390x844.png`.

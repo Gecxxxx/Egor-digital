@@ -196,9 +196,12 @@ export function App() {
           portrait.addEventListener("load", resolve, { once: true });
           portrait.addEventListener("error", resolve, { once: true });
         });
-    const minimum = new Promise((resolve) => window.setTimeout(resolve, 320));
+    const fontReady = document.fonts?.ready ?? Promise.resolve();
+    const minimumDelay = window.matchMedia("(max-width: 820px)").matches ? 520 : 320;
+    const minimum = new Promise((resolve) => window.setTimeout(resolve, minimumDelay));
     const maximum = new Promise((resolve) => window.setTimeout(resolve, 760));
-    Promise.all([minimum, Promise.race([portraitReady, maximum])]).then(() => { if (active) setReady(true); });
+    const visualAssetsReady = Promise.all([portraitReady, fontReady]);
+    Promise.all([minimum, Promise.race([visualAssetsReady, maximum])]).then(() => { if (active) setReady(true); });
     return () => { active = false; document.body.classList.remove("is-intro-active"); };
   }, []);
 
