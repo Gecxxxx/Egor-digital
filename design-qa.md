@@ -218,6 +218,7 @@ final result: passed
 **Findings**
 
 - No actionable P0, P1, or P2 findings remain.
+
 - [P3] Long pages still rely on the browser scrollbar rather than a custom progress indicator. This is intentional and keeps the mobile experience familiar and lightweight.
 
 final result: passed
@@ -284,5 +285,19 @@ final result: passed
 - Privacy typography was verified at `375px` content width with no horizontal overflow; Cyrillic display text wraps without clipping.
 - `npm run build`: passed. `npm run test:sites`: 6/6 passed. `git diff --check`: passed.
 - Findings: no actionable P0, P1, or P2 issue remains.
+
+final result: passed
+
+**Homepage Portrait Scale and Mobile 404-Composition Verification — 2026-08-01**
+
+- Visual target: the existing branded mobile 404 composition, compared side by side with the revised homepage in the cloud browser at a `390 × 844` mobile frame.
+- Asset fidelity: the homepage continues to use `/assets/images/egor-hero-cutout.webp`; the 404-only peace-sign portrait was not reused.
+- Desktop evidence at `1363 × 936`: the portrait renders at approximately `567 × 756px`, remains grounded at the bottom of the HERO, keeps the head and shoulders visible, and produces zero horizontal document overflow.
+- Mobile evidence: the previous standalone `410px` portrait block is removed at `≤520px`. The portrait now occupies a compact upper-right crop (`164 × 224px` at the 390px frame), following the 404 hierarchy while keeping the headline, accent rule, subtitle, CTAs, facts, and ticker readable in the first screen.
+- Narrow-screen refinement: at `≤360px` the portrait contracts to `142 × 198px`, preserving the same side composition without crowding the first two title lines.
+- Interaction evidence: the mobile menu still opens as a full-height visible panel with all seven routes and its Telegram, lead, and privacy actions. The ticker remains present directly after the HERO.
+- Console evidence: no application-originated warnings or errors were found; the only recorded error came from an unrelated Chrome extension metadata bridge.
+- Checks: `npm run build`, `npm run test:sites` (`7/7`), and `git diff --check` passed.
+- Findings: no actionable P0, P1, or P2 issues remain for the desktop portrait scale or mobile HERO composition.
 
 final result: passed
