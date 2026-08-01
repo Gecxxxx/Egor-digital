@@ -15,6 +15,7 @@ When implementing from a selected generated mock, treat that image as the source
 - Keep the current site's seven-route information architecture and real content: home, services, cases, pricing, process, about, and contacts.
 - Preserve real prices and promises: website from $500, CRM/automation from $1000, audit/small task from $250, support from $50/month, and two months of support included after launch.
 - Keep both contact paths visible: a direct Telegram link and the lead form must be available on the Contacts page and in the site footer.
+- Direct contacts: Telegram `@egecxxxx`, WhatsApp `+20 114 969 2210`, email `eggetsevich@gmail.com`, and Instagram `@_gecevich_`; show all four on the Contacts page and in the footer.
 - Display every case preview in a true 16:9 frame with the full screenshot visible; do not crop case artwork.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.

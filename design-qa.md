@@ -127,4 +127,14 @@
 - Checks: `npm run build` passed; `npm run test:sites` passed `4/4`.
 - Findings: no actionable P0, P1, or P2 differences remain for this update.
 
+**Expanded Direct Contact Verification — 2026-08-01**
+
+- Added the user-provided email, WhatsApp number, and Instagram handle alongside the existing Telegram contact.
+- Contacts-page evidence: four visible direct-contact cards resolve to `https://t.me/egecxxxx`, `https://wa.me/201149692210`, `mailto:eggetsevich@gmail.com`, and `https://www.instagram.com/_gecevich_/`.
+- Footer evidence: the same four labeled contact destinations are present on every route, followed by the existing lead-form trigger.
+- Form success evidence: submitting the inline brief exposes all four direct channels as continuation actions.
+- Layout evidence: the rendered Contacts page has no horizontal overflow at the available desktop viewport; contact cards and success actions collapse to one column at the mobile breakpoint.
+- Checks: `npm run build` passed; `npm run test:sites` passed `4/4`.
+- Findings: no actionable P0, P1, or P2 issues remain for this contact expansion.
+
 final result: passed
