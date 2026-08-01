@@ -88,4 +88,13 @@
 - Checks: `npm run build` passed; `npm run test:sites` passed `4/4`.
 - No P0/P1/P2 findings remain for this regression.
 
+**Systemic Accent-Title Verification — 2026-08-01**
+
+- Regression sources: user captures `Screenshot 2026-08-01 143552.png`, `Screenshot 2026-08-01 143624.png`, and `Screenshot 2026-08-01 143644.png` showing the shared accent underline crossing wrapped headings and following copy.
+- Root cause: `.accent-title span` remained inline, so a bottom border was painted across each wrapped line box and did not reserve vertical space.
+- Fix: the shared accent-title span now uses `inline-block`, `max-width: 100%`, and `10px` bottom padding. The border is painted once below the complete wrapped title.
+- Browser evidence: source captures and revised browser clips were emitted together for the lead-flow, FAQ, and About sections at `1363 × 936`, DPR `1`.
+- Measured post-fix copy gaps: lead-flow `16px`; About `16px`. FAQ summary text has `25px` internal top padding after the underline.
+- No P0/P1/P2 findings remain for the shared heading component.
+
 final result: passed
