@@ -273,3 +273,16 @@ final result: passed
 - Findings: no actionable P0, P1, or P2 visual, responsive, interaction, SEO, or routing issues remain.
 
 final result: passed
+
+**Mobile Privacy and Optimized Case Gallery Verification — 2026-08-01**
+
+- Tested desktop Cases at `1348 × 926` and mobile Home, navigation, loader, ticker, form consent, and Privacy at `390 × 844`.
+- Case order is Дарья Каминскене, Green Apple Dent, then Крыша-мечты on Home and the full Cases page.
+- All seven case covers use responsive WebP sources at 640, 960, and 1440 widths in true 16:9 frames with no crop. Mobile selected the 640px sources, each about 15–24KB.
+- The mobile menu opens above content, closes after route selection, and the continuous ticker moves on touch widths. The branded loader is visible during the bounded asset wait.
+- Privacy is a known route, linked from the footer and mobile menu. Lead forms require explicit consent before submission.
+- Privacy typography was verified at `375px` content width with no horizontal overflow; Cyrillic display text wraps without clipping.
+- `npm run build`: passed. `npm run test:sites`: 6/6 passed. `git diff --check`: passed.
+- Findings: no actionable P0, P1, or P2 issue remains.
+
+final result: passed

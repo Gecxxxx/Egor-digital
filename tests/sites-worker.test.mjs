@@ -41,6 +41,28 @@ test("falls back to index.html for a known app route", async () => {
   assert.deepEqual(calls, ["/services?source=share", "/index.html"]);
 });
 
+test("serves the privacy route as a known app page", async () => {
+  const calls = [];
+  const response = await worker.fetch(
+    new Request("https://example.test/privacy/", { headers: { accept: "text/html" } }),
+    {
+      ASSETS: {
+        fetch: async (request) => {
+          const url = new URL(request.url);
+          calls.push(url.pathname);
+          return new Response(url.pathname === "/index.html" ? "privacy-app" : "missing", {
+            status: url.pathname === "/index.html" ? 200 : 404,
+          });
+        },
+      },
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(await response.text(), "privacy-app");
+  assert.deepEqual(calls, ["/privacy/", "/index.html"]);
+});
+
 test("serves the app 404 shell with a 404 status for an unknown route", async () => {
   const calls = [];
   const response = await worker.fetch(
