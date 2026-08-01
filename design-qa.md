@@ -265,7 +265,7 @@ final result: passed
 - “Вернуться на сайт” navigated to the home HERO; “Оставить заявку” opened the shared lead modal and the modal closed correctly.
 - Unknown routes set the title to `404 — Страница не найдена | Digital Tools by Egor` and `robots` to `noindex,follow`; known routes restore the normal title, description, and `index,follow` directive.
 - The build emits `dist/client/404.html`. The application worker serves known routes from `index.html` with 200 and unknown HTML routes from the 404 shell with status 404; API and non-GET requests remain untouched.
-- Live routing iteration [P1] — after the first Cloudflare deployment, the platform correctly served the new `404.html` for unknown paths but also returned HTTP 404 for direct visits to real client routes such as `/services`. Fix: added explicit Cloudflare Pages 200 rewrites for every known route and trailing-slash variant while leaving unmatched paths to the custom 404 document.
+- Live routing iteration [P1] — after the first Cloudflare deployment, the platform correctly served the new `404.html` for unknown paths but also returned HTTP 404 for direct visits to real client routes such as `/services`. Fix: added explicit Cloudflare Pages 200 rewrites for every known route and trailing-slash variant while leaving unmatched paths to the custom 404 document. A second live pass found that rewriting to `/index.html` triggered Cloudflare's canonical redirect to `/`; the final rules rewrite known routes internally to `/`, preserving the requested client URL and a 200 response.
 - Console check found no application-originated warnings or errors; the browser only reported the unrelated extension metadata bridge.
 - `npm run build`: passed.
 - `npm run test:sites`: 5/5 passed.
