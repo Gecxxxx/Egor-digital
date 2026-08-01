@@ -18,10 +18,10 @@ test("serves existing static assets without a fallback", async () => {
   assert.deepEqual(calls, ["/assets/app.js"]);
 });
 
-test("falls back to index.html for an unknown app route", async () => {
+test("falls back to index.html for a known app route", async () => {
   const calls = [];
   const response = await worker.fetch(
-    new Request("https://example.test/flow/step-two?source=share", {
+    new Request("https://example.test/services?source=share", {
       headers: { accept: "text/html" },
     }),
     {
@@ -38,7 +38,32 @@ test("falls back to index.html for an unknown app route", async () => {
   );
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls, ["/flow/step-two?source=share", "/index.html"]);
+  assert.deepEqual(calls, ["/services?source=share", "/index.html"]);
+});
+
+test("serves the app 404 shell with a 404 status for an unknown route", async () => {
+  const calls = [];
+  const response = await worker.fetch(
+    new Request("https://example.test/missing-page?source=share", {
+      headers: { accept: "text/html" },
+    }),
+    {
+      ASSETS: {
+        fetch: async (request) => {
+          const url = new URL(request.url);
+          calls.push(url.pathname + url.search);
+          return new Response(url.pathname === "/404.html" ? "not-found-app" : "missing", {
+            status: url.pathname === "/404.html" ? 200 : 404,
+            headers: { "content-type": "text/html; charset=utf-8" },
+          });
+        },
+      },
+    },
+  );
+
+  assert.equal(response.status, 404);
+  assert.equal(await response.text(), "not-found-app");
+  assert.deepEqual(calls, ["/missing-page?source=share", "/404.html"]);
 });
 
 test("does not turn missing API or write requests into the app shell", async () => {
@@ -63,6 +88,7 @@ test("does not turn missing API or write requests into the app shell", async () 
 
 test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/index.html", import.meta.url));
+  await access(new URL("../dist/client/404.html", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
 });

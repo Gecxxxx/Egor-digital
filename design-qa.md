@@ -239,3 +239,36 @@ final result: passed
 - Findings: no actionable P0, P1, or P2 issues remain for the selected animation set.
 
 final result: passed
+
+**Branded 404 Page Verification — 2026-08-01**
+
+- Source visual truth: the approved home composition captured at `/workspace/scratch/egor-404-source-design-1363x936.png` (`1363 × 936` pixels, 1× density). It is the visual-language reference for the new state: black editorial grid, Oswald/Inter hierarchy, purple-to-cyan accent rule, square controls, and natural-color portrait treatment.
+- Implementation screenshots: desktop `/workspace/scratch/egor-404-desktop-1363x936.png` (`1363 × 936` pixels) and mobile `/workspace/scratch/egor-404-mobile-final-390x844.png` (`390 × 844` pixels), both at 1× density and in the completed intro-animation state.
+- Combined comparison input: `/workspace/scratch/egor-404-qa-comparison-2726x936.png` (`2726 × 936` pixels), with the established home design on the left and the new 404 state on the right.
+- State: unknown local route `/nesushchestvuyushchaya-stranitsa`; no modal in the comparison capture; header and full 404 recovery controls visible.
+
+**Comparison History**
+
+- Initial [P2] — on the first `390 × 844` mobile pass, the portrait began below the primary controls and only the top of Egor's head appeared at the bottom edge. Fix: moved the cutout into the upper-right 404 composition at `≤520px`, cropped it to the upper body, and kept it behind the text layer. Post-fix evidence: face, raised peace-sign gesture, headline, explanation, both CTAs, and quick links are all visible in the first mobile screen.
+- Post-fix mobile evidence: heading line-height is `57.24px` for `54px` type; heading, both `329px`-wide CTAs, and quick links stay inside the `375px` content viewport. Edge checks at `320px` and `430px` found matching document/client widths and no actionable content overflow.
+
+**Required Fidelity Surfaces**
+
+- Fonts and typography: Oswald and Inter are preserved; the 404 headline uses the approved `1.04–1.06` Cyrillic-safe rhythm, restrained tracking, and the same accent rule placement as other display headings.
+- Spacing and layout rhythm: desktop uses the established 58/42 editorial split; mobile keeps 23px side insets, stacked 58px CTAs, and places recovery links within the first viewport.
+- Colors and visual tokens: existing `--bg`, `--line`, `--purple`, `--cyan`, muted copy, and grain/grid treatment are reused without introducing a separate error-state palette.
+- Image quality and asset fidelity: the existing `502 × 884` transparent natural-color peace-sign WebP is reused, eagerly loaded, synchronously decoded, and included in the loader's priority portrait wait.
+- Copy and content: explicit 404 identification, explanation, “Вернуться на сайт”, “Оставить заявку”, and quick links to Services, Cases, and Contacts are all present.
+
+**Interactions, SEO, and Runtime**
+
+- “Вернуться на сайт” navigated to the home HERO; “Оставить заявку” opened the shared lead modal and the modal closed correctly.
+- Unknown routes set the title to `404 — Страница не найдена | Digital Tools by Egor` and `robots` to `noindex,follow`; known routes restore the normal title, description, and `index,follow` directive.
+- The build emits `dist/client/404.html`. The application worker serves known routes from `index.html` with 200 and unknown HTML routes from the 404 shell with status 404; API and non-GET requests remain untouched.
+- Console check found no application-originated warnings or errors; the browser only reported the unrelated extension metadata bridge.
+- `npm run build`: passed.
+- `npm run test:sites`: 5/5 passed.
+- `git diff --check`: passed.
+- Findings: no actionable P0, P1, or P2 visual, responsive, interaction, SEO, or routing issues remain.
+
+final result: passed

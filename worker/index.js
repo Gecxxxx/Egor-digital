@@ -1,3 +1,5 @@
+const APP_ROUTES = new Set(["/", "/services", "/cases", "/pricing", "/process", "/about", "/contacts"]);
+
 export default {
   async fetch(request, env) {
     const response = await env.ASSETS.fetch(request);
@@ -7,9 +9,19 @@ export default {
       return response;
     }
 
-    const indexUrl = new URL(request.url);
-    indexUrl.pathname = "/index.html";
-    indexUrl.search = "";
-    return env.ASSETS.fetch(new Request(indexUrl, request));
+    const requestUrl = new URL(request.url);
+    const pathname = requestUrl.pathname.replace(/\/+$/, "") || "/";
+    const isKnownRoute = APP_ROUTES.has(pathname);
+    const shellUrl = new URL(request.url);
+    shellUrl.pathname = isKnownRoute ? "/index.html" : "/404.html";
+    shellUrl.search = "";
+    const shell = await env.ASSETS.fetch(new Request(shellUrl, request));
+
+    if (isKnownRoute || shell.status === 404) return shell;
+    return new Response(request.method === "HEAD" ? null : shell.body, {
+      status: 404,
+      statusText: "Not Found",
+      headers: shell.headers,
+    });
   },
 };

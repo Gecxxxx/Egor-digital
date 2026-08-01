@@ -5,6 +5,7 @@ const nav = [
   ["/", "Главная"], ["/services", "Услуги"], ["/cases", "Кейсы"],
   ["/pricing", "Цены"], ["/process", "Процесс"], ["/about", "Обо мне"], ["/contacts", "Контакты"],
 ];
+const knownPaths = new Set(nav.map(([href]) => href));
 
 const contactLinks = [
   { label: "Telegram", value: "@egecxxxx", href: "https://t.me/egecxxxx", action: "Открыть диалог" },
@@ -139,10 +140,12 @@ function Header({ path, go, onLead }) {
 
 function Eyebrow({ children }) { return <p className="eyebrow"><span aria-hidden="true" />{children}</p>; }
 function AccentTitle({ children, as = "h2" }) { const Tag = as; return <Tag className="accent-title"><span>{children}</span></Tag>; }
-function CTA({ children, onClick, secondary = false }) { return <button className={secondary ? "cta secondary" : "cta"} onClick={onClick}><span className="cta-copy"><span>{children}</span><span aria-hidden="true">{children}</span></span><span className="cta-action">Открыть<ArrowUpRight size={14} weight="bold" aria-hidden="true" /></span></button>; }
+function CTA({ children, onClick, secondary = false, action = "Открыть" }) { return <button className={secondary ? "cta secondary" : "cta"} onClick={onClick}><span className="cta-copy"><span>{children}</span><span aria-hidden="true">{children}</span></span><span className="cta-action">{action}<ArrowUpRight size={14} weight="bold" aria-hidden="true" /></span></button>; }
 function CaseImage({ item }) { return <div className="case-image"><img src={item.image} alt={item.name} width={item.imageWidth} height={item.imageHeight} loading="lazy" decoding="async" /></div>; }
 
 function Hero({ go, onLead }) { return <><section className="hero grid-surface"><div className="hero-copy"><Eyebrow>Digital Tools by Egor</Eyebrow><h1 aria-label="Сайты. CRM. Автоматизация."><span className="hero-line"><span>Сайты.</span></span><span className="hero-line"><span>CRM.</span></span><span className="hero-line accent"><span>Автоматизация.</span></span></h1><p className="hero-sub"><AnimatedChars text="От идеи до работающей " /><strong><AnimatedChars text="системы заявок" offset={22} /></strong></p><div className="hero-actions"><CTA onClick={() => go("/cases")}>Смотреть кейсы</CTA><CTA secondary onClick={onLead}>Получить разбор</CTA></div><div className="hero-facts"><div><b>Сайт для бизнеса</b><strong><CountUp end={500} prefix="от $" /></strong></div><div><b><CountUp end={2} suffix=" месяца поддержки" /></b><strong>бесплатно</strong></div></div></div><div className="hero-person"><img src="/assets/images/egor-hero-cutout.webp" alt="Егор — разработчик сайтов и CRM" width="1086" height="1448" loading="eager" decoding="sync" fetchPriority="high" /></div></section><div className="ticker" aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div></div></>; }
+
+function NotFound({ go, onLead }) { return <main className="not-found"><section className="not-found-hero grid-surface"><div className="not-found-copy"><Eyebrow>Ошибка 404</Eyebrow><p className="not-found-code" aria-hidden="true">404</p><h1><span>Страница</span><span>не найдена</span></h1><p className="not-found-text">Похоже, ссылка устарела или такой страницы больше нет. Вернитесь на главную либо расскажите о своей задаче — отвечу лично.</p><div className="not-found-actions"><CTA action="Перейти" onClick={() => go("/")}>Вернуться на сайт</CTA><CTA secondary onClick={onLead}>Оставить заявку</CTA></div><nav className="not-found-links" aria-label="Полезные страницы"><span>Можно перейти сразу:</span><button onClick={() => go("/services")}>Услуги</button><button onClick={() => go("/cases")}>Кейсы</button><button onClick={() => go("/contacts")}>Контакты</button></nav></div><div className="not-found-person"><img src="/assets/images/egor-about-cutout.webp" alt="Егор — Digital Tools by Egor" width="502" height="884" loading="eager" decoding="sync" fetchPriority="high" /></div></section></main>; }
 
 function CaseGrid({ limit, go }) { const shown = typeof limit === "number" ? cases.slice(0, limit) : cases; return <div className="case-grid">{shown.map((item, index) => <article className="case-card" key={item.name}><div className="case-meta"><span>{String(index + 1).padStart(2, "0")}</span><span>{item.type}</span></div><CaseImage item={item} /><div className="case-body"><div><p>{item.tags.join(" · ")}</p><h3>{item.name}</h3><p>{item.description}</p></div><button onClick={() => go(item.href)}>Смотреть проект</button></div></article>)}</div>; }
 
@@ -181,14 +184,24 @@ export function App() {
   const { path, go } = useRoute();
   const [leadOpen, setLeadOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const isNotFound = !knownPaths.has(path);
   useRevealOnScroll(path, ready);
+
+  useEffect(() => {
+    const robots = document.querySelector('meta[name="robots"]') || document.head.appendChild(Object.assign(document.createElement("meta"), { name: "robots" }));
+    const description = document.querySelector('meta[name="description"]');
+    document.title = isNotFound ? "404 — Страница не найдена | Digital Tools by Egor" : "Digital Tools by Egor — сайты, CRM и автоматизация";
+    robots.content = isNotFound ? "noindex,follow" : "index,follow";
+    if (description) description.content = isNotFound ? "Запрошенная страница не найдена. Вернитесь на сайт Digital Tools by Egor или оставьте заявку." : "Сайты, CRM и автоматизация для бизнеса — от идеи до работающей системы заявок.";
+  }, [isNotFound]);
 
   useEffect(() => {
     let active = true;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) { setReady(true); return undefined; }
     document.body.classList.add("is-intro-active");
-    const portrait = document.querySelector(window.location.pathname === "/about" ? ".about-image img" : ".hero-person img");
+    const portraitSelector = window.location.pathname === "/about" ? ".about-image img" : knownPaths.has(window.location.pathname) ? ".hero-person img" : ".not-found-person img";
+    const portrait = document.querySelector(portraitSelector);
     const portraitReady = portrait?.complete && portrait.naturalWidth
       ? Promise.resolve()
       : new Promise((resolve) => {
@@ -207,6 +220,6 @@ export function App() {
 
   useEffect(() => { if (ready) document.body.classList.remove("is-intro-active"); }, [ready]);
   const onLead = () => setLeadOpen(true);
-  const page = path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} /> : <Home go={go} onLead={onLead} />;
+  const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} /> : <NotFound go={go} onLead={onLead} />;
   return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><Header path={path} go={go} onLead={onLead} />{page}<Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={() => setLeadOpen(false)} />}</div></>;
 }
