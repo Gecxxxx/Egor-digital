@@ -97,4 +97,22 @@
 - Measured post-fix copy gaps: lead-flow `16px`; About `16px`. FAQ summary text has `25px` internal top padding after the underline.
 - No P0/P1/P2 findings remain for the shared heading component.
 
+**About Cutout and Image-Delivery Verification — 2026-08-01**
+
+- Source visual truth path: `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 144456.png` (`1907 × 897` px), showing the selected smiling peace-sign portrait with its original outdoor background.
+- Implementation screenshot path: browser-rendered capture of `http://terminal.local:4173/about` in the active cloud-browser session, `1363 × 936` CSS px at DPR `1`, with the About section aligned to the viewport.
+- State: desktop About route, sticky navigation visible, no modal, idle interaction state.
+- Full-view comparison evidence: the source screenshot and updated browser capture were emitted together in one comparison input. The selected smile, peace-sign gesture, natural-color treatment, black shirt, and biography composition are preserved; the outdoor background is removed and replaced by the established black editorial grid.
+- Focused evidence: the portrait region was inspected at its rendered `408.86 × 720` CSS-pixel box. The optimized asset completed successfully at its expected natural dimensions (`502 × 884`) with no broken-media state, background rectangle, or layout shift.
+- Fonts and typography: existing Oswald/Inter hierarchy and line wrapping are unchanged.
+- Spacing and layout rhythm: the portrait panel remains aligned with the biography column; desktop and responsive height rules reserve stable space before decode.
+- Colors and visual tokens: natural skin and clothing colors remain visible against the black surface; purple/cyan accents and grid lines are unchanged.
+- Image quality and asset fidelity: the About asset is a transparent WebP cutout derived from the selected peace-sign photo and weighs `29,946` bytes. The homepage portrait is now an equivalent transparent WebP at `48,534` bytes instead of the previous `1,058,542`-byte PNG. No actionable transparency halo or compression artifact is visible at rendered size.
+- Copy and content: biography, facts, CTA, and route structure are unchanged.
+- Delivery behavior: the two portrait assets are preloaded; route-critical portraits use eager/high-priority decode; case images use explicit dimensions, lazy loading, and asynchronous decode. Converted case imagery is `607,416` bytes total versus `1,142,813` bytes for the previous JPEG set plus the existing WebP, a reduction of about `47%`.
+- Primary interaction tested: About “Смотреть кейсы” CTA navigated to `/cases`; browser Back returned to `/about`.
+- Console errors checked: no `terminal.local` warnings or errors. Only unrelated Chrome-extension metadata errors were present in the broader browser log.
+- Checks: `npm run build` passed; `npm run test:sites` passed `4/4`.
+- Findings: no actionable P0, P1, or P2 differences remain for the requested portrait/background and loading changes.
+
 final result: passed

@@ -11,6 +11,7 @@ When implementing from a selected generated mock, treat that image as the source
 - Preserve the selected dark editorial layout inspired by ZelvixAI: black/charcoal surface, subtle grain, strict vertical grid, condensed uppercase display type, square controls, and generous negative space.
 - Use the existing Digital Tools by Egor logo and a restrained violet-to-cyan accent system; do not use lime green.
 - The homepage hero headline is “САЙТЫ. CRM. АВТОМАТИЗАЦИЯ.” with Egor as a natural-color cutout on the black grid, with no photographic background.
+- The About page uses the separate smiling portrait with Egor's raised peace-sign gesture; keep it in natural color as a clean cutout on the same black editorial grid, without the original outdoor photo background.
 - Keep the current site's seven-route information architecture and real content: home, services, cases, pricing, process, about, and contacts.
 - Preserve real prices and promises: website from $500, CRM/automation from $1000, audit/small task from $250, support from $50/month, and two months of support included after launch.
 
