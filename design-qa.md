@@ -138,3 +138,21 @@
 - Findings: no actionable P0, P1, or P2 issues remain for this contact expansion.
 
 final result: passed
+
+**Selected Motion System Verification — 2026-08-01**
+
+- Requested set: optimized branded loading, blur-to-sharp and masked HERO lines, staged HERO cascade, continuous ticker, viewport section reveals, metric count-up, masked CTA copy swap, moving arrow/border hover, 16:9 case-image reveal/hover, and animated FAQ accordions.
+- Source visual truth: `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 140935.png`; normalized desktop comparison: `/workspace/scratch/egor-motion-source-1348x936.jpg`.
+- Implementation evidence: `/workspace/scratch/egor-motion-implementation-1348x936.jpg`; combined comparison input: `/workspace/scratch/egor-motion-qa-comparison.jpg`.
+- Viewport/state: `1348 × 936` px at 1×, home route at the top, desktop navigation visible, no modal, completed intro state.
+- Full-view comparison: the existing black editorial grid, three-line heading, natural-color portrait, CTA/fact hierarchy, and ticker placement remain intact. Motion was layered onto the approved composition rather than changing its information architecture or contact paths.
+- Focused HERO finding: an intermediate build constrained the third line and visually clipped `Автоматизация.`. The width constraint was removed; post-fix measurement reported equal client and scroll widths (`662px`) and the line remained inside the copy column (`right 731px < 754px`). No headline or underline overlap remains.
+- Focused case finding: cards retain `aspect-ratio: 16 / 9` and `object-fit: contain`; the reveal uses `clip-path` and the hover uses a small image scale, so the source artwork is never cropped.
+- Loading/performance: the intro is bounded below one second, waits briefly for the eager/high-priority decoded HERO portrait, and reveals the page only after the portrait is ready or the short safety timeout expires. The optimized WebP portraits and explicit image dimensions remain in place.
+- Primary interactions tested: route navigation, lead-modal open/close, FAQ open-state change, and case-section scrolling/reveal. The infinite ticker moved continuously and paused on hover.
+- Accessibility: FAQ controls expose `aria-expanded`/`aria-controls`; duplicate CTA hover copy is hidden from assistive technology; all motion is disabled or reduced under `prefers-reduced-motion`.
+- Runtime: no application-originated console errors were observed; the only browser log entry was an unrelated Chrome-extension metadata error.
+- Checks: `npm run build` passed; `npm run test:sites` passed `4/4`; `git diff --check` passed.
+- Findings: no actionable P0, P1, or P2 issues remain for the selected animation set.
+
+final result: passed

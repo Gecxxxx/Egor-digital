@@ -17,5 +17,7 @@ When implementing from a selected generated mock, treat that image as the source
 - Keep both contact paths visible: a direct Telegram link and the lead form must be available on the Contacts page and in the site footer.
 - Direct contacts: Telegram `@egecxxxx`, WhatsApp `+20 114 969 2210`, email `eggetsevich@gmail.com`, and Instagram `@_gecevich_`; show all four on the Contacts page and in the footer.
 - Display every case preview in a true 16:9 frame with the full screenshot visible; do not crop case artwork.
+- Motion direction approved from the ZelvixAI reference: a fast branded intro that waits briefly for the hero portrait, blur-to-sharp and masked line reveals, staggered hero content, continuous benefit ticker, scroll-triggered section reveals, count-up metrics, masked CTA text swaps with moving action icons, 16:9 case-image reveals/hover zoom, and smoothly animated FAQ accordions.
+- Keep the intro under roughly one second on a normal connection, prefer transform/opacity over heavy filters, and respect `prefers-reduced-motion` across every animation.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.
