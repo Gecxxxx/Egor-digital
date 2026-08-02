@@ -187,7 +187,50 @@ function Testimonials() { const items = [["Анна", "Егор помог ра�
 function Faq() { const qs = [["Можно начать с маленькой задачи?", "Да. Аудит, форма или точечная доработка помогают быстро проверить формат работы."], ["Один канал заявок входит в сайт?", "Да: Telegram, MAX или email — выбираем удобный вариант."], ["Что значит поддержка 2 месяца?", "Исправляю технические ошибки, помогаю с мелкими правками и контролирую стабильность после запуска."], ["Можно добавить CRM позже?", "Да. Сайт строится так, чтобы CRM и автоматизацию можно было подключить по мере роста."]]; const [openIndex, setOpenIndex] = useState(0); return <section className="section faq"><Eyebrow>FAQ</Eyebrow><AccentTitle>Короткие ответы</AccentTitle><div className="faq-list">{qs.map(([q,a], index) => { const open = openIndex === index; return <div className={open ? "faq-item is-open" : "faq-item"} key={q}><button type="button" aria-expanded={open} aria-controls={`faq-answer-${index}`} onClick={() => setOpenIndex(open ? -1 : index)}><span>{q}</span><i aria-hidden="true" /></button><div className="faq-answer" id={`faq-answer-${index}`} aria-hidden={!open}><div><p>{a}</p></div></div></div>; })}</div></section>; }
 function FinalCta({ onLead }) { return <section className="final-cta grid-surface"><Eyebrow>Следующий шаг</Eyebrow><h2>Разберём задачу<br />без лишней сметы</h2><p>Напишите, какой у вас бизнес и что сейчас мешает заявкам. Предложу понятный первый шаг и ориентир по бюджету.</p><CTA onClick={onLead}>Получить разбор</CTA></section>; }
 
-function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расскажите о задаче" }) { const [sent, setSent] = useState(false); const submit = (event) => { event.preventDefault(); if (!event.currentTarget.reportValidity()) return; setSent(true); }; return sent ? <div className="success"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка подготовлена</h2><p>Выберите удобный канал и напишите Егору напрямую — он ответит лично.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} key={link.label}>{link.label}</a>)}</div></div> : <form onSubmit={submit}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2><label>Имя<input name="name" required autoComplete="name" placeholder="Как к вам обращаться" autoFocus={autoFocus} /></label><label>Контакт<input name="contact" required autoComplete="email" placeholder="Telegram, WhatsApp или email" /></label><label>Что нужно<textarea name="message" rows="4" placeholder="Сайт, аудит, CRM или доработка" /></label><label className="privacy-consent"><input name="privacy" type="checkbox" required /><span>Я согласен на обработку персональных данных и принимаю <button type="button" onClick={onPrivacy}>политику конфиденциальности</button>.</span></label><button type="submit">Продолжить</button></form>; }
+function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расскажите о задаче" }) {
+  const [status, setStatus] = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const submit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity() || status === "sending") return;
+
+    const values = new FormData(form);
+    const payload = {
+      name: String(values.get("name") || "").trim(),
+      contact: String(values.get("contact") || "").trim(),
+      message: String(values.get("message") || "").trim(),
+      website: String(values.get("website") || "").trim(),
+    };
+
+    setStatus("sending");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result || result.ok !== true) {
+        throw new Error(result?.error || "Не удалось отправить заявку. Попробуйте ещё раз или напишите напрямую.");
+      }
+      form.reset();
+      setStatus("success");
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Не удалось отправить заявку. Попробуйте ещё раз или напишите напрямую.");
+      setStatus("error");
+    }
+  };
+
+  if (status === "success") {
+    return <div className="success" role="status"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка отправлена</h2><p>Заявка уже пришла Егору в Telegram. Он свяжется с вами по указанному контакту.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} key={link.label}>{link.label}</a>)}</div></div>;
+  }
+
+  return <form onSubmit={submit} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2><label>Имя<input name="name" required autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /></label><label>Контакт<input name="contact" required autoComplete="email" maxLength="200" placeholder="Telegram, WhatsApp или email" /></label><label>Что нужно<textarea name="message" rows="4" required maxLength="3000" placeholder="Сайт, аудит, CRM или доработка" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent"><input name="privacy" type="checkbox" required /><span>Я согласен на обработку персональных данных и принимаю <button type="button" onClick={onPrivacy}>политику конфиденциальности</button>.</span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
+}
 
 function LeadModal({ onClose, onPrivacy }) { useEffect(() => { const esc = (e) => e.key === "Escape" && onClose(); window.addEventListener("keydown", esc); return () => window.removeEventListener("keydown", esc); }, [onClose]); return <div className="modal-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}><div className="modal" role="dialog" aria-modal="true" aria-labelledby="lead-title"><button className="modal-close" onClick={onClose}>Закрыть</button><LeadForm titleId="lead-title" heading="Оставить заявку" autoFocus onPrivacy={onPrivacy} /></div></div>; }
 

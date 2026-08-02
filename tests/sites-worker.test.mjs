@@ -114,6 +114,9 @@ test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/_redirects", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
+  for (const route of ["services", "cases", "pricing", "process", "about", "contacts", "privacy"]) {
+    await access(new URL(`../dist/client/${route}.html`, import.meta.url));
+  }
 });
 
 test("keeps the mobile menu visible and ticker moving with reduced motion", async () => {

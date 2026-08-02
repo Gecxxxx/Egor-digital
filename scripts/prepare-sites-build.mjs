@@ -9,6 +9,7 @@ const index = path.join(dist, "client", "index.html");
 const notFound = path.join(dist, "client", "404.html");
 const worker = path.join(root, "worker", "index.js");
 const hosting = path.join(root, ".openai", "hosting.json");
+const appRoutes = ["services", "cases", "pricing", "process", "about", "contacts", "privacy"];
 
 for (const file of [index, worker, hosting]) {
   if (!existsSync(file)) throw new Error("Missing Sites build input: " + file);
@@ -17,6 +18,7 @@ for (const file of [index, worker, hosting]) {
 mkdirSync(path.join(dist, "server"), { recursive: true });
 mkdirSync(path.join(dist, ".openai"), { recursive: true });
 copyFileSync(index, notFound);
+for (const route of appRoutes) copyFileSync(index, path.join(dist, "client", route + ".html"));
 copyFileSync(worker, path.join(dist, "server", "index.js"));
 copyFileSync(hosting, path.join(dist, ".openai", "hosting.json"));
 

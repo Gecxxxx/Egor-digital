@@ -251,6 +251,10 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .privacy-consent { grid-template-columns: 22px minmax(0, 1fr) !important; align-items: start; gap: 11px !important; text-transform: none !important; color: #a4a4aa !important; font-size: 12px !important; line-height: 1.55; }
 .privacy-consent input { width: 18px !important; height: 18px; margin: 1px 0 0; padding: 0; accent-color: var(--purple); }
 .privacy-consent button { display: inline; min-height: 0 !important; border: 0 !important; border-bottom: 1px solid var(--purple) !important; border-image: none !important; padding: 0 0 2px !important; background: transparent !important; color: var(--cyan) !important; text-transform: none !important; cursor: pointer; }
+.form-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; }
+.form-status { padding: 12px 14px; border: 1px solid var(--line); font-size: 12px; line-height: 1.5; }
+.form-error { border-color: rgba(194,76,255,.62); color: #f0c9ff; background: rgba(194,76,255,.07); }
+.inline-lead form > button:disabled, .modal form > button:disabled { cursor: wait; opacity: .62; }
 .inline-lead form > button, .inline-lead .success a { min-height: 56px; border: 1px solid transparent; border-image: linear-gradient(90deg, var(--purple), var(--cyan)) 1; background: transparent; color: white; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 .inline-lead .success { min-height: 420px; }
 .faq-list { margin-top: 38px; border-top: 1px solid var(--line); }
@@ -418,7 +422,6 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
 
 @media (max-width: 520px) {
   .brand small { display: none; }
-  .hero-copy { padding-top: 48px; }
   .hero h1 { font-size: clamp(56px, 17vw, 66px); }
   .hero-line.accent > span { font-size: clamp(39px, 12.25vw, 48px); }
   .hero-facts { grid-template-columns: 1fr 1fr; }

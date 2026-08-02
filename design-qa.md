@@ -315,3 +315,15 @@ final result: passed
 - Findings: no actionable P0, P1, or P2 issues remain for the desktop portrait scale or mobile HERO composition.
 
 final result: passed
+
+**VPS Telegram Form and Release Verification — 2026-08-02**
+
+- The shared modal and Contacts-page form now POST JSON to the production server's existing `/api/brief` endpoint with the required `name`, `contact`, and `message` fields plus the existing `website` honeypot.
+- Success is shown only after an HTTP-success response containing `{ ok: true }`. Sending disables the submit control; server errors remain visible and retryable without clearing the entered data.
+- The modal heading is “Оставить заявку”; the message field and privacy consent are both required. A successful response confirms that the application reached Telegram and retains direct-contact links as secondary options.
+- The build now emits route-specific HTML shells for every known React route so the existing VPS `server.js` can serve direct visits without being replaced.
+- `scripts/deploy-vps.sh` preserves `.env`, Telegram tokens, `server.js`, Nginx, and systemd; creates a compressed frontend backup; stages the new build; verifies `/`, `/services`, and `OPTIONS /api/brief`; and automatically restores the previous frontend if a deployment check fails.
+- Checks: `bash -n scripts/deploy-vps.sh` passed; `git diff --check` passed; `npm run build` passed; `npm run test:sites` passed `9/9`.
+- Findings: no actionable form-contract, route-shell, build, or rollback issue remains before the controlled VPS release.
+
+final result: passed
