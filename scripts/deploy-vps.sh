@@ -13,6 +13,22 @@ PREVIOUS_DIR="$APP_DIR/public.previous-$STAMP"
 SWITCHED=0
 SERVER_PATCHED=0
 
+wait_for_endpoint() {
+  local method="$1"
+  local url="$2"
+  local attempt
+
+  for attempt in $(seq 1 30); do
+    if curl --fail --silent --show-error --max-time 5 -X "$method" "$url" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+
+  echo "Service did not become ready: $method $url" >&2
+  return 1
+}
+
 if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
   echo "Run this deployment as root." >&2
   exit 1
@@ -71,9 +87,9 @@ SWITCHED=1
 
 systemctl restart "$SERVICE_NAME"
 systemctl is-active --quiet "$SERVICE_NAME"
-curl --fail --silent --show-error --max-time 10 http://127.0.0.1:3000/ >/dev/null
-curl --fail --silent --show-error --max-time 10 http://127.0.0.1:3000/services >/dev/null
-curl --fail --silent --show-error --max-time 10 -X OPTIONS http://127.0.0.1:3000/api/brief >/dev/null
+wait_for_endpoint GET http://127.0.0.1:3000/
+wait_for_endpoint GET http://127.0.0.1:3000/services
+wait_for_endpoint OPTIONS http://127.0.0.1:3000/api/brief
 
 rm -rf -- "$PREVIOUS_DIR"
 SWITCHED=0
