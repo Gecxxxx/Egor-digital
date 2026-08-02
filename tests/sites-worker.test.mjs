@@ -172,3 +172,37 @@ test("keeps modal controls above the sticky header and mobile menu", async () =>
   assert.match(app, /if \(modalOpen\) setOpen\(false\)/);
   assert.match(app, /\(hover: hover\) and \(pointer: fine\)/);
 });
+
+test("keeps scroll reveals fast and immediately accessible with reduced motion", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.ok(css.includes("transition: opacity .34s ease"));
+  assert.ok(css.includes("transform .42s cubic-bezier"));
+  assert.ok(css.includes(".motion-reveal { opacity: 1 !important; transform: none !important; filter: none !important"));
+  assert.ok(app.includes("(index % 4) * 35"));
+  assert.ok(app.includes('rootMargin: "0px 0px -2%", threshold: 0.03'));
+});
+
+test("shows pricing offers directly after a compact first screen", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.match(app, /className="pricing-hero"/);
+  assert.match(app, /className="section pricing-plans-section"/);
+  assert.ok(css.includes(".pricing-hero { height: auto; min-height: 340px"));
+  assert.ok(css.includes(".pricing-hero { min-height: 0; gap: 26px"));
+});
+
+test("ships approved client testimonials and Yandex Metrika", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.match(html, /mc\.yandex\.ru\/metrika\/tag\.js\?id=111246146/);
+  assert.match(html, /ym\(111246146, "init"/);
+  assert.match(app, /Дарья Каминскене/);
+  assert.match(app, /Green Apple Dent/);
+  assert.match(app, /Крыша-мечты/);
+  assert.match(app, /window\.ym\?\.\(111246146, "hit"/);
+  assert.match(app, /Яндекс Метрика и cookie/);
+});

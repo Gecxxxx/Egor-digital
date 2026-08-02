@@ -145,8 +145,8 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .case-meta { padding: 14px 18px; display: flex; justify-content: space-between; text-transform: uppercase; font-size: 10px; color: #aaa; border-bottom: 1px solid var(--line); }
 .case-meta span:first-child { color: var(--purple); }
 .case-meta span:last-child { max-width: 82%; text-align: right; line-height: 1.45; }
-.case-image { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; display: grid; place-items: center; background: #050506; border-bottom: 1px solid var(--line); clip-path: inset(0 100% 0 0); transition: clip-path .85s cubic-bezier(.22,1,.36,1); }
-.case-card.is-visible .case-image { clip-path: inset(0); transition-delay: calc(var(--reveal-delay, 0ms) + 90ms); }
+.case-image { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; display: grid; place-items: center; background: #050506; border-bottom: 1px solid var(--line); clip-path: inset(0 100% 0 0); transition: clip-path .45s cubic-bezier(.22,1,.36,1); }
+.case-card.is-visible .case-image { clip-path: inset(0); transition-delay: calc(var(--reveal-delay, 0ms) + 40ms); }
 .case-image picture { display: block; width: 100%; height: 100%; }
 .case-card img { width: 100%; height: 100%; object-fit: contain; display: block; filter: saturate(.78); transform: scale(1.025); transition: filter .45s ease, transform .7s cubic-bezier(.22,1,.36,1); }
 .case-card:hover { border-color: rgba(194,76,255,.55); transform: translateY(-4px); }
@@ -182,6 +182,10 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .page-hero > div:last-child { min-width: 0; padding-bottom: 4px; }
 .page-hero > div:last-child > p { color: #aaaab0; line-height: 1.6; margin: 0 0 24px; max-width: 52ch; }
 .page-hero .cta { min-width: 100%; }
+.pricing-hero { height: auto; min-height: 340px; padding-block: clamp(42px, 6svh, 64px); }
+.pricing-hero h1 { max-width: 11ch; font-size: clamp(52px, 5.5vw, 88px); }
+.pricing-plans-section { padding-top: clamp(40px, 5vw, 64px); }
+.pricing-plans-section .plans { margin-top: 40px; }
 .offer-grid { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 55px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
 .offer { padding: 30px; min-height: 280px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .offer > p { color: var(--cyan); text-transform: uppercase; font-size: 11px; }
@@ -227,10 +231,12 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .about-facts { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0; }
 .about-facts span { border: 1px solid var(--line); padding: 11px 14px; text-transform: uppercase; font-size: 10px; }
 .testimonials > div { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 50px; }
-.testimonials blockquote { margin: 0; min-height: 260px; border-right: 1px solid var(--line); padding: 34px; display: flex; flex-direction: column; justify-content: space-between; }
+.testimonials blockquote { margin: 0; min-height: 390px; border-right: 1px solid var(--line); padding: 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
 .testimonials blockquote:last-child { border-right: 0; }
-.testimonials blockquote p { font-size: 17px; line-height: 1.6; }
-.testimonials cite { color: var(--cyan); text-transform: uppercase; font-style: normal; font-size: 11px; }
+.testimonials blockquote p { margin: 0; font-size: 15px; line-height: 1.7; }
+.testimonials cite { display: grid; gap: 6px; color: var(--cyan); text-transform: uppercase; font-style: normal; font-size: 11px; }
+.testimonials cite strong { color: #f3f3f3; font-size: 12px; }
+.testimonials cite span { color: var(--cyan); line-height: 1.45; }
 .contact-options { display: grid; grid-template-columns: repeat(4, 1fr); padding-block: 0; }
 .contact-options > div { min-height: 330px; padding: 60px 28px; border-right: 1px solid var(--line); display: flex; flex-direction: column; }
 .contact-options > div:last-child { border-right: 0; }
@@ -309,7 +315,7 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
 .privacy-contact { grid-column: 2; border: 1px solid var(--line); padding: 30px; }
 .privacy-contact p { color: #a2a2a8; line-height: 1.7; }
 
-.motion-reveal { opacity: 0; transform: translateY(28px); filter: blur(4px); transition: opacity .6s ease var(--reveal-delay, 0ms), transform .68s cubic-bezier(.22,1,.36,1) var(--reveal-delay, 0ms), filter .6s ease var(--reveal-delay, 0ms); }
+.motion-reveal { opacity: 0; transform: translateY(18px); filter: blur(2px); transition: opacity .34s ease var(--reveal-delay, 0ms), transform .42s cubic-bezier(.22,1,.36,1) var(--reveal-delay, 0ms), filter .34s ease var(--reveal-delay, 0ms); }
 .motion-reveal.is-visible { opacity: 1; transform: none; filter: blur(0); }
 .modal-backdrop { animation: modal-backdrop-in .22s ease both; }
 .modal { animation: modal-in .38s cubic-bezier(.22,1,.36,1) both; }
@@ -383,6 +389,9 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .privacy-hero h1 { font-size: clamp(38px, 10vw, 46px); hyphens: manual; overflow-wrap: anywhere; }
   .page-hero > div:last-child { padding-bottom: 0; }
   .page-hero > div:last-child > p { margin-bottom: 24px; }
+  .pricing-hero { min-height: 0; gap: 26px; padding: 38px 22px 34px; }
+  .pricing-hero h1 { font-size: clamp(40px, 10.5vw, 50px); }
+  .pricing-plans-section { padding-top: 36px; }
   .offer-grid { grid-template-columns: 1fr; margin-top: 38px; }
   .offer { min-height: 0; padding: 25px; }
   .plans { margin-top: 40px; }
@@ -419,7 +428,7 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .privacy-sections article { grid-template-columns: 34px minmax(0, 1fr); gap: 10px 14px; }
   .privacy-sections article p { grid-column: 2; }
   .privacy-contact { grid-column: 1; padding: 24px 22px; }
-  .motion-reveal { transform: translateY(20px); filter: blur(2px); transition-duration: .52s, .58s, .48s; }
+  .motion-reveal { transform: translateY(14px); filter: blur(1px); transition-duration: .3s, .38s, .3s; }
   .intro-loader { gap: 22px; }
   .intro-progress { width: min(286px, 74vw); }
 }

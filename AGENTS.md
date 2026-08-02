@@ -37,5 +37,9 @@ When implementing from a selected generated mock, treat that image as the source
 - Use the existing gradient `egor-digital-e` brand mark as the browser favicon and Apple touch icon.
 - Lead modals must render in a portal above the sticky header and mobile navigation. Keep the close control sticky and visible while the modal scrolls or the mobile keyboard is open, close any open navigation when the modal opens, and do not autofocus fields on touch devices.
 - Mobile internal-page HERO typography and spacing must not switch on viewport-height media queries. Safari expands and collapses its browser chrome while scrolling, so use width-based values for title size, padding, and inter-column gaps to keep wrapping and composition stable.
+- Keep scroll-triggered content reveals fast: visible content should settle within roughly 300–500ms with only a short stagger, and `prefers-reduced-motion` must expose it immediately.
+- The Pricing route uses a compact first screen so the offer cards begin inside the initial viewport instead of sitting below a full-height introductory hero.
+- Testimonials from Дарья Каминскене, Анна at Green Apple Dent, and the Крыша-мечты team are client-approved and may be presented as direct quotes with their project roles.
+- Keep Yandex Metrika counter `111246146` enabled with Webvisor, clickmap, link tracking, and SPA route hits; keep the privacy policy aligned with this analytics use.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.

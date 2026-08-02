@@ -63,7 +63,7 @@ function useRevealOnScroll(path, ready) {
     const targets = [...document.querySelectorAll(selector)];
     targets.forEach((element, index) => {
       element.classList.add("motion-reveal");
-      element.style.setProperty("--reveal-delay", `${(index % 4) * 55}ms`);
+      element.style.setProperty("--reveal-delay", `${(index % 4) * 35}ms`);
     });
 
     if (reduceMotion || !("IntersectionObserver" in window)) {
@@ -77,7 +77,7 @@ function useRevealOnScroll(path, ready) {
         entry.target.classList.add("is-visible");
         observer.unobserve(entry.target);
       });
-    }, { rootMargin: "0px 0px -8%", threshold: 0.08 });
+    }, { rootMargin: "0px 0px -2%", threshold: 0.03 });
     targets.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, [path, ready]);
@@ -183,7 +183,7 @@ function Cases({ go, onLead }) {
 
 const plans = [{ label: "Старт", title: "Маленькая задача", price: "$250", text: "Аудит, правка, форма или небольшой модуль.", bullets: ["аудит сайта или формы", "доработка блока и адаптива", "форма заявки", "уведомления по задаче"] }, { label: "Лучший выбор", title: "Сайт для бизнеса", price: "$500", text: "Структура, дизайн, адаптив, форма и один канал заявок.", bullets: ["структура под доверие", "телефон и компьютер", "форма и аналитика", "Telegram, MAX или email"] }, { label: "Система контроля", title: "CRM / Автоматизация", price: "$1000", text: "Клиенты, источники, статусы и отчёты в одной системе.", bullets: ["CRM или админка", "статусы и заявки", "уведомления", "экспорт и аналитика"] }];
 
-function Pricing({ onLead }) { return <main><PageHero eyebrow="Цены" title="Цены на сайт, заявки и CRM" text="Можно запустить сайт от $500, а CRM, автоматизацию и поддержку добавить по мере роста. До старта понятно, что входит в работу." onLead={onLead} /><section className="section"><Eyebrow>Стартовый формат</Eyebrow><AccentTitle>Выберите точку входа</AccentTitle><div className="plans">{plans.map((p) => <article className="plan" key={p.title}><p>{p.label}</p><h3>{p.title}</h3><div><strong>от {p.price}</strong></div><span>{p.text}</span><ul>{p.bullets.map((b) => <li key={b}>{b}</li>)}</ul><CTA onClick={onLead}>Выбрать</CTA></article>)}</div></section><section className="section pricing-detail"><div><Eyebrow>Входит в сайт от $500</Eyebrow><ul><li>структура под задачу бизнеса</li><li>дизайн в едином стиле</li><li>адаптив под основные устройства</li><li>форма и один канал заявок</li><li>SEO-теги и аналитика</li></ul></div><div><Eyebrow>Сроки</Eyebrow><dl><div><dt>от 1 дня</dt><dd>небольшая задача</dd></div><div><dt>3–7 дней</dt><dd>мини-лендинг</dd></div><div><dt>от 7 дней</dt><dd>сайт для бизнеса</dd></div><div><dt>от 2 недель</dt><dd>CRM / админка</dd></div></dl></div></section><Faq /><FinalCta onLead={onLead} /></main>; }
+function Pricing({ onLead }) { return <main><PageHero className="pricing-hero" eyebrow="Цены" title="Цены на сайт, заявки и CRM" text="Можно запустить сайт от $500, а CRM, автоматизацию и поддержку добавить по мере роста. До старта понятно, что входит в работу." onLead={onLead} /><section className="section pricing-plans-section"><Eyebrow>Стартовый формат</Eyebrow><AccentTitle>Выберите точку входа</AccentTitle><div className="plans">{plans.map((p) => <article className="plan" key={p.title}><p>{p.label}</p><h3>{p.title}</h3><div><strong>от {p.price}</strong></div><span>{p.text}</span><ul>{p.bullets.map((b) => <li key={b}>{b}</li>)}</ul><CTA onClick={onLead}>Выбрать</CTA></article>)}</div></section><section className="section pricing-detail"><div><Eyebrow>Входит в сайт от $500</Eyebrow><ul><li>структура под задачу бизнеса</li><li>дизайн в едином стиле</li><li>адаптив под основные устройства</li><li>форма и один канал заявок</li><li>SEO-теги и аналитика</li></ul></div><div><Eyebrow>Сроки</Eyebrow><dl><div><dt>от 1 дня</dt><dd>небольшая задача</dd></div><div><dt>3–7 дней</dt><dd>мини-лендинг</dd></div><div><dt>от 7 дней</dt><dd>сайт для бизнеса</dd></div><div><dt>от 2 недель</dt><dd>CRM / админка</dd></div></dl></div></section><Faq /><FinalCta onLead={onLead} /></main>; }
 
 const steps = [["01", "Разбор", "Понимаем бизнес, услуги, клиентов, текущие проблемы и цель сайта.", "Понятная задача и приоритеты"], ["02", "Структура", "Собираем логику страниц, офферов, CTA и пути к заявке.", "Согласованная структура"], ["03", "Сборка", "Делаю дизайн, адаптив, формы, SEO и техническую основу.", "Рабочая версия сайта"], ["04", "Заявки", "Подключаем формы и один канал: Telegram, MAX или email.", "Заявка приходит туда, где удобно"], ["05", "Запуск", "Проверяем страницы, аналитику и публикуем сайт.", "Сайт открыт и начинается поддержка"]];
 
@@ -193,7 +193,27 @@ function About({ onLead, go }) { return <main><PageHero eyebrow="Обо мне" 
 
 function Contacts({ onLead, go }) { return <main><PageHero eyebrow="Контакты" title="Расскажите, что нужно запустить" text="Не нужен длинный бриф. Достаточно имени и удобного способа связи — отвечу лично и уточню задачу." onLead={onLead} action="Оставить заявку" /><section className="section contact-options"><div><span>01</span><h3>Нужен сайт</h3><p>структура, заявки и запуск</p><button onClick={onLead}>Открыть форму</button></div><div><span>02</span><h3>Нужен аудит</h3><p>найти, что мешает доверию</p><button onClick={onLead}>Открыть форму</button></div><div><span>03</span><h3>CRM и заявки</h3><p>навести порядок в обращениях</p><button onClick={onLead}>Открыть форму</button></div><div><span>04</span><h3>Поддержка</h3><p>доработки и техконтроль</p><button onClick={onLead}>Открыть форму</button></div></section><section className="section contact-hub"><div className="direct-contact"><Eyebrow>Прямые контакты</Eyebrow><AccentTitle>Напишите напрямую</AccentTitle><p>Можно не заполнять форму: выберите удобный канал и коротко расскажите о задаче. Егор ответит лично.</p><div className="direct-contact-list">{contactLinks.map((link) => <a className="direct-contact-link" href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} key={link.label}><span>{link.label}</span><strong>{link.value}</strong><small>{link.action}</small></a>)}</div></div><div className="inline-lead"><LeadForm titleId="contact-form-title" onPrivacy={() => go("/privacy")} /></div></section></main>; }
 
-function Testimonials() { const items = [["Анна", "Егор помог разложить услуги так, чтобы клиенту было понятно, куда нажать и как оставить заявку."], ["Дарья", "Получился аккуратный сайт для личного бренда: без перегруза и с понятной подачей услуг."], ["Илья", "Получили систему: заявки видны, данные не теряются, администратору стало проще работать."]]; return <section className="section testimonials"><Eyebrow>Отзывы</Eyebrow><AccentTitle>Что ценят в работе</AccentTitle><div>{items.map(([n,t]) => <blockquote key={n}><p>“{t}”</p><cite>{n}</cite></blockquote>)}</div></section>; }
+function Testimonials() {
+  const items = [
+    {
+      name: "Дарья Каминскене",
+      role: "Маркетолог · личный бренд",
+      text: "Егор помог собрать структуру сайта и понятно упаковать мои услуги. Мы несколько раз обсуждали детали, правили подачу и адаптировали сайт для телефона. В итоге получился аккуратный сайт для личного бренда, который действительно соответствует моему стилю и который не стыдно отправлять клиентам.",
+    },
+    {
+      name: "Анна",
+      role: "Green Apple Dent",
+      text: "Нам нужно было не просто обновить сайт, а сделать удобную систему для работы с заявками. Егор перенёс сайт, создал отдельную админку, подключил уведомления в Telegram и MAX и настроил всю техническую часть. Теперь обращения сохраняются в одном месте, а администратору стало намного проще их контролировать.",
+    },
+    {
+      name: "Крыша-мечты",
+      role: "Кровельные работы · Москва и область",
+      text: "Егор разработал для нас полноценный сайт по кровельным работам: продумал структуру, оформил услуги, добавил калькулятор стоимости и формы заявок. Отдельно проработал мобильную версию и помог с запуском сайта на нашем домене. Получился понятный инструмент, где клиент может изучить услуги, рассчитать стоимость и оставить заявку.",
+    },
+  ];
+
+  return <section className="section testimonials"><Eyebrow>Отзывы</Eyebrow><AccentTitle>Что говорят клиенты</AccentTitle><div>{items.map((item) => <blockquote key={item.name}><p>“{item.text}”</p><cite><strong>{item.name}</strong><span>{item.role}</span></cite></blockquote>)}</div></section>;
+}
 function Faq() { const qs = [["Можно начать с маленькой задачи?", "Да. Аудит, форма или точечная доработка помогают быстро проверить формат работы."], ["Один канал заявок входит в сайт?", "Да: Telegram, MAX или email — выбираем удобный вариант."], ["Что значит поддержка 2 месяца?", "Исправляю технические ошибки, помогаю с мелкими правками и контролирую стабильность после запуска."], ["Можно добавить CRM позже?", "Да. Сайт строится так, чтобы CRM и автоматизацию можно было подключить по мере роста."]]; const [openIndex, setOpenIndex] = useState(0); return <section className="section faq"><Eyebrow>FAQ</Eyebrow><AccentTitle>Короткие ответы</AccentTitle><div className="faq-list">{qs.map(([q,a], index) => { const open = openIndex === index; return <div className={open ? "faq-item is-open" : "faq-item"} key={q}><button type="button" aria-expanded={open} aria-controls={`faq-answer-${index}`} onClick={() => setOpenIndex(open ? -1 : index)}><span>{q}</span><i aria-hidden="true" /></button><div className="faq-answer" id={`faq-answer-${index}`} aria-hidden={!open}><div><p>{a}</p></div></div></div>; })}</div></section>; }
 function FinalCta({ onLead }) { return <section className="final-cta grid-surface"><Eyebrow>Следующий шаг</Eyebrow><h2>Разберём задачу<br />без лишней сметы</h2><p>Напишите, какой у вас бизнес и что сейчас мешает заявкам. Предложу понятный первый шаг и ориентир по бюджету.</p><CTA onClick={onLead}>Получить разбор</CTA></section>; }
 
@@ -265,7 +285,7 @@ function LeadModal({ onClose, onPrivacy }) {
   );
 }
 
-function Privacy({ go }) { return <main><PageHero className="privacy-hero" eyebrow="Документы" title={"Политика конфиденци\u00ADальности"} text="Здесь описано, какие данные используются при обращении через формы сайта, зачем они нужны и как запросить их удаление." onLead={() => go("/contacts")} action="Перейти к контактам" /><section className="section privacy-page"><div className="privacy-intro"><Eyebrow>Редакция от 1 августа 2026</Eyebrow><AccentTitle>Коротко и понятно</AccentTitle><p>Оператор персональных данных — Егор Гецевич, Digital Tools by Egor. Контакт для вопросов и обращений: <a href="mailto:eggetsevich@gmail.com">eggetsevich@gmail.com</a>.</p></div><div className="privacy-sections"><article><span>01</span><h2>Какие данные</h2><p>Имя, контакт для связи и описание задачи, которые вы добровольно указываете в форме. Сайт не запрашивает паспортные, платёжные или иные чувствительные данные.</p></article><article><span>02</span><h2>Зачем они нужны</h2><p>Чтобы ответить на обращение, уточнить задачу, подготовить предложение и продолжить общение по выбранному вами каналу.</p></article><article><span>03</span><h2>Основание обработки</h2><p>Данные обрабатываются только после вашего явного согласия: без отметки чекбокса форма не отправляется. Согласие можно отозвать в любой момент.</p></article><article><span>04</span><h2>Хранение и передача</h2><p>Данные используются только для связи по вашему запросу и не продаются третьим лицам. Они могут передаваться техническим сервисам связи и хостинга только в объёме, необходимом для работы сайта.</p></article><article><span>05</span><h2>Ваши права</h2><p>Вы можете запросить уточнение, прекращение обработки или удаление данных, написав на email оператора. Запрос будет обработан в разумный срок.</p></article><article><span>06</span><h2>Файлы cookie</h2><p>Сайт не использует рекламные cookie и не создаёт пользовательские профили. При подключении аналитики политика и механизм согласия будут обновлены до её запуска.</p></article></div><div className="privacy-contact"><h2>Нужно удалить данные</h2><p>Напишите с того же контакта, который использовали в заявке, и укажите, какие данные нужно удалить.</p><a href="mailto:eggetsevich@gmail.com">Написать на email</a></div></section></main>; }
+function Privacy({ go }) { return <main><PageHero className="privacy-hero" eyebrow="Документы" title={"Политика конфиденци\u00ADальности"} text="Здесь описано, какие данные используются при обращении через формы сайта, зачем они нужны и как запросить их удаление." onLead={() => go("/contacts")} action="Перейти к контактам" /><section className="section privacy-page"><div className="privacy-intro"><Eyebrow>Редакция от 2 августа 2026</Eyebrow><AccentTitle>Коротко и понятно</AccentTitle><p>Оператор персональных данных — Егор Гецевич, Digital Tools by Egor. Контакт для вопросов и обращений: <a href="mailto:eggetsevich@gmail.com">eggetsevich@gmail.com</a>.</p></div><div className="privacy-sections"><article><span>01</span><h2>Какие данные</h2><p>Имя, контакт для связи и описание задачи, которые вы добровольно указываете в форме. Сайт не запрашивает паспортные, платёжные или иные чувствительные данные.</p></article><article><span>02</span><h2>Зачем они нужны</h2><p>Чтобы ответить на обращение, уточнить задачу, подготовить предложение и продолжить общение по выбранному вами каналу.</p></article><article><span>03</span><h2>Основание обработки</h2><p>Данные из формы обрабатываются только после вашего явного согласия: без отметки чекбокса форма не отправляется. Согласие можно отозвать в любой момент.</p></article><article><span>04</span><h2>Хранение и передача</h2><p>Данные используются только для связи по вашему запросу и не продаются третьим лицам. Они могут передаваться техническим сервисам связи, аналитики и хостинга только в объёме, необходимом для работы сайта.</p></article><article><span>05</span><h2>Ваши права</h2><p>Вы можете запросить уточнение, прекращение обработки или удаление данных, написав на email оператора. Запрос будет обработан в разумный срок.</p></article><article><span>06</span><h2>Яндекс Метрика и cookie</h2><p>Для анализа посещаемости используется Яндекс Метрика, счётчик 111246146, с функциями Вебвизора и карты кликов. Сервис может использовать cookie и получать технические сведения о посещении, включая адрес страницы, источник перехода и действия на сайте. Эти данные используются для улучшения сайта и оценки эффективности рекламы.</p></article></div><div className="privacy-contact"><h2>Нужно удалить данные</h2><p>Напишите с того же контакта, который использовали в заявке, и укажите, какие данные нужно удалить.</p><a href="mailto:eggetsevich@gmail.com">Написать на email</a></div></section></main>; }
 
 function Footer({ go, onLead }) { return <footer><button className="brand footer-brand" onClick={() => go("/")}><img src="/assets/images/egor-digital-e.webp" alt="" width="43" height="43" loading="lazy" decoding="async" /><span><b>Digital Tools by Egor</b><small>Websites · CRM · Automation</small></span></button><div className="footer-nav">{nav.slice(1).map(([href,label]) => <button key={href} onClick={() => go(href)}>{label}</button>)}<button onClick={() => go("/privacy")}>Политика конфиденциальности</button></div><div className="footer-contact"><span>Связаться напрямую</span>{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} key={link.label}>{link.label} · {link.value}</a>)}<button onClick={onLead}>Оставить заявку</button></div><p>© 2026 Digital Tools by Egor · Remote</p></footer>; }
 
@@ -273,6 +293,7 @@ export function App() {
   const { path, go } = useRoute();
   const [leadOpen, setLeadOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const initialMetrikaPath = useRef(path);
   const isNotFound = !knownPaths.has(path);
   useRevealOnScroll(path, ready);
 
@@ -283,6 +304,15 @@ export function App() {
     robots.content = isNotFound ? "noindex,follow" : "index,follow";
     if (description) description.content = isNotFound ? "Запрошенная страница не найдена. Вернитесь на сайт Digital Tools by Egor или оставьте заявку." : path === "/privacy" ? "Политика обработки персональных данных на сайте Digital Tools by Egor." : "Сайты, CRM и автоматизация для бизнеса — от идеи до работающей системы заявок.";
   }, [isNotFound, path]);
+
+  useEffect(() => {
+    if (initialMetrikaPath.current === path) return;
+    initialMetrikaPath.current = path;
+    window.ym?.(111246146, "hit", window.location.href, {
+      referer: document.referrer,
+      title: document.title,
+    });
+  }, [path]);
 
   useEffect(() => {
     let active = true;
