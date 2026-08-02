@@ -143,8 +143,10 @@ test("keeps every shared page hero within the first viewport", async () => {
   assert.ok(css.includes("font-size: clamp(56px, min(6.1vw, 10.6svh), 104px)"));
   assert.ok(css.includes("align-items: center; overflow: hidden"));
   assert.ok(css.includes("min-height: calc(100svh - 72px)"));
-  assert.ok(css.includes("align-content: start; align-items: start; gap: clamp(92px, 20svh, 170px)"));
-  assert.ok(css.includes("@media (max-width: 820px) and (max-height: 720px)"));
+  assert.ok(css.includes("align-content: start; align-items: start; gap: clamp(56px, 16vw, 76px)"));
+  assert.ok(css.includes("font-size: clamp(40px, 10.5vw, 50px)"));
+  assert.ok(!css.includes("@media (max-width: 820px) and (max-height:"));
+  assert.ok(!css.includes(".page-hero h1 { max-width: none; font-size: clamp(42px, min(12vw, 8.2svh), 58px)"));
   assert.ok(!css.includes("font-size: clamp(64px, 8vw, 124px)"));
 });
 
