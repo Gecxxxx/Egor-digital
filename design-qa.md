@@ -139,6 +139,18 @@
 
 final result: passed
 
+**Viewport-safe HERO, optional lead comment, and demo case release — 2026-08-02**
+
+- Source evidence: `upload/image(24).png`, `upload/image(25).png`, and `upload/image(26).png` showed internal-page display titles continuing below the first desktop viewport at 1918×1078.
+- Shared fix: `.page-hero` now uses the available viewport height below the 86px desktop header; title size and section padding respond to both viewport width and height; phone/tablet and short-screen rules keep the eyebrow, full title, description, and CTA in one coherent first-screen composition.
+- The shared change covers Services, Cases, Pricing, Process, About, Contacts, and Privacy rather than route-specific overrides.
+- The Ilya Morozov fitness concept is added as a true 16:9 responsive case asset at 640, 960, 1440, and 1536 widths. NovaDent, Casa Maris, Level Home, and the fitness concept are explicitly labeled `Демо-проект`.
+- Lead forms require name, contact method, and privacy consent. `Комментарий (по желанию)` is optional in the interface and the VPS deploy safely patches `/api/brief` validation after backing up `server.js`.
+- Checks: `git diff --check` passed; `bash -n scripts/deploy-vps.sh` passed; `npm run build` passed; `npm run test:sites` passed 13/13.
+- Findings: no P0/P1 build, route, asset, form-contract, or release-safety issue remains.
+
+final result: passed
+
 **Desktop Portrait +20% and Responsive Verification — 2026-08-01**
 
 - Source request: the attached desktop HERO crop `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 215831.png`; the approved mobile composition remains unchanged.

@@ -135,3 +135,13 @@ test("keeps the mobile hero portrait fully visible behind the text", async () =>
   assert.ok(css.includes("width: 100%; height: auto; max-width: 100%; object-fit: contain"));
   assert.ok(!css.includes(".hero-person { top: 68px; right: -14px"));
 });
+
+test("keeps every shared page hero within the first viewport", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.ok(css.includes("height: clamp(500px, calc(100svh - 86px), 860px)"));
+  assert.ok(css.includes("font-size: clamp(56px, min(6.1vw, 10.6svh), 104px)"));
+  assert.ok(css.includes("min-height: calc(100svh - 72px)"));
+  assert.ok(css.includes("@media (max-width: 820px) and (max-height: 720px)"));
+  assert.ok(!css.includes("font-size: clamp(64px, 8vw, 124px)"));
+});
