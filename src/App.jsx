@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ArrowUpRight } from "@phosphor-icons/react/ArrowUpRight";
 
 const nav = [
@@ -117,7 +118,7 @@ function IntroLoader({ ready }) {
   return <div className={ready ? "intro-loader is-complete" : "intro-loader"} aria-hidden="true"><div className="intro-mark"><img src="/assets/images/egor-digital-e.webp" width="50" height="50" alt="" /><div><strong>Digital Tools by Egor</strong><span>Сайты · CRM · Автоматизация</span></div></div><div className="intro-progress"><i /></div></div>;
 }
 
-function Header({ path, go, onLead }) {
+function Header({ path, go, onLead, modalOpen }) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     document.body.classList.toggle("mobile-menu-open", open);
@@ -125,6 +126,8 @@ function Header({ path, go, onLead }) {
   }, [open]);
 
   useEffect(() => { setOpen(false); }, [path]);
+
+  useEffect(() => { if (modalOpen) setOpen(false); }, [modalOpen]);
 
   useEffect(() => {
     const closeOnEscape = (event) => event.key === "Escape" && setOpen(false);
@@ -239,7 +242,28 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
   return <form onSubmit={submit} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2><label>Имя<input name="name" required autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /></label><label>Способ связи<input name="contact" required autoComplete="email" maxLength="200" placeholder="Telegram, WhatsApp или email" /></label><label>Комментарий (по желанию)<textarea name="message" rows="4" maxLength="3000" placeholder="Сайт, аудит, CRM или доработка" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent"><input name="privacy" type="checkbox" required /><span>Я согласен на обработку персональных данных и принимаю <button type="button" onClick={onPrivacy}>политику конфиденциальности</button>.</span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
 }
 
-function LeadModal({ onClose, onPrivacy }) { useEffect(() => { const esc = (e) => e.key === "Escape" && onClose(); window.addEventListener("keydown", esc); return () => window.removeEventListener("keydown", esc); }, [onClose]); return <div className="modal-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}><div className="modal" role="dialog" aria-modal="true" aria-labelledby="lead-title"><button className="modal-close" onClick={onClose}>Закрыть</button><LeadForm titleId="lead-title" heading="Оставить заявку" autoFocus onPrivacy={onPrivacy} /></div></div>; }
+function LeadModal({ onClose, onPrivacy }) {
+  useEffect(() => {
+    const esc = (event) => event.key === "Escape" && onClose();
+    document.body.classList.add("modal-open");
+    window.addEventListener("keydown", esc);
+    return () => {
+      document.body.classList.remove("modal-open");
+      window.removeEventListener("keydown", esc);
+    };
+  }, [onClose]);
+
+  const autoFocus = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  return createPortal(
+    <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+        <div className="modal-toolbar"><button className="modal-close" onClick={onClose} aria-label="Закрыть окно заявки">Закрыть</button></div>
+        <div className="modal-content"><LeadForm titleId="lead-title" heading="Оставить заявку" autoFocus={autoFocus} onPrivacy={onPrivacy} /></div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
 
 function Privacy({ go }) { return <main><PageHero className="privacy-hero" eyebrow="Документы" title={"Политика конфиденци\u00ADальности"} text="Здесь описано, какие данные используются при обращении через формы сайта, зачем они нужны и как запросить их удаление." onLead={() => go("/contacts")} action="Перейти к контактам" /><section className="section privacy-page"><div className="privacy-intro"><Eyebrow>Редакция от 1 августа 2026</Eyebrow><AccentTitle>Коротко и понятно</AccentTitle><p>Оператор персональных данных — Егор Гецевич, Digital Tools by Egor. Контакт для вопросов и обращений: <a href="mailto:eggetsevich@gmail.com">eggetsevich@gmail.com</a>.</p></div><div className="privacy-sections"><article><span>01</span><h2>Какие данные</h2><p>Имя, контакт для связи и описание задачи, которые вы добровольно указываете в форме. Сайт не запрашивает паспортные, платёжные или иные чувствительные данные.</p></article><article><span>02</span><h2>Зачем они нужны</h2><p>Чтобы ответить на обращение, уточнить задачу, подготовить предложение и продолжить общение по выбранному вами каналу.</p></article><article><span>03</span><h2>Основание обработки</h2><p>Данные обрабатываются только после вашего явного согласия: без отметки чекбокса форма не отправляется. Согласие можно отозвать в любой момент.</p></article><article><span>04</span><h2>Хранение и передача</h2><p>Данные используются только для связи по вашему запросу и не продаются третьим лицам. Они могут передаваться техническим сервисам связи и хостинга только в объёме, необходимом для работы сайта.</p></article><article><span>05</span><h2>Ваши права</h2><p>Вы можете запросить уточнение, прекращение обработки или удаление данных, написав на email оператора. Запрос будет обработан в разумный срок.</p></article><article><span>06</span><h2>Файлы cookie</h2><p>Сайт не использует рекламные cookie и не создаёт пользовательские профили. При подключении аналитики политика и механизм согласия будут обновлены до её запуска.</p></article></div><div className="privacy-contact"><h2>Нужно удалить данные</h2><p>Напишите с того же контакта, который использовали в заявке, и укажите, какие данные нужно удалить.</p><a href="mailto:eggetsevich@gmail.com">Написать на email</a></div></section></main>; }
 
@@ -286,5 +310,5 @@ export function App() {
   const onLead = () => setLeadOpen(true);
   const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
   const openPrivacy = () => { setLeadOpen(false); go("/privacy"); };
-  return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><Header path={path} go={go} onLead={onLead} />{page}<Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={() => setLeadOpen(false)} onPrivacy={openPrivacy} />}</div></>;
+  return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} />{page}<Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={() => setLeadOpen(false)} onPrivacy={openPrivacy} />}</div></>;
 }

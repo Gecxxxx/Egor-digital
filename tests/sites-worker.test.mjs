@@ -158,3 +158,15 @@ test("ships browser and Apple tab icons from the brand mark", async () => {
   await access(new URL("../public/favicon-32.png", import.meta.url));
   await access(new URL("../public/apple-touch-icon.png", import.meta.url));
 });
+
+test("keeps modal controls above the sticky header and mobile menu", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.ok(css.includes(".modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 200"));
+  assert.ok(css.includes(".modal-toolbar { position: sticky; top: 0; z-index: 3"));
+  assert.ok(css.includes("body.modal-open { overflow: hidden; }"));
+  assert.match(app, /createPortal\(/);
+  assert.match(app, /if \(modalOpen\) setOpen\(false\)/);
+  assert.match(app, /\(hover: hover\) and \(pointer: fine\)/);
+});
