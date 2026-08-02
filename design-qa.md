@@ -139,36 +139,29 @@
 
 final result: passed
 
-**Mobile Reliability, Privacy, and Case Library Verification — 2026-08-01**
+**Viewport-safe HERO, optional lead comment, and demo case release — 2026-08-02**
 
-- Visual target: supplied `1672 × 941` “Крыша-мечты” cover at `/workspace/scratch/7f3ba18f735b/upload/image(17).png`.
-- Implementation evidence: `/workspace/scratch/egor-cases-qa.jpg`; normalized source/implementation comparison: `/workspace/scratch/egor-roof-case-comparison.png`.
-- Tested states: desktop Cases route at `1348 × 926`; mobile Home, open navigation, loader, modal, and Privacy route inside a real `390 × 844` iframe viewport with a `375px` content viewport.
+- Source evidence: `upload/image(24).png`, `upload/image(25).png`, and `upload/image(26).png` showed internal-page display titles continuing below the first desktop viewport at 1918×1078.
+- Shared fix: `.page-hero` now uses the available viewport height below the 86px desktop header; title size and section padding respond to both viewport width and height; phone/tablet and short-screen rules keep the eyebrow, full title, description, and CTA in one coherent first-screen composition.
+- The shared change covers Services, Cases, Pricing, Process, About, Contacts, and Privacy rather than route-specific overrides.
+- The Ilya Morozov fitness concept is added as a true 16:9 responsive case asset at 640, 960, 1440, and 1536 widths. NovaDent, Casa Maris, Level Home, and the fitness concept are explicitly labeled `Демо-проект`.
+- Lead forms require name, contact method, and privacy consent. `Комментарий (по желанию)` is optional in the interface and the VPS deploy safely patches `/api/brief` validation after backing up `server.js`.
+- Checks: `git diff --check` passed; `bash -n scripts/deploy-vps.sh` passed; `npm run build` passed; `npm run test:sites` passed 13/13.
+- Findings: no P0/P1 build, route, asset, form-contract, or release-safety issue remains.
 
-**Iteration history**
+final result: passed
 
-- Initial [P1] — the published Site checkout was an older source version with a static mobile ticker and no current menu/motion system. Fix: synchronized the approved latest source into the Sites checkout, then preserved and strengthened the fixed mobile navigation, loader, motion, and ticker behavior.
-- Initial [P2] — the first mobile Privacy pass measured `554px` content width inside a `375px` viewport because the long Cyrillic display word could not wrap. Fix: added a Privacy-specific responsive title size plus a manual Cyrillic-safe break. Post-fix document/client widths both measure `375px`; the H1 measures `329px` with no horizontal scroll.
+**Desktop Portrait +20% and Responsive Verification — 2026-08-01**
 
-**Required fidelity surfaces**
-
-- Fonts and typography: Oswald/Inter remain unchanged. The Privacy display title retains the editorial uppercase treatment at `44.85px` on mobile and wraps with a valid visible hyphen instead of clipping.
-- Spacing and layout rhythm: mobile navigation fills the viewport from the fixed 72px header; buttons remain at least 52px high. Case artwork measures `1.7778`, matching 16:9, with full covers visible.
-- Colors and visual tokens: the established black grid, restrained white/gray hierarchy, and violet-to-cyan accents remain consistent across navigation, Privacy, forms, and case cards.
-- Image quality and asset fidelity: the supplied roof cover is reproduced without crop or content changes. Responsive WebP sources at 640, 960, and 1440 widths are used for all seven cases; mobile selected the 640 source, reducing the relevant case payloads to about 15–24KB.
-- Copy and content: Home and Cases start with Дарья Каминскене, Green Apple Dent, and Крыша-мечты. The Privacy page contains operator contact, data categories, purpose, basis, storage, user rights, and cookie disclosure.
-
-**Interactions and runtime**
-
-- Mobile menu opened to `390 × 772`, reached full `opacity: 1`, `visibility: visible`, and `pointer-events: auto`; selecting Cases changed the path to `/cases` and closed the panel.
-- The ticker transform changed from `-166.255px` to `-201.82px` during the observation interval, confirming continuous motion on touch width.
-- The branded mobile loader was visibly active before readiness and then cleared after the bounded wait.
-- Lead submission without consent remained blocked (`success: 0`, checkbox invalid). After checking consent, the success state rendered.
-- Privacy title, description, six content sections, footer link, mobile-menu link, known-route worker fallback, and trailing-slash routing were verified.
-- `npm run build`: passed.
-- `npm run test:sites`: 6/6 passed.
-- `git diff --check`: passed.
-- Findings: no actionable P0, P1, or P2 issue remains.
+- Source request: the attached desktop HERO crop `/workspace/scratch/7f3ba18f735b/upload/Screenshot 2026-08-01 215831.png`; the approved mobile composition remains unchanged.
+- Desktop scale: above `1100px`, the portrait height increased exactly 20% from `min(82vh, 780px)` to `min(98.4vh, 936px)`, with the maximum width increased from `126%` to `151.2%`.
+- Composition: the enlarged portrait is top-anchored so Egor's head remains fully visible; the lower body crops cleanly at the HERO/ticker boundary without touching the heading, subtitle, or controls.
+- Responsive coverage: verified at `430`, `768`, `820`, `1024`, `1100`, `1101`, `1280`, and `1363px`. Every tested viewport reported matching document/client widths and no horizontal overflow.
+- Mobile preservation: the approved compact upper-right portrait treatment at `≤520px` is unchanged. Tablet widths continue to use the existing lower portrait frame, while desktop widths retain the two-column HERO.
+- Mobile interactions: at `430`, `768`, and `820px`, the menu opened with `aria-expanded=true`, the visible `.nav.open` state, and all seven navigation items. The ticker transform changed during observation, confirming continuous movement.
+- Runtime: no application-originated console errors were observed; the only recorded errors came from the unrelated browser-extension metadata bridge.
+- Checks: `npm run build` passed; `npm run test:sites` passed `7/7`; `git diff --check` passed.
+- Findings: no actionable P0, P1, or P2 responsive, interaction, clipping, or overflow issues remain.
 
 final result: passed
 
@@ -251,6 +244,7 @@ final result: passed
 **Findings**
 
 - No actionable P0, P1, or P2 findings remain.
+
 - [P3] Long pages still rely on the browser scrollbar rather than a custom progress indicator. This is intentional and keeps the mobile experience familiar and lightweight.
 
 final result: passed
@@ -304,5 +298,44 @@ final result: passed
 - `npm run test:sites`: 5/5 passed.
 - `git diff --check`: passed.
 - Findings: no actionable P0, P1, or P2 visual, responsive, interaction, SEO, or routing issues remain.
+
+final result: passed
+
+**Mobile Privacy and Optimized Case Gallery Verification — 2026-08-01**
+
+- Tested desktop Cases at `1348 × 926` and mobile Home, navigation, loader, ticker, form consent, and Privacy at `390 × 844`.
+- Case order is Дарья Каминскене, Green Apple Dent, then Крыша-мечты on Home and the full Cases page.
+- All seven case covers use responsive WebP sources at 640, 960, and 1440 widths in true 16:9 frames with no crop. Mobile selected the 640px sources, each about 15–24KB.
+- The mobile menu opens above content, closes after route selection, and the continuous ticker moves on touch widths. The branded loader is visible during the bounded asset wait.
+- Privacy is a known route, linked from the footer and mobile menu. Lead forms require explicit consent before submission.
+- Privacy typography was verified at `375px` content width with no horizontal overflow; Cyrillic display text wraps without clipping.
+- `npm run build`: passed. `npm run test:sites`: 6/6 passed. `git diff --check`: passed.
+- Findings: no actionable P0, P1, or P2 issue remains.
+
+final result: passed
+
+**Homepage Portrait Scale and Mobile 404-Composition Verification — 2026-08-01**
+
+- Visual target: the existing branded mobile 404 composition, compared side by side with the revised homepage in the cloud browser at a `390 × 844` mobile frame.
+- Asset fidelity: the homepage continues to use `/assets/images/egor-hero-cutout.webp`; the 404-only peace-sign portrait was not reused.
+- Desktop evidence at `1363 × 936`: the portrait renders at approximately `567 × 756px`, remains grounded at the bottom of the HERO, keeps the head and shoulders visible, and produces zero horizontal document overflow.
+- Mobile evidence: the previous standalone `410px` portrait block is removed at `≤520px`. The portrait now occupies a compact upper-right crop (`164 × 224px` at the 390px frame), following the 404 hierarchy while keeping the headline, accent rule, subtitle, CTAs, facts, and ticker readable in the first screen.
+- Narrow-screen refinement: at `≤360px` the portrait contracts to `142 × 198px`, preserving the same side composition without crowding the first two title lines.
+- Interaction evidence: the mobile menu still opens as a full-height visible panel with all seven routes and its Telegram, lead, and privacy actions. The ticker remains present directly after the HERO.
+- Console evidence: no application-originated warnings or errors were found; the only recorded error came from an unrelated Chrome extension metadata bridge.
+- Checks: `npm run build`, `npm run test:sites` (`7/7`), and `git diff --check` passed.
+- Findings: no actionable P0, P1, or P2 issues remain for the desktop portrait scale or mobile HERO composition.
+
+final result: passed
+
+**VPS Telegram Form and Release Verification — 2026-08-02**
+
+- The shared modal and Contacts-page form now POST JSON to the production server's existing `/api/brief` endpoint with the required `name`, `contact`, and `message` fields plus the existing `website` honeypot.
+- Success is shown only after an HTTP-success response containing `{ ok: true }`. Sending disables the submit control; server errors remain visible and retryable without clearing the entered data.
+- The modal heading is “Оставить заявку”; the message field and privacy consent are both required. A successful response confirms that the application reached Telegram and retains direct-contact links as secondary options.
+- The build now emits route-specific HTML shells for every known React route so the existing VPS `server.js` can serve direct visits without being replaced.
+- `scripts/deploy-vps.sh` preserves `.env`, Telegram tokens, `server.js`, Nginx, and systemd; creates a compressed frontend backup; stages the new build; verifies `/`, `/services`, and `OPTIONS /api/brief`; and automatically restores the previous frontend if a deployment check fails.
+- Checks: `bash -n scripts/deploy-vps.sh` passed; `git diff --check` passed; `npm run build` passed; `npm run test:sites` passed `9/9`.
+- Findings: no actionable form-contract, route-shell, build, or rollback issue remains before the controlled VPS release.
 
 final result: passed

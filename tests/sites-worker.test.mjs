@@ -114,6 +114,9 @@ test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/_redirects", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
+  for (const route of ["services", "cases", "pricing", "process", "about", "contacts", "privacy"]) {
+    await access(new URL(`../dist/client/${route}.html`, import.meta.url));
+  }
 });
 
 test("keeps the mobile menu visible and ticker moving with reduced motion", async () => {
@@ -131,4 +134,75 @@ test("keeps the mobile hero portrait fully visible behind the text", async () =>
   assert.ok(css.includes("width: min(52vw, 200px); height: auto"));
   assert.ok(css.includes("width: 100%; height: auto; max-width: 100%; object-fit: contain"));
   assert.ok(!css.includes(".hero-person { top: 68px; right: -14px"));
+});
+
+test("keeps every shared page hero within the first viewport", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.ok(css.includes("height: clamp(500px, calc(100svh - 86px), 860px)"));
+  assert.ok(css.includes("font-size: clamp(56px, min(6.1vw, 10.6svh), 104px)"));
+  assert.ok(css.includes("align-items: center; overflow: hidden"));
+  assert.ok(css.includes("min-height: calc(100svh - 72px)"));
+  assert.ok(css.includes("align-content: start; align-items: start; gap: clamp(56px, 16vw, 76px)"));
+  assert.ok(css.includes("font-size: clamp(40px, 10.5vw, 50px)"));
+  assert.ok(!css.includes("@media (max-width: 820px) and (max-height:"));
+  assert.ok(!css.includes(".page-hero h1 { max-width: none; font-size: clamp(42px, min(12vw, 8.2svh), 58px)"));
+  assert.ok(!css.includes("font-size: clamp(64px, 8vw, 124px)"));
+});
+
+test("ships browser and Apple tab icons from the brand mark", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+
+  assert.match(html, /href="\/favicon\.ico"/);
+  assert.match(html, /href="\/favicon-32\.png"/);
+  assert.match(html, /href="\/apple-touch-icon\.png"/);
+  await access(new URL("../public/favicon.ico", import.meta.url));
+  await access(new URL("../public/favicon-32.png", import.meta.url));
+  await access(new URL("../public/apple-touch-icon.png", import.meta.url));
+});
+
+test("keeps modal controls above the sticky header and mobile menu", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.ok(css.includes(".modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.82); z-index: 200"));
+  assert.ok(css.includes(".modal-toolbar { position: sticky; top: 0; z-index: 3"));
+  assert.ok(css.includes("body.modal-open { overflow: hidden; }"));
+  assert.match(app, /createPortal\(/);
+  assert.match(app, /if \(modalOpen\) setOpen\(false\)/);
+  assert.match(app, /\(hover: hover\) and \(pointer: fine\)/);
+});
+
+test("keeps scroll reveals fast and immediately accessible with reduced motion", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.ok(css.includes("transition: opacity .34s ease"));
+  assert.ok(css.includes("transform .42s cubic-bezier"));
+  assert.ok(css.includes(".motion-reveal { opacity: 1 !important; transform: none !important; filter: none !important"));
+  assert.ok(app.includes("(index % 4) * 35"));
+  assert.ok(app.includes('rootMargin: "0px 0px -2%", threshold: 0.03'));
+});
+
+test("shows pricing offers directly after a compact first screen", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.match(app, /className="pricing-hero"/);
+  assert.match(app, /className="section pricing-plans-section"/);
+  assert.ok(css.includes(".pricing-hero { height: auto; min-height: 340px"));
+  assert.ok(css.includes(".pricing-hero { min-height: 0; gap: 26px"));
+});
+
+test("ships approved client testimonials and Yandex Metrika", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.match(html, /mc\.yandex\.ru\/metrika\/tag\.js\?id=111246146/);
+  assert.match(html, /ym\(111246146, "init"/);
+  assert.match(app, /Дарья Каминскене/);
+  assert.match(app, /Green Apple Dent/);
+  assert.match(app, /Крыша-мечты/);
+  assert.match(app, /window\.ym\?\.\(111246146, "hit"/);
+  assert.match(app, /Яндекс Метрика и cookie/);
 });
