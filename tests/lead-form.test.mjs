@@ -15,16 +15,25 @@ test("submits the lead form to the VPS Telegram endpoint", () => {
 test("updates VPS validation so an empty comment is accepted", () => {
   assert.match(deploySource, /patch-vps-server\.mjs/);
   assert.match(deploySource, /SERVER_BACKUP_FILE/);
+  assert.match(deploySource, /wait_for_endpoint GET http:\/\/127\.0\.0\.1:3000\//);
+  assert.match(deploySource, /for attempt in \$\(seq 1 30\)/);
   assert.match(serverPatchSource, /!payload\.name \|\| !payload\.contact\)/);
   assert.doesNotMatch(serverPatchSource, /newCondition = .*payload\.message/);
 });
 
 test("labels concept work as demo projects and includes the fitness case", () => {
-  assert.match(appSource, /name: "Илья Морозов", type: "Демо-проект"/);
-  assert.match(appSource, /name: "NovaDent", type: "Демо-проект"/);
-  assert.match(appSource, /name: "Casa Maris", type: "Демо-проект"/);
-  assert.match(appSource, /name: "Level Home", type: "Демо-проект"/);
+  assert.match(appSource, /name: "Илья Морозов", categories: \["Демо-проект", "Сайт", "Личный бренд"\]/);
+  assert.match(appSource, /name: "NovaDent", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
+  assert.match(appSource, /name: "Casa Maris", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
+  assert.match(appSource, /name: "Level Home", categories: \["Демо-проект", "Сайт", "Автоматизация"\]/);
   assert.match(appSource, /fitness-coach\.webp/);
+});
+
+test("filters cases by every matching category", () => {
+  assert.match(appSource, /item\.categories\.includes\(filter\)/);
+  assert.match(appSource, /item\.categories\.join\(" \/ "\)/);
+  assert.match(appSource, /"Личный бренд", "Демо-проект"/);
+  assert.match(appSource, /Проекты и концепты/);
 });
 
 test("requires only name, contact and privacy consent", () => {
