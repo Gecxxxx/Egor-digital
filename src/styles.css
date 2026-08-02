@@ -331,8 +331,8 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .mobile-nav-actions button { border-image: linear-gradient(90deg, var(--purple), var(--cyan)) 1; }
   .mobile-nav-actions .mobile-privacy { min-height: 38px; border: 0; border-bottom: 1px solid var(--line); border-image: none; color: #8f8f95; font-size: 9px; }
 
-  .hero { min-height: 760px; height: calc(100svh - 72px); max-height: 900px; grid-template-columns: minmax(0, 1fr); isolation: isolate; }
-  .hero-copy { min-width: 0; width: 100%; padding: 54px 22px 300px; }
+  .hero { min-height: auto; height: auto; max-height: none; display: block; isolation: isolate; }
+  .hero-copy { min-width: 0; width: 100%; padding: 54px 22px 26px; }
   .hero h1 { width: 100%; font-size: clamp(58px, 17.5vw, 72px); }
   .hero-line { width: 100%; }
   .hero-line.accent { width: max-content; max-width: 100%; }
@@ -341,9 +341,9 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .cta, .cta.secondary { min-width: 0; width: 100%; min-height: 58px; }
   .hero-facts { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; max-width: none; }
   .hero-facts div { min-width: 0; padding-left: 12px; }
-  .hero-person { position: absolute; z-index: 1; right: 0; bottom: 0; width: min(72vw, 390px); height: 390px; pointer-events: none; }
+  .hero-person { position: absolute; z-index: 1; top: 70px; right: -8px; bottom: auto; width: 240px; height: 255px; overflow: hidden; display: block; pointer-events: none; }
   .hero-person::before { inset: 8% 0 0; }
-  .hero-person img { width: 100%; height: 100%; object-position: right bottom; }
+  .hero-person img { position: absolute; top: 0; right: 0; width: auto; height: 410px; max-width: none; object-fit: contain; object-position: top center; }
   .ticker-track { animation-duration: 18s; -webkit-animation-duration: 18s; }
   .ticker span { min-width: 290px; padding-inline: 20px; }
 
@@ -422,9 +422,8 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .hero h1 { font-size: clamp(56px, 17vw, 66px); }
   .hero-line.accent > span { font-size: clamp(39px, 12.25vw, 48px); }
   .hero-facts { grid-template-columns: 1fr 1fr; }
-  .hero { min-height: 760px; }
-  .hero-copy { padding-bottom: 285px; }
-  .hero-person { width: min(76vw, 340px); height: 350px; }
+  .hero-person { top: 68px; right: -14px; width: 178px; height: 190px; }
+  .hero-person img { height: 306px; }
   .accent-title { font-size: clamp(42px, 12.5vw, 49px); }
   .filters { gap: 9px 13px; }
   .service-row { grid-template-columns: 34px minmax(0, 1fr); }
