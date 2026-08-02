@@ -141,7 +141,20 @@ test("keeps every shared page hero within the first viewport", async () => {
 
   assert.ok(css.includes("height: clamp(500px, calc(100svh - 86px), 860px)"));
   assert.ok(css.includes("font-size: clamp(56px, min(6.1vw, 10.6svh), 104px)"));
+  assert.ok(css.includes("align-items: center; overflow: hidden"));
   assert.ok(css.includes("min-height: calc(100svh - 72px)"));
+  assert.ok(css.includes("align-content: start; align-items: start; gap: clamp(92px, 20svh, 170px)"));
   assert.ok(css.includes("@media (max-width: 820px) and (max-height: 720px)"));
   assert.ok(!css.includes("font-size: clamp(64px, 8vw, 124px)"));
+});
+
+test("ships browser and Apple tab icons from the brand mark", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+
+  assert.match(html, /href="\/favicon\.ico"/);
+  assert.match(html, /href="\/favicon-32\.png"/);
+  assert.match(html, /href="\/apple-touch-icon\.png"/);
+  await access(new URL("../public/favicon.ico", import.meta.url));
+  await access(new URL("../public/favicon-32.png", import.meta.url));
+  await access(new URL("../public/apple-touch-icon.png", import.meta.url));
 });
