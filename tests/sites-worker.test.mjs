@@ -123,3 +123,12 @@ test("keeps the mobile menu visible and ticker moving with reduced motion", asyn
   assert.ok(css.includes("@media (max-width: 820px) and (prefers-reduced-motion: reduce)"));
   assert.ok(css.includes("animation: ticker-run 18s linear infinite !important"));
 });
+
+test("keeps the mobile hero portrait fully visible behind the text", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.ok(css.includes("width: min(39vw, 300px); height: auto; overflow: visible"));
+  assert.ok(css.includes("width: min(52vw, 200px); height: auto"));
+  assert.ok(css.includes("width: 100%; height: auto; max-width: 100%; object-fit: contain"));
+  assert.ok(!css.includes(".hero-person { top: 68px; right: -14px"));
+});
