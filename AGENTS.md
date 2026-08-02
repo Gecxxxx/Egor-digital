@@ -41,5 +41,6 @@ When implementing from a selected generated mock, treat that image as the source
 - The Pricing route uses a compact first screen so the offer cards begin inside the initial viewport instead of sitting below a full-height introductory hero.
 - Testimonials from Дарья Каминскене, Анна at Green Apple Dent, and the Крыша-мечты team are client-approved and may be presented as direct quotes with their project roles.
 - Keep Yandex Metrika counter `111246146` enabled with Webvisor, clickmap, link tracking, and SPA route hits; keep the privacy policy aligned with this analytics use.
+- The VPS Content Security Policy must explicitly allow Yandex Metrika and Webvisor in `script-src`, `img-src`, `connect-src`, `frame-src`, `child-src`, and the relevant analytics hosts in `frame-ancestors`; deployment must fail and roll back if the live header blocks counter `111246146`.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.
