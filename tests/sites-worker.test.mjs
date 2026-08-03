@@ -18,7 +18,7 @@ test("serves existing static assets without a fallback", async () => {
   assert.deepEqual(calls, ["/assets/app.js"]);
 });
 
-test("falls back to index.html for a known app route", async () => {
+test("falls back to the prerendered shell for a known app route", async () => {
   const calls = [];
   const response = await worker.fetch(
     new Request("https://example.test/services?source=share", {
@@ -29,8 +29,8 @@ test("falls back to index.html for a known app route", async () => {
         fetch: async (request) => {
           const url = new URL(request.url);
           calls.push(url.pathname + url.search);
-          return new Response(url.pathname === "/index.html" ? "app" : "missing", {
-            status: url.pathname === "/index.html" ? 200 : 404,
+          return new Response(url.pathname === "/services.html" ? "services-app" : "missing", {
+            status: url.pathname === "/services.html" ? 200 : 404,
           });
         },
       },
@@ -38,7 +38,8 @@ test("falls back to index.html for a known app route", async () => {
   );
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls, ["/services?source=share", "/index.html"]);
+  assert.equal(await response.text(), "services-app");
+  assert.deepEqual(calls, ["/services?source=share", "/services.html"]);
 });
 
 test("serves the privacy route as a known app page", async () => {
@@ -50,8 +51,8 @@ test("serves the privacy route as a known app page", async () => {
         fetch: async (request) => {
           const url = new URL(request.url);
           calls.push(url.pathname);
-          return new Response(url.pathname === "/index.html" ? "privacy-app" : "missing", {
-            status: url.pathname === "/index.html" ? 200 : 404,
+          return new Response(url.pathname === "/privacy.html" ? "privacy-app" : "missing", {
+            status: url.pathname === "/privacy.html" ? 200 : 404,
           });
         },
       },
@@ -60,7 +61,7 @@ test("serves the privacy route as a known app page", async () => {
 
   assert.equal(response.status, 200);
   assert.equal(await response.text(), "privacy-app");
-  assert.deepEqual(calls, ["/privacy/", "/index.html"]);
+  assert.deepEqual(calls, ["/privacy/", "/privacy.html"]);
 });
 
 test("serves the app 404 shell with a 404 status for an unknown route", async () => {
@@ -112,17 +113,40 @@ test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/index.html", import.meta.url));
   await access(new URL("../dist/client/404.html", import.meta.url));
   await access(new URL("../dist/client/_redirects", import.meta.url));
+  await access(new URL("../dist/client/robots.txt", import.meta.url));
+  await access(new URL("../dist/client/sitemap.xml", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
   for (const route of ["services", "cases", "pricing", "process", "about", "contacts", "privacy"]) {
     await access(new URL(`../dist/client/${route}.html`, import.meta.url));
+    await access(new URL(`../dist/client/${route}/index.html`, import.meta.url));
   }
+});
+
+test("prerenders route content with unique SEO metadata and crawlable links", async () => {
+  const home = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
+  const services = await readFile(new URL("../dist/client/services.html", import.meta.url), "utf8");
+  const pricing = await readFile(new URL("../dist/client/pricing.html", import.meta.url), "utf8");
+  const notFound = await readFile(new URL("../dist/client/404.html", import.meta.url), "utf8");
+  const robots = await readFile(new URL("../dist/client/robots.txt", import.meta.url), "utf8");
+  const sitemap = await readFile(new URL("../dist/client/sitemap.xml", import.meta.url), "utf8");
+
+  assert.match(home, /<div id="root">[\s\S]*<main>/);
+  assert.match(services, /Услуги для сайта, заявок и CRM/);
+  assert.match(services, /<title>Создание сайтов и CRM для бизнеса — услуги и цены<\/title>/);
+  assert.match(services, /rel="canonical" href="https:\/\/egordigital\.site\/services"/);
+  assert.match(services, /<a[^>]+href="\/cases"/);
+  assert.match(services, /"@type":"BreadcrumbList"/);
+  assert.match(pricing, /<title>Стоимость создания сайта и CRM — от \$500<\/title>/);
+  assert.match(notFound, /<meta name="robots" content="noindex,follow"/);
+  assert.match(robots, /Sitemap: https:\/\/egordigital\.site\/sitemap\.xml/);
+  assert.match(sitemap, /<loc>https:\/\/egordigital\.site\/pricing<\/loc>/);
 });
 
 test("keeps the mobile menu visible and ticker moving with reduced motion", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
-  assert.ok(css.includes(".nav.open > button, .nav.open .mobile-nav-actions { opacity: 1; transform: none; }"));
+  assert.ok(css.includes(".nav.open > a, .nav.open .mobile-nav-actions { opacity: 1; transform: none; }"));
   assert.ok(css.includes("@media (max-width: 820px) and (prefers-reduced-motion: reduce)"));
   assert.ok(css.includes("animation: ticker-run 18s linear infinite !important"));
 });
