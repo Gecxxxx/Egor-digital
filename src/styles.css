@@ -279,6 +279,22 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .about-image { min-height: 720px; border: 1px solid var(--line); overflow: hidden; display: flex; align-items: flex-end; justify-content: center; position: relative; background-color: #08080a; }
 .about-image::after { content: ""; position: absolute; inset: 18% 8% 0; background: radial-gradient(circle at center, rgba(130,64,255,.1), transparent 66%); filter: blur(30px); }
 .about-image img { position: relative; z-index: 1; display: block; width: auto; max-width: 100%; height: 720px; object-fit: contain; object-position: center bottom; filter: contrast(1.02) saturate(.93); }
+.about-orbit { --orbit-x: 0px; --orbit-y: 0px; --portrait-x: 0px; --portrait-y: 0px; isolation: isolate; align-items: stretch; background: #07070a; perspective: 900px; }
+.about-orbit::after { z-index: 4; inset: 0; background: linear-gradient(180deg, rgba(5,5,8,.16), transparent 22%, transparent 70%, rgba(5,5,8,.48)); filter: none; pointer-events: none; }
+.about-orbit img { z-index: 1; width: 100%; max-width: none; height: 100%; object-fit: cover; object-position: center center; transform: translate3d(var(--portrait-x), var(--portrait-y), 0) scale(1.035); transition: transform .5s cubic-bezier(.22,1,.36,1); filter: contrast(1.02) saturate(.96); }
+.about-orbit-ring { position: absolute; z-index: 2; left: 4%; top: 37%; width: 92%; height: 24%; border: 1px solid rgba(92,206,255,.34); border-inline-color: rgba(194,76,255,.6); border-radius: 50%; transform: rotate(-13deg); box-shadow: 0 0 28px rgba(130,64,255,.13), inset 0 0 22px rgba(92,206,255,.08); animation: about-orbit-pulse 5.8s ease-in-out infinite; pointer-events: none; }
+.about-orbit-ui { position: absolute; z-index: 3; inset: 0; transform: translate3d(var(--orbit-x), var(--orbit-y), 28px); transition: transform .45s cubic-bezier(.22,1,.36,1); pointer-events: none; }
+.about-orbit-card { position: absolute; min-width: 142px; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; padding: 11px 13px; display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(32,27,52,.74), rgba(9,24,34,.64)); box-shadow: 0 16px 40px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); animation: about-card-float 6.8s ease-in-out infinite; }
+.about-orbit-card > i { width: 9px; height: 9px; flex: 0 0 auto; border: 1px solid var(--purple); box-shadow: 2px 2px 0 var(--cyan), 0 0 15px rgba(92,206,255,.38); }
+.about-orbit-card > span { min-width: 0; display: grid; gap: 3px; }
+.about-orbit-card strong { color: #f6f6f8; font-size: 10px; line-height: 1; letter-spacing: .08em; text-transform: uppercase; }
+.about-orbit-card small { color: #a9a9b1; font-size: 8px; line-height: 1.25; white-space: nowrap; }
+.about-orbit-card-site { top: 11%; left: 5%; animation-delay: -.8s; }
+.about-orbit-card-lead { top: 23%; right: 4%; animation-delay: -2.4s; }
+.about-orbit-card-crm { bottom: 27%; left: 4%; animation-delay: -4.2s; }
+.about-orbit-card-telegram { right: 5%; bottom: 14%; animation-delay: -5.5s; }
+@keyframes about-card-float { 0%, 100% { transform: translate3d(0,0,0) rotate(-.5deg); } 50% { transform: translate3d(0,-11px,18px) rotate(.7deg); } }
+@keyframes about-orbit-pulse { 0%, 100% { opacity: .52; transform: rotate(-13deg) scale(.985); } 50% { opacity: .9; transform: rotate(-11deg) scale(1.02); } }
 .about-grid > div:last-child > p { color: #a0a0a5; line-height: 1.75; max-width: 65ch; }
 .about-facts { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0; }
 .about-facts span { border: 1px solid var(--line); padding: 11px 14px; text-transform: uppercase; font-size: 10px; }
@@ -472,6 +488,9 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
 
   .about-image { min-height: 540px; }
   .about-image img { height: 540px; }
+  .about-image.about-orbit { width: min(100%, 620px); min-height: 0; height: auto; aspect-ratio: 4 / 5; justify-self: center; }
+  .about-image.about-orbit img { height: 100%; }
+  .about-orbit-card { min-width: 134px; }
   .testimonials > div { grid-template-columns: 1fr; margin-top: 38px; }
   .testimonials blockquote { min-height: 220px; border-right: 0; border-bottom: 1px solid var(--line); padding: 26px; }
   .direct-contact-list { grid-template-columns: 1fr; }
@@ -535,6 +554,15 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .service-choice > div { grid-template-columns: 1fr 1fr; }
   .about-image { min-height: 500px; }
   .about-image img { height: 500px; }
+  .about-image.about-orbit { width: 100%; min-height: 0; height: auto; aspect-ratio: 4 / 5; }
+  .about-image.about-orbit img { height: 100%; }
+  .about-orbit-card { min-width: 108px; border-radius: 9px; padding: 8px 9px; gap: 8px; }
+  .about-orbit-card strong { font-size: 8px; }
+  .about-orbit-card small { max-width: 86px; overflow: hidden; text-overflow: ellipsis; font-size: 7px; }
+  .about-orbit-card-site { top: 9%; left: 3%; }
+  .about-orbit-card-lead { top: 22%; right: 3%; }
+  .about-orbit-card-crm { bottom: 25%; left: 3%; }
+  .about-orbit-card-telegram { right: 3%; bottom: 11%; }
   .about-facts { display: grid; grid-template-columns: 1fr; }
   .modal-backdrop { place-items: start center; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
   .modal { min-height: 0; max-height: calc(100dvh - max(20px, env(safe-area-inset-top) + env(safe-area-inset-bottom))); }
