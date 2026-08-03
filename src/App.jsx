@@ -224,7 +224,7 @@ function Header({ path, go, onLead, modalOpen }) {
 function Eyebrow({ children }) { return <p className="eyebrow"><span aria-hidden="true" />{children}</p>; }
 function AccentTitle({ children, as = "h2" }) { const Tag = as; return <Tag className="accent-title"><span>{children}</span></Tag>; }
 function CTA({ children, onClick, href, go, secondary = false, action = "Открыть" }) {
-  const content = <><span className="cta-copy"><span>{children}</span><span aria-hidden="true">{children}</span></span><span className="cta-action">{action}<ArrowUpRight size={14} weight="bold" aria-hidden="true" /></span></>;
+  const content = <><span className="sr-only">{children}</span><span className="cta-copy" aria-hidden="true"><span>{children}</span><span>{children}</span></span><span className="cta-action" aria-hidden="true">{action}<ArrowUpRight size={14} weight="bold" /></span></>;
   return href ? <SiteLink className={secondary ? "cta secondary" : "cta"} href={href} go={go}>{content}</SiteLink> : <button className={secondary ? "cta secondary" : "cta"} onClick={onClick}>{content}</button>;
 }
 function CaseImage({ item, featured = false }) {
@@ -341,11 +341,17 @@ function Testimonials() {
 function Faq() { const qs = [["Можно начать с маленькой задачи?", "Да. Аудит, форма или точечная доработка помогают быстро проверить формат работы."], ["Один канал заявок входит в сайт?", "Да: Telegram, MAX или email — выбираем удобный вариант."], ["Что значит поддержка 2 месяца?", "Исправляю технические ошибки, помогаю с мелкими правками и контролирую стабильность после запуска."], ["Можно добавить CRM позже?", "Да. Сайт строится так, чтобы CRM и автоматизацию можно было подключить по мере роста."]]; const [openIndex, setOpenIndex] = useState(0); return <section className="section faq"><Eyebrow>FAQ</Eyebrow><AccentTitle>Короткие ответы</AccentTitle><div className="faq-list">{qs.map(([q,a], index) => { const open = openIndex === index; return <div className={open ? "faq-item is-open" : "faq-item"} key={q}><button type="button" aria-expanded={open} aria-controls={`faq-answer-${index}`} onClick={() => setOpenIndex(open ? -1 : index)}><span>{q}</span><i aria-hidden="true" /></button><div className="faq-answer" id={`faq-answer-${index}`} aria-hidden={!open}><div><p>{a}</p></div></div></div>; })}</div></section>; }
 function FinalCta({ onLead }) { return <section className="final-cta grid-surface"><Eyebrow>Следующий шаг</Eyebrow><h2>Разберём задачу<br />без лишней сметы</h2><p>Напишите, какой у вас бизнес и что сейчас мешает заявкам. Предложу понятный первый шаг и ориентир по бюджету.</p><CTA onClick={onLead}>Получить разбор</CTA></section>; }
 
+function FieldError({ id, message }) {
+  return message ? <span className="field-error" id={id} role="alert">{message}</span> : null;
+}
+
 function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расскажите о задаче", selection = {} }) {
   const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [service, setService] = useState(selection.service || "website");
   const started = useRef(false);
+  const fieldId = (name) => `${titleId}-${name}`;
 
   const markStarted = () => {
     if (started.current) return;
@@ -353,20 +359,48 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
     trackGoal("lead_form_start", getGoalContext({ form: selection.source || "direct", service }));
   };
 
+  const handleInput = (event) => {
+    markStarted();
+    const name = event.target?.name;
+    if (!name || !fieldErrors[name]) return;
+    setFieldErrors((current) => {
+      const next = { ...current };
+      delete next[name];
+      return next;
+    });
+  };
+
   const submit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    if (!form.reportValidity() || status === "sending") return;
+    if (status === "sending") return;
 
     const values = new FormData(form);
+    const name = String(values.get("name") || "").trim();
+    const contact = String(values.get("contact") || "").trim();
+    const currentWebsite = String(values.get("current_website") || "").trim();
+    const websiteField = form.elements.namedItem("current_website");
+    const privacyAccepted = values.get("privacy") === "on";
+    const nextFieldErrors = {};
+    if (!name) nextFieldErrors.name = "Введите имя.";
+    if (!contact) nextFieldErrors.contact = "Укажите Telegram, WhatsApp, телефон или email.";
+    if (currentWebsite && websiteField instanceof HTMLInputElement && !websiteField.validity.valid) nextFieldErrors.current_website = "Введите адрес сайта в формате https://example.com.";
+    if (!privacyAccepted) nextFieldErrors.privacy = "Подтвердите согласие на обработку персональных данных.";
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors);
+      setStatus("idle");
+      window.requestAnimationFrame(() => form.querySelector("[aria-invalid='true']")?.focus());
+      return;
+    }
+
+    setFieldErrors({});
     const attribution = captureAttribution();
     const currentPage = getCurrentPage();
     const comment = String(values.get("message") || "").trim();
     const chosenService = leadServices.find((item) => item.value === String(values.get("service") || service)) || leadServices[0];
-    const currentWebsite = String(values.get("current_website") || "").trim();
     const payload = {
-      name: String(values.get("name") || "").trim(),
-      contact: String(values.get("contact") || "").trim(),
+      name,
+      contact,
       message: buildLeadMessage({ comment, serviceLabel: chosenService.label, price: selection.price, currentWebsite, attribution, currentPage }),
       comment,
       website: String(values.get("website") || "").trim(),
@@ -393,7 +427,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
         body: JSON.stringify(payload),
       });
       const result = await response.json().catch(() => null);
-      if (!response.ok || !result || result.ok !== true) {
+      if (!response.ok || result?.ok === false || result?.success === false) {
         throw new Error(result?.error || "Не удалось отправить заявку. Попробуйте ещё раз или напишите напрямую.");
       }
       form.reset();
@@ -410,7 +444,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
     return <div className="success" role="status"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка отправлена</h2><p>Заявка уже пришла Егору в Telegram. Он свяжется с вами по указанному контакту.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} onClick={() => trackContact(link, "form_success")} key={link.label}>{link.label}</a>)}</div></div>;
   }
 
-  return <form onSubmit={submit} onInput={markStarted} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2>{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}<fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset><label>Имя<input name="name" required autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /></label><label>Способ связи<input name="contact" required autoComplete="off" maxLength="200" placeholder="Telegram, WhatsApp или email" /></label><label>Текущий сайт (по желанию)<input name="current_website" type="url" inputMode="url" autoComplete="url" maxLength="1000" placeholder="https://example.com" /></label><label>Комментарий (по желанию)<textarea name="message" rows="3" maxLength="3000" placeholder="Что хотите запустить или улучшить" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent"><input name="privacy" type="checkbox" required /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.</span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
+  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2>{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}<fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset><label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Способ связи<input id={fieldId("contact")} name="contact" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="off" maxLength="200" placeholder="Telegram, WhatsApp или email" /><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>Комментарий (по желанию)<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder="Что хотите запустить или улучшить" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
 }
 
 function LeadModal({ onClose, onPrivacy, selection, returnFocusElement }) {

@@ -211,6 +211,13 @@ test("keeps the mobile hero portrait fully visible behind the text", async () =>
   assert.ok(!css.includes(".hero-person { top: 68px; right: -14px"));
 });
 
+test("shows complete case-study images instead of cropping their previews", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.ok(css.includes(".case-image img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }"));
+  assert.ok(css.includes(".case-study-preview .case-image img { filter: none; transform: none; }"));
+});
+
 test("ships an adaptive animated Digital Orbit portrait on the about page", async () => {
   const about = await readFile(new URL("../dist/client/about.html", import.meta.url), "utf8");
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
