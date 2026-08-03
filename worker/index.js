@@ -13,7 +13,7 @@ export default {
     const pathname = requestUrl.pathname.replace(/\/+$/, "") || "/";
     const isKnownRoute = APP_ROUTES.has(pathname);
     const shellUrl = new URL(request.url);
-    shellUrl.pathname = isKnownRoute ? "/index.html" : "/404.html";
+    shellUrl.pathname = isKnownRoute ? (pathname === "/" ? "/index.html" : `${pathname}.html`) : "/404.html";
     shellUrl.search = "";
     const shell = await env.ASSETS.fetch(new Request(shellUrl, request));
 
