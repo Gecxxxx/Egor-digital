@@ -11,6 +11,7 @@ const execFileAsync = promisify(execFile);
 const appSource = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
 const deploySource = await readFile(new URL("../scripts/deploy-vps.sh", import.meta.url), "utf8");
 const serverPatchSource = await readFile(new URL("../scripts/patch-vps-server.mjs", import.meta.url), "utf8");
+const nginxPatchSource = await readFile(new URL("../scripts/patch-vps-nginx.mjs", import.meta.url), "utf8");
 
 test("submits the lead form to the VPS Telegram endpoint", () => {
   assert.match(appSource, /fetch\("\/api\/brief"/);
@@ -58,30 +59,70 @@ test("updates VPS validation so an empty comment is accepted", () => {
   assert.doesNotMatch(serverPatchSource, /newCondition = .*payload\.message/);
 });
 
-test("allows Yandex Metrika and Webvisor through the VPS CSP", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "egor-metrika-csp-"));
+test("delegates the VPS CSP to Nginx and keeps API response headers compact", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "egor-vps-security-"));
   const serverPath = join(directory, "server.js");
+  const nginxPath = join(directory, "egordigital.site");
   const serverSource = `
     const validation = (payload) => {
       if (!payload.name || !payload.contact || !payload.message) return "Заполните имя, контакт и короткое описание задачи.";
     };
-    const csp = "default-src 'self'; frame-ancestors 'self'; frame-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self';";
+    function securityHeaders() {
+      return {
+        'Content-Security-Policy': [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-inline'",
+          "connect-src 'self'"
+        ].join('; '),
+        'X-Content-Type-Options': 'nosniff'
+      };
+    }
+  `;
+  const nginxSource = `
+server {
+    listen 80;
+    server_name egordigital.site www.egordigital.site;
+    return 301 https://egordigital.site$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name egordigital.site;
+
+    ssl_certificate /etc/letsencrypt/live/egordigital.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/egordigital.site/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+    }
+}
   `;
 
   await writeFile(serverPath, serverSource);
+  await writeFile(nginxPath, nginxSource);
   await execFileAsync(process.execPath, [new URL("../scripts/patch-vps-server.mjs", import.meta.url).pathname, serverPath]);
+  await execFileAsync(process.execPath, [new URL("../scripts/patch-vps-nginx.mjs", import.meta.url).pathname, nginxPath]);
 
-  const patched = await readFile(serverPath, "utf8");
-  assert.match(patched, /script-src[^;]*https:\/\/mc\.yandex\.ru[^;]*https:\/\/yastatic\.net/);
-  assert.match(patched, /connect-src[^;]*https:\/\/mc\.yandex\.ru[^;]*wss:\/\/mc\.webvisor\.org/);
-  assert.match(patched, /img-src[^;]*https:\/\/mc\.yandex\.ru/);
-  assert.match(patched, /child-src blob:[^;]*https:\/\/mc\.yandex\.ru/);
-  assert.match(patched, /frame-src[^;]*blob:[^;]*https:\/\/mc\.yandex\.ru/);
-  assert.match(patched, /frame-ancestors[^;]*https:\/\/\*\.yandex\.ru/);
-  assert.match(deploySource, /verify_metrika/);
-  assert.match(deploySource, /grep '111246146' >\/dev\/null/);
-  assert.doesNotMatch(deploySource, /grep -q '111246146'/);
-  assert.match(deploySource, /content-security-policy:.*connect-src/);
+  const patchedServer = await readFile(serverPath, "utf8");
+  const patchedNginx = await readFile(nginxPath, "utf8");
+
+  assert.match(patchedServer, /!payload\.name \|\| !payload\.contact\)/);
+  assert.doesNotMatch(patchedServer, /Content-Security-Policy/);
+  assert.match(patchedNginx, /proxy_hide_header Content-Security-Policy/);
+  assert.match(patchedNginx, /proxy_buffer_size 32k/);
+  assert.match(patchedNginx, /proxy_buffers 8 32k/);
+  assert.match(patchedNginx, /script-src[^;]*https:\/\/mc\.yandex\.ru[^;]*https:\/\/yastatic\.net/);
+  assert.match(patchedNginx, /connect-src[^;]*https:\/\/mc\.yandex\.ru[^;]*wss:\/\/mc\.webvisor\.org/);
+  assert.match(patchedNginx, /img-src[^;]*https:\/\/mc\.yandex\.ru/);
+  assert.match(patchedNginx, /style-src[^;]*https:\/\/fonts\.googleapis\.com/);
+  assert.match(patchedNginx, /font-src[^;]*https:\/\/fonts\.gstatic\.com/);
+
+  assert.match(nginxPatchSource, /BEGIN EGORDIGITAL MANAGED SECURITY/);
+  assert.match(deploySource, /patch-vps-nginx\.mjs/);
+  assert.match(deploySource, /NGINX_BACKUP_FILE/);
+  assert.match(deploySource, /verify_public_headers/);
+  assert.match(deploySource, /verify_brief_api/);
+  assert.match(deploySource, /Public CSP header is unexpectedly large/);
 });
 
 test("labels concept work as demo projects and includes the fitness case", () => {
