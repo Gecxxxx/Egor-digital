@@ -256,6 +256,17 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .inline-lead form { display: grid; gap: 20px; }
 .inline-lead label { display: grid; gap: 8px; color: #999; text-transform: uppercase; font-size: 10px; }
 .inline-lead input, .inline-lead textarea { width: 100%; border: 1px solid var(--line); background: #070708; color: white; padding: 15px; resize: vertical; }
+.selected-plan { margin: -12px 0 0; padding: 13px 15px; border-left: 2px solid var(--cyan); background: rgba(74,221,255,.055); color: #b8b8be; font-size: 13px; line-height: 1.5; }
+.selected-plan strong { color: var(--cyan); font-weight: 600; }
+.service-choice { min-width: 0; margin: 0; padding: 0; border: 0; }
+.service-choice legend { margin-bottom: 9px; color: #999; text-transform: uppercase; font-size: 10px; }
+.service-choice > div { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+.service-choice label { display: block; min-width: 0; cursor: pointer; }
+.service-choice input { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0; pointer-events: none; }
+.service-choice span { min-height: 42px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; padding: 9px 6px; color: #a6a6ac; text-align: center; text-transform: uppercase; font-size: 9px; transition: border-color .2s, color .2s, background .2s; }
+.service-choice label:hover span { border-color: #62626a; color: white; }
+.service-choice label.is-selected span { border-color: var(--purple); background: rgba(194,76,255,.09); color: white; }
+.service-choice input:focus-visible + span { outline: 2px solid var(--cyan); outline-offset: 2px; }
 .privacy-consent { grid-template-columns: 22px minmax(0, 1fr) !important; align-items: start; gap: 11px !important; text-transform: none !important; color: #a4a4aa !important; font-size: 12px !important; line-height: 1.55; }
 .privacy-consent input { width: 18px !important; height: 18px; margin: 1px 0 0; padding: 0; accent-color: var(--purple); }
 .privacy-consent a { display: inline; min-height: 0 !important; border: 0 !important; border-bottom: 1px solid var(--purple) !important; border-image: none !important; padding: 0 0 2px !important; background: transparent !important; color: var(--cyan) !important; text-transform: none !important; text-decoration: none; cursor: pointer; }
@@ -449,6 +460,7 @@ footer p { color: #7f7f84; font-size: 10px; text-transform: uppercase; }
   .lead-flow li { grid-template-columns: 38px minmax(0, 1fr); }
   .lead-flow li small { grid-column: 2; }
   .success-links { grid-template-columns: 1fr; }
+  .service-choice > div { grid-template-columns: 1fr 1fr; }
   .about-image { min-height: 500px; }
   .about-image img { height: 500px; }
   .about-facts { display: grid; grid-template-columns: 1fr; }
