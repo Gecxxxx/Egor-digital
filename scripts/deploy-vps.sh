@@ -29,6 +29,16 @@ wait_for_endpoint() {
   return 1
 }
 
+verify_metrika() {
+  local headers
+
+  curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3000/ | grep -q '111246146'
+  headers="$(curl --fail --silent --show-error --head --max-time 5 http://127.0.0.1:3000/ | tr -d '\r')"
+  grep -qi '^content-security-policy:.*script-src[^;]*https://mc\.yandex\.ru' <<<"$headers"
+  grep -qi '^content-security-policy:.*connect-src[^;]*https://mc\.yandex\.ru' <<<"$headers"
+  grep -qi '^content-security-policy:.*img-src[^;]*https://mc\.yandex\.ru' <<<"$headers"
+}
+
 if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
   echo "Run this deployment as root." >&2
   exit 1
@@ -90,6 +100,7 @@ systemctl is-active --quiet "$SERVICE_NAME"
 wait_for_endpoint GET http://127.0.0.1:3000/
 wait_for_endpoint GET http://127.0.0.1:3000/services
 wait_for_endpoint OPTIONS http://127.0.0.1:3000/api/brief
+verify_metrika
 
 rm -rf -- "$PREVIOUS_DIR"
 SWITCHED=0
