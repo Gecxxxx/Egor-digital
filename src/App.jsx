@@ -276,7 +276,37 @@ const steps = [["01", "Разбор", "Понимаем бизнес, услуг
 
 function Process({ onLead }) { return <main><PageHero eyebrow="Процесс" title="Как проходит работа над сайтом" text="Сначала разбираем задачу, затем собираем структуру, делаем сайт, подключаем заявки и спокойно запускаем — без хаоса и сюрпризов." onLead={onLead} /><section className="section"><Eyebrow>5 этапов</Eyebrow><AccentTitle>От разбора до запуска</AccentTitle><div className="steps">{steps.map(([n,t,d,r]) => <article key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p><strong>{r}</strong></article>)}</div></section><section className="section process-notes"><div><Eyebrow>Материалы</Eyebrow><h3>Что нужно от вас</h3><p>Описание бизнеса и услуг, контакты, логотип, фото, примеры, доступы и быстрая обратная связь.</p></div><div><Eyebrow>Правки</Eyebrow><h3>Как проходят правки</h3><p>1–2 круга входят в запуск. Исправляем текст, детали, состояния, адаптив и понятность блоков.</p></div><div><Eyebrow>После запуска</Eyebrow><h3>Что дальше</h3><p>Два месяца поддержки бесплатно, затем — новые страницы, CRM, интеграции или подписка от $50.</p></div></section><FinalCta onLead={onLead} /></main>; }
 
-function About({ onLead, go }) { return <main><PageHero eyebrow="Обо мне" title="Сайт как бизнес-инструмент" text="Он должен быстро объяснять ценность, снимать сомнения клиента и приводить к понятному действию." onLead={onLead} /><section className="section about-grid"><div className="about-image grid-surface"><img src="/assets/images/egor-about-cutout.webp" alt="Егор — Digital Tools by Egor" width="502" height="884" loading="eager" decoding="sync" fetchPriority="high" /></div><div><Eyebrow>Кто я</Eyebrow><AccentTitle>Егор — разработчик сайтов и CRM</AccentTitle><p>Я создаю сайты и digital-системы для бизнеса: помогаю понятнее показать услуги, повысить доверие, получать заявки и навести порядок в процессах.</p><p>Работал в школах водных видов спорта, фитнес-клубах, туризме и локальных сервисах. Поэтому понимаю бизнес изнутри: заявки в чатах, клиенты в таблицах, оплаты отдельно и отчёты вручную.</p><p>Моя задача — собрать понятную систему: сайт, заявки, аналитику, CRM и автоматизацию.</p><div className="about-facts"><span>5 лет в digital-проектах</span><span>Проект веду лично</span><span>Специалисты под задачи</span></div><CTA href="/cases" go={go}>Смотреть кейсы</CTA></div></section><Testimonials /><FinalCta onLead={onLead} /></main>; }
+function DigitalOrbitPortrait() {
+  const move = (event) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || event.pointerType === "touch") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - .5) * 14;
+    const y = ((event.clientY - rect.top) / rect.height - .5) * 14;
+    event.currentTarget.style.setProperty("--orbit-x", `${x}px`);
+    event.currentTarget.style.setProperty("--orbit-y", `${y}px`);
+    event.currentTarget.style.setProperty("--portrait-x", `${-x * .28}px`);
+    event.currentTarget.style.setProperty("--portrait-y", `${-y * .28}px`);
+  };
+  const reset = (event) => {
+    event.currentTarget.style.setProperty("--orbit-x", "0px");
+    event.currentTarget.style.setProperty("--orbit-y", "0px");
+    event.currentTarget.style.setProperty("--portrait-x", "0px");
+    event.currentTarget.style.setProperty("--portrait-y", "0px");
+  };
+  const cards = [
+    ["site", "Site", "Структура готова"],
+    ["lead", "Lead", "Новая заявка"],
+    ["crm", "CRM", "Клиент в работе"],
+    ["telegram", "Telegram", "Сообщение получено"],
+  ];
+  return <div className="about-image about-orbit grid-surface" onPointerMove={move} onPointerLeave={reset}>
+    <img src="/assets/images/egor-about-orbit.webp" alt="Егор в окружении digital-интерфейсов" width="1122" height="1402" loading="eager" decoding="async" fetchPriority="high" />
+    <span className="about-orbit-ring" aria-hidden="true" />
+    <div className="about-orbit-ui" aria-hidden="true">{cards.map(([type, title, detail]) => <span className={`about-orbit-card about-orbit-card-${type}`} key={type}><i /><span><strong>{title}</strong><small>{detail}</small></span></span>)}</div>
+  </div>;
+}
+
+function About({ onLead, go }) { return <main><PageHero eyebrow="Обо мне" title="Сайт как бизнес-инструмент" text="Он должен быстро объяснять ценность, снимать сомнения клиента и приводить к понятному действию." onLead={onLead} /><section className="section about-grid"><DigitalOrbitPortrait /><div><Eyebrow>Кто я</Eyebrow><AccentTitle>Егор — разработчик сайтов и CRM</AccentTitle><p>Я создаю сайты и digital-системы для бизнеса: помогаю понятнее показать услуги, повысить доверие, получать заявки и навести порядок в процессах.</p><p>Работал в школах водных видов спорта, фитнес-клубах, туризме и локальных сервисах. Поэтому понимаю бизнес изнутри: заявки в чатах, клиенты в таблицах, оплаты отдельно и отчёты вручную.</p><p>Моя задача — собрать понятную систему: сайт, заявки, аналитику, CRM и автоматизацию.</p><div className="about-facts"><span>5 лет в digital-проектах</span><span>Проект веду лично</span><span>Специалисты под задачи</span></div><CTA href="/cases" go={go}>Смотреть кейсы</CTA></div></section><Testimonials /><FinalCta onLead={onLead} /></main>; }
 
 function Contacts({ onLead, go }) { return <main><PageHero eyebrow="Контакты" title="Расскажите, что нужно запустить" text="Не нужен длинный бриф. Достаточно имени и удобного способа связи — отвечу лично и уточню задачу." onLead={onLead} action="Оставить заявку" /><section className="section contact-options"><div><span>01</span><h3>Нужен сайт</h3><p>структура, заявки и запуск</p><button onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "contacts_option" })}>Открыть форму</button></div><div><span>02</span><h3>Нужен аудит</h3><p>найти, что мешает доверию</p><button onClick={() => onLead({ service: "audit", serviceLabel: "Аудит", source: "contacts_option" })}>Открыть форму</button></div><div><span>03</span><h3>CRM и заявки</h3><p>навести порядок в обращениях</p><button onClick={() => onLead({ service: "crm", serviceLabel: "CRM", source: "contacts_option" })}>Открыть форму</button></div><div><span>04</span><h3>Поддержка</h3><p>доработки и техконтроль</p><button onClick={() => onLead({ service: "improvements", serviceLabel: "Доработка", source: "contacts_option" })}>Открыть форму</button></div></section><section className="section contact-hub"><div className="direct-contact"><Eyebrow>Прямые контакты</Eyebrow><AccentTitle>Напишите напрямую</AccentTitle><p>Можно не заполнять форму: выберите удобный канал и коротко расскажите о задаче. Егор ответит лично.</p><div className="direct-contact-list">{contactLinks.map((link) => <a className="direct-contact-link" href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} onClick={() => trackContact(link, "contacts")} key={link.label}><span>{link.label}</span><strong>{link.value}</strong><small>{link.action}</small></a>)}</div></div><div className="inline-lead"><LeadForm titleId="contact-form-title" selection={{ source: "contacts_inline" }} onPrivacy={() => go("/privacy")} /></div></section></main>; }
 

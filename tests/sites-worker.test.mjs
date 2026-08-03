@@ -177,6 +177,19 @@ test("keeps the mobile hero portrait fully visible behind the text", async () =>
   assert.ok(!css.includes(".hero-person { top: 68px; right: -14px"));
 });
 
+test("ships an adaptive animated Digital Orbit portrait on the about page", async () => {
+  const about = await readFile(new URL("../dist/client/about.html", import.meta.url), "utf8");
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const orbitAsset = await readFile(new URL("../public/assets/images/egor-about-orbit.webp", import.meta.url));
+
+  assert.match(about, /egor-about-orbit\.webp/);
+  assert.match(about, /about-orbit-card-site/);
+  assert.match(about, /about-orbit-card-telegram/);
+  assert.ok(css.includes("@keyframes about-card-float"));
+  assert.ok(css.includes("aspect-ratio: 4 / 5"));
+  assert.ok(orbitAsset.byteLength > 20_000);
+});
+
 test("keeps every shared page hero within the first viewport", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
