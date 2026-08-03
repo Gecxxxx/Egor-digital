@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight } from "@phosphor-icons/react/ArrowUpRight";
 import { getRoute, normalizePath, routes, SITE_URL } from "./site-config.js";
@@ -6,6 +6,8 @@ import { buildLeadMessage, captureAttribution, getCurrentPage, getGoalContext, t
 
 const nav = routes.filter(({ path, nav: showInNav }) => path !== "/privacy" && showInNav !== false).map(({ path, label }) => [path, label]);
 const knownPaths = new Set(routes.map(({ path }) => path));
+const useBrowserLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+const INTRO_SESSION_KEY = "egor:intro-seen";
 
 const contactLinks = [
   { label: "Telegram", value: "@egecxxxx", href: "https://t.me/egecxxxx", action: "Открыть диалог", goal: "telegram_click" },
@@ -231,9 +233,14 @@ function CaseImage({ item, featured = false }) {
   return <div className="case-image"><picture><source type="image/webp" srcSet={`${base}-640.webp 640w, ${base}-960.webp 960w, ${base}-1440.webp 1440w, ${item.image} ${item.imageWidth}w`} sizes={sizes} /><img src={item.image} alt={`${item.name} — превью проекта`} width={item.imageWidth} height={item.imageHeight} loading="lazy" decoding="async" /></picture></div>;
 }
 
-function Hero({ go, onLead }) { return <><section className="hero grid-surface"><div className="hero-copy"><Eyebrow>Digital Tools by Egor</Eyebrow><h1 aria-label="Сайты. CRM. Автоматизация."><span className="hero-line"><span>Сайты.</span></span><span className="hero-line"><span>CRM.</span></span><span className="hero-line accent"><span>Автоматизация.</span></span></h1><p className="hero-sub"><AnimatedChars text="От идеи до работающей " /><strong><AnimatedChars text="системы заявок" offset={22} /></strong></p><div className="hero-actions"><CTA href="/cases" go={go}>Смотреть кейсы</CTA><CTA secondary onClick={onLead}>Получить разбор</CTA></div><div className="hero-facts"><div><b>Сайт для бизнеса</b><strong><CountUp end={500} prefix="от $" /></strong></div><div><b><CountUp end={2} suffix=" месяца поддержки" /></b><strong>бесплатно</strong></div></div></div><div className="hero-person"><img src="/assets/images/egor-hero-cutout.webp" alt="Егор — разработчик сайтов и CRM" width="1086" height="1448" loading="eager" decoding="sync" fetchPriority="high" /></div></section><div className="ticker" aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div></div></>; }
+function BenefitTicker() {
+  const [paused, setPaused] = useState(false);
+  return <div className={paused ? "ticker is-paused" : "ticker"} aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div><button type="button" className="ticker-toggle" aria-pressed={paused} onClick={() => setPaused((current) => !current)}>{paused ? "Запустить" : "Пауза"}</button></div>;
+}
 
-function NotFound({ go, onLead }) { return <main className="not-found"><section className="not-found-hero grid-surface"><div className="not-found-copy"><Eyebrow>Ошибка 404</Eyebrow><p className="not-found-code" aria-hidden="true">404</p><h1><span>Страница</span><span>не найдена</span></h1><p className="not-found-text">Похоже, ссылка устарела или такой страницы больше нет. Вернитесь на главную либо расскажите о своей задаче — отвечу лично.</p><div className="not-found-actions"><CTA action="Перейти" href="/" go={go}>Вернуться на сайт</CTA><CTA secondary onClick={onLead}>Оставить заявку</CTA></div><nav className="not-found-links" aria-label="Полезные страницы"><span>Можно перейти сразу:</span><SiteLink href="/services" go={go}>Услуги</SiteLink><SiteLink href="/cases" go={go}>Кейсы</SiteLink><SiteLink href="/contacts" go={go}>Контакты</SiteLink></nav></div><div className="not-found-person"><img src="/assets/images/egor-about-cutout.webp" alt="Егор — Digital Tools by Egor" width="502" height="884" loading="eager" decoding="sync" fetchPriority="high" /></div></section></main>; }
+function Hero({ go, onLead }) { return <><section className="hero grid-surface"><div className="hero-copy"><Eyebrow>Digital Tools by Egor</Eyebrow><h1 aria-label="Сайты. CRM. Автоматизация."><span className="hero-line"><span>Сайты.</span></span><span className="hero-line"><span>CRM.</span></span><span className="hero-line accent"><span>Автоматизация.</span></span></h1><p className="hero-sub"><AnimatedChars text="От идеи до работающей " /><strong><AnimatedChars text="системы заявок" offset={22} /></strong></p><div className="hero-actions"><CTA href="/cases" go={go}>Смотреть кейсы</CTA><CTA secondary onClick={onLead}>Получить разбор</CTA></div><div className="hero-facts"><div><b>Сайт для бизнеса</b><strong><CountUp end={500} prefix="от $" /></strong></div><div><b><CountUp end={2} suffix=" месяца поддержки" /></b><strong>бесплатно</strong></div></div></div><div className="hero-person"><img src="/assets/images/egor-hero-cutout.webp" alt="Егор — разработчик сайтов и CRM" width="1086" height="1448" loading="eager" decoding="sync" fetchPriority="high" /></div></section><BenefitTicker /></>; }
+
+function NotFound({ go, onLead }) { return <main id="main-content" tabIndex="-1" className="not-found"><section className="not-found-hero grid-surface"><div className="not-found-copy"><Eyebrow>Ошибка 404</Eyebrow><p className="not-found-code" aria-hidden="true">404</p><h1><span>Страница</span><span>не найдена</span></h1><p className="not-found-text">Похоже, ссылка устарела или такой страницы больше нет. Вернитесь на главную либо расскажите о своей задаче — отвечу лично.</p><div className="not-found-actions"><CTA action="Перейти" href="/" go={go}>Вернуться на сайт</CTA><CTA secondary onClick={onLead}>Оставить заявку</CTA></div><nav className="not-found-links" aria-label="Полезные страницы"><span>Можно перейти сразу:</span><SiteLink href="/services" go={go}>Услуги</SiteLink><SiteLink href="/cases" go={go}>Кейсы</SiteLink><SiteLink href="/contacts" go={go}>Контакты</SiteLink></nav></div><div className="not-found-person"><img src="/assets/images/egor-about-cutout.webp" alt="Егор — Digital Tools by Egor" width="502" height="884" loading="eager" decoding="sync" fetchPriority="high" /></div></section></main>; }
 
 function CaseAction({ item, go, placement, children = "Смотреть проект" }) {
   return item.casePath
@@ -406,21 +413,54 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
   return <form onSubmit={submit} onInput={markStarted} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2>{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}<fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset><label>Имя<input name="name" required autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /></label><label>Способ связи<input name="contact" required autoComplete="off" maxLength="200" placeholder="Telegram, WhatsApp или email" /></label><label>Текущий сайт (по желанию)<input name="current_website" type="url" inputMode="url" autoComplete="url" maxLength="1000" placeholder="https://example.com" /></label><label>Комментарий (по желанию)<textarea name="message" rows="3" maxLength="3000" placeholder="Что хотите запустить или улучшить" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent"><input name="privacy" type="checkbox" required /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.</span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
 }
 
-function LeadModal({ onClose, onPrivacy, selection }) {
+function LeadModal({ onClose, onPrivacy, selection, returnFocusElement }) {
+  const dialogRef = useRef(null);
+  const returnFocusRef = useRef(null);
+
   useEffect(() => {
-    const esc = (event) => event.key === "Escape" && onClose();
+    const app = document.querySelector(".app");
+    const previousAriaHidden = app?.getAttribute("aria-hidden");
+    returnFocusRef.current = returnFocusElement instanceof HTMLElement ? returnFocusElement : document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    const focusableSelector = [
+      "a[href]", "button:not([disabled])", "input:not([disabled]):not([type='hidden'])",
+      "textarea:not([disabled])", "select:not([disabled])", "[tabindex]:not([tabindex='-1'])",
+    ].join(",");
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") { event.preventDefault(); onClose(); return; }
+      if (event.key !== "Tab") return;
+      const focusable = [...(dialogRef.current?.querySelectorAll(focusableSelector) || [])].filter((element) => !element.hasAttribute("hidden") && element.getAttribute("aria-hidden") !== "true");
+      if (focusable.length === 0) { event.preventDefault(); dialogRef.current?.focus(); return; }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
+    };
+
     document.body.classList.add("modal-open");
-    window.addEventListener("keydown", esc);
+    if (app) { app.inert = true; app.setAttribute("aria-hidden", "true"); }
+    window.addEventListener("keydown", handleKeyDown);
+    window.requestAnimationFrame(() => {
+      const preferred = dialogRef.current?.querySelector("[autofocus]");
+      (preferred || dialogRef.current?.querySelector(".modal-close") || dialogRef.current)?.focus();
+    });
     return () => {
       document.body.classList.remove("modal-open");
-      window.removeEventListener("keydown", esc);
+      window.removeEventListener("keydown", handleKeyDown);
+      if (app) {
+        app.inert = false;
+        app.removeAttribute("inert");
+        if (previousAriaHidden === null) app.removeAttribute("aria-hidden");
+        else app.setAttribute("aria-hidden", previousAriaHidden);
+      }
+      window.setTimeout(() => returnFocusRef.current?.isConnected && returnFocusRef.current.focus(), 0);
     };
-  }, [onClose]);
+  }, [onClose, returnFocusElement]);
 
   const autoFocus = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   return createPortal(
     <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+      <div ref={dialogRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="lead-title" tabIndex="-1">
         <div className="modal-toolbar"><button className="modal-close" onClick={onClose} aria-label="Закрыть окно заявки">Закрыть</button></div>
         <div className="modal-content"><LeadForm titleId="lead-title" heading="Оставить заявку" autoFocus={autoFocus} onPrivacy={onPrivacy} selection={selection} /></div>
       </div>
@@ -438,7 +478,9 @@ export function App({ initialPath = "/" }) {
   const [leadOpen, setLeadOpen] = useState(false);
   const [leadSelection, setLeadSelection] = useState({});
   const [ready, setReady] = useState(false);
+  const leadTriggerRef = useRef(null);
   const initialMetrikaPath = useRef(path);
+  const initialFocusPath = useRef(path);
   const isNotFound = !knownPaths.has(path);
   useRevealOnScroll(path, ready);
 
@@ -474,8 +516,18 @@ export function App({ initialPath = "/" }) {
   }, [path]);
 
   useEffect(() => {
+    if (initialFocusPath.current === path) return;
+    initialFocusPath.current = path;
+    document.getElementById("page-content")?.focus({ preventScroll: true });
+  }, [path]);
+
+  useBrowserLayoutEffect(() => {
     let active = true;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let introSeen = false;
+    try { introSeen = window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1"; } catch { introSeen = false; }
+    if (introSeen) { setReady(true); return undefined; }
+
     document.body.classList.add("is-intro-active");
     const portraitSelector = window.location.pathname === "/about" ? ".about-image img" : knownPaths.has(window.location.pathname) ? ".hero-person img" : ".not-found-person img";
     const portrait = document.querySelector(portraitSelector);
@@ -486,23 +538,27 @@ export function App({ initialPath = "/" }) {
           portrait.addEventListener("load", resolve, { once: true });
           portrait.addEventListener("error", resolve, { once: true });
         });
-    const fontReady = document.fonts?.ready ?? Promise.resolve();
-    const minimumDelay = reduceMotion ? 360 : window.matchMedia("(max-width: 820px)").matches ? 520 : 320;
+    const minimumDelay = reduceMotion ? 160 : window.matchMedia("(max-width: 820px)").matches ? 360 : 280;
     const minimum = new Promise((resolve) => window.setTimeout(resolve, minimumDelay));
-    const maximum = new Promise((resolve) => window.setTimeout(resolve, 760));
-    const visualAssetsReady = Promise.all([portraitReady, fontReady]);
-    Promise.all([minimum, Promise.race([visualAssetsReady, maximum])]).then(() => { if (active) setReady(true); });
+    const maximum = new Promise((resolve) => window.setTimeout(resolve, 420));
+    Promise.all([minimum, Promise.race([portraitReady, maximum])]).then(() => {
+      if (!active) return;
+      try { window.sessionStorage.setItem(INTRO_SESSION_KEY, "1"); } catch { /* session storage can be unavailable */ }
+      setReady(true);
+    });
     return () => { active = false; document.body.classList.remove("is-intro-active"); };
   }, []);
 
   useEffect(() => { if (ready) document.body.classList.remove("is-intro-active"); }, [ready]);
   const onLead = (selection = {}) => {
     const nextSelection = selection?.nativeEvent ? {} : selection;
+    leadTriggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setLeadSelection(nextSelection);
     setLeadOpen(true);
     trackGoal("lead_modal_open", getGoalContext({ form: nextSelection.source || "general", service: nextSelection.service || "" }));
   };
   const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : caseStudyContent[path] ? <CaseStudy path={path} go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
   const openPrivacy = () => { setLeadOpen(false); go("/privacy"); };
-  return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} />{page}<Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={() => setLeadOpen(false)} onPrivacy={openPrivacy} selection={leadSelection} />}</div></>;
+  const closeLead = useCallback(() => setLeadOpen(false), []);
+  return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><a className="skip-link" href="#page-content">Перейти к содержимому</a><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} /><div id="page-content" tabIndex="-1">{page}</div><Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={closeLead} onPrivacy={openPrivacy} selection={leadSelection} returnFocusElement={leadTriggerRef.current} />}</div></>;
 }

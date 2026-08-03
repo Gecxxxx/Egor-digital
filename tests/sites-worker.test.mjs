@@ -160,12 +160,46 @@ test("keeps the original hero and ships three detailed real cases", async () => 
   assert.match(roof, /Калькулятор ориентировочной стоимости/);
 });
 
-test("keeps the mobile menu visible and ticker moving with reduced motion", async () => {
+test("keeps mobile navigation visible, ticker moving normally and reduced motion static", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
   assert.ok(css.includes(".nav.open > a, .nav.open .mobile-nav-actions { opacity: 1; transform: none; }"));
-  assert.ok(css.includes("@media (max-width: 820px) and (prefers-reduced-motion: reduce)"));
-  assert.ok(css.includes("animation: ticker-run 18s linear infinite !important"));
+  assert.ok(css.includes(".ticker-track { animation-duration: 18s; -webkit-animation-duration: 18s; }"));
+  assert.ok(css.includes(".ticker-track { transform: none !important; will-change: auto; }"));
+  assert.ok(!css.includes("animation: ticker-run 18s linear infinite !important"));
+});
+
+test("shows the branded loader only once per session without delaying secondary assets", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.match(app, /INTRO_SESSION_KEY = "egor:intro-seen"/);
+  assert.match(app, /sessionStorage\.getItem\(INTRO_SESSION_KEY\)/);
+  assert.match(app, /sessionStorage\.setItem\(INTRO_SESSION_KEY, "1"\)/);
+  assert.match(app, /\? 360 : 280/);
+  assert.match(app, /setTimeout\(resolve, 420\)/);
+  assert.doesNotMatch(app, /document\.fonts/);
+  assert.doesNotMatch(html, /rel="preload"[^>]+egor-about-cutout/);
+});
+
+test("traps and restores modal focus while hiding background content", async () => {
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+
+  assert.match(app, /app\.inert = true/);
+  assert.match(app, /app\.setAttribute\("aria-hidden", "true"\)/);
+  assert.match(app, /event\.key !== "Tab"/);
+  assert.match(app, /returnFocusRef\.current\.focus\(\)/);
+  assert.match(app, /className="skip-link" href="#page-content"/);
+  assert.match(app, /role="dialog" aria-modal="true"/);
+});
+
+test("provides an explicit ticker pause control", async () => {
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.match(app, /className="ticker-toggle" aria-pressed=\{paused\}/);
+  assert.match(app, /paused \? "Запустить" : "Пауза"/);
+  assert.ok(css.includes(".ticker.is-paused .ticker-track { animation-play-state: paused;"));
 });
 
 test("keeps the mobile hero portrait fully visible behind the text", async () => {
