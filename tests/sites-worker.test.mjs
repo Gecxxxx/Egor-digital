@@ -144,14 +144,14 @@ test("prerenders route content with unique SEO metadata and crawlable links", as
   assert.match(sitemap, /<loc>https:\/\/egordigital\.site\/cases\/green-apple-dent<\/loc>/);
 });
 
-test("ships the approved business-first hero and three detailed real cases", async () => {
+test("keeps the original hero and ships three detailed real cases", async () => {
   const home = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
   const daria = await readFile(new URL("../dist/client/cases/daria-kaminskene.html", import.meta.url), "utf8");
   const clinic = await readFile(new URL("../dist/client/cases/green-apple-dent.html", import.meta.url), "utf8");
   const roof = await readFile(new URL("../dist/client/cases/krysha-mechty.html", import.meta.url), "utf8");
 
-  assert.match(home, /Сайты для бизнеса от \$500, которые объясняют услугу и приводят заявки/);
-  assert.match(home, /Рассчитать стоимость/);
+  assert.match(home, /Сайты\. CRM\. Автоматизация\./);
+  assert.match(home, /Смотреть кейсы/);
   assert.match(daria, /Что нужно было решить/);
   assert.match(daria, /Дарья Каминскене — маркетолог/);
   assert.match(clinic, /Telegram и MAX-уведомления/);
