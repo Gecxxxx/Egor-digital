@@ -117,7 +117,7 @@ test("emits the files required by Sites packaging", async () => {
   await access(new URL("../dist/client/sitemap.xml", import.meta.url));
   await access(new URL("../dist/server/index.js", import.meta.url));
   await access(new URL("../dist/.openai/hosting.json", import.meta.url));
-  for (const route of ["services", "cases", "pricing", "process", "about", "contacts", "privacy"]) {
+  for (const route of ["services", "cases", "cases/daria-kaminskene", "cases/green-apple-dent", "cases/krysha-mechty", "pricing", "process", "about", "contacts", "privacy"]) {
     await access(new URL(`../dist/client/${route}.html`, import.meta.url));
     await access(new URL(`../dist/client/${route}/index.html`, import.meta.url));
   }
@@ -141,6 +141,23 @@ test("prerenders route content with unique SEO metadata and crawlable links", as
   assert.match(notFound, /<meta name="robots" content="noindex,follow"/);
   assert.match(robots, /Sitemap: https:\/\/egordigital\.site\/sitemap\.xml/);
   assert.match(sitemap, /<loc>https:\/\/egordigital\.site\/pricing<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/egordigital\.site\/cases\/green-apple-dent<\/loc>/);
+});
+
+test("ships the approved business-first hero and three detailed real cases", async () => {
+  const home = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
+  const daria = await readFile(new URL("../dist/client/cases/daria-kaminskene.html", import.meta.url), "utf8");
+  const clinic = await readFile(new URL("../dist/client/cases/green-apple-dent.html", import.meta.url), "utf8");
+  const roof = await readFile(new URL("../dist/client/cases/krysha-mechty.html", import.meta.url), "utf8");
+
+  assert.match(home, /Сайты для бизнеса от \$500, которые объясняют услугу и приводят заявки/);
+  assert.match(home, /Рассчитать стоимость/);
+  assert.match(daria, /Что нужно было решить/);
+  assert.match(daria, /Дарья Каминскене — маркетолог/);
+  assert.match(clinic, /Telegram и MAX-уведомления/);
+  assert.match(clinic, /"@type":"BreadcrumbList"/);
+  assert.match(clinic, /"position":3/);
+  assert.match(roof, /Калькулятор ориентировочной стоимости/);
 });
 
 test("keeps the mobile menu visible and ticker moving with reduced motion", async () => {
