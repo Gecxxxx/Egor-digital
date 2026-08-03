@@ -14,9 +14,22 @@ const serverPatchSource = await readFile(new URL("../scripts/patch-vps-server.mj
 
 test("submits the lead form to the VPS Telegram endpoint", () => {
   assert.match(appSource, /fetch\("\/api\/brief"/);
-  assert.match(appSource, /result\.ok !== true/);
+  assert.match(appSource, /!response\.ok \|\| result\?\.ok === false \|\| result\?\.success === false/);
+  assert.doesNotMatch(appSource, /result\.ok !== true/);
   assert.match(appSource, /setStatus\("success"\)/);
   assert.match(appSource, /trackGoal\("lead_form_success"/);
+});
+
+test("shows Russian accessible validation without browser-native English messages", () => {
+  assert.match(appSource, /<form noValidate/);
+  assert.match(appSource, /Введите имя\./);
+  assert.match(appSource, /Укажите Telegram, WhatsApp, телефон или email\./);
+  assert.match(appSource, /Подтвердите согласие на обработку персональных данных\./);
+  assert.match(appSource, /aria-describedby=\{fieldErrors\.name/);
+  assert.match(appSource, /className="field-error" id=\{id\} role="alert"/);
+  assert.match(appSource, /className="form-status form-error" role="alert"/);
+  assert.match(appSource, /className="cta-copy" aria-hidden="true"/);
+  assert.match(appSource, /className="cta-action" aria-hidden="true"/);
 });
 
 test("submits service, tariff and first-touch attribution", () => {
