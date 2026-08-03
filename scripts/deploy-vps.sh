@@ -32,7 +32,9 @@ wait_for_endpoint() {
 verify_metrika() {
   local headers
 
-  curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3000/ | grep -q '111246146'
+  # Let grep consume the full response. With pipefail, `grep -q` can close the
+  # pipe after the first match and make curl report a false write error (23).
+  curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3000/ | grep '111246146' >/dev/null
   headers="$(curl --fail --silent --show-error --head --max-time 5 http://127.0.0.1:3000/ | tr -d '\r')"
   grep -qi '^content-security-policy:.*script-src[^;]*https://mc\.yandex\.ru' <<<"$headers"
   grep -qi '^content-security-policy:.*connect-src[^;]*https://mc\.yandex\.ru' <<<"$headers"

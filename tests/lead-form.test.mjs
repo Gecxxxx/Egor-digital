@@ -66,6 +66,8 @@ test("allows Yandex Metrika and Webvisor through the VPS CSP", async () => {
   assert.match(patched, /frame-src[^;]*blob:[^;]*https:\/\/mc\.yandex\.ru/);
   assert.match(patched, /frame-ancestors[^;]*https:\/\/\*\.yandex\.ru/);
   assert.match(deploySource, /verify_metrika/);
+  assert.match(deploySource, /grep '111246146' >\/dev\/null/);
+  assert.doesNotMatch(deploySource, /grep -q '111246146'/);
   assert.match(deploySource, /content-security-policy:.*connect-src/);
 });
 
