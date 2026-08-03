@@ -186,6 +186,7 @@ test("ships an adaptive animated Digital Orbit portrait on the about page", asyn
   assert.match(about, /about-orbit-card-site/);
   assert.match(about, /about-orbit-card-telegram/);
   assert.ok(css.includes("@keyframes about-card-float"));
+  assert.ok(css.includes(".about-orbit-ui { position: absolute; z-index: 5;"));
   assert.ok(css.includes("aspect-ratio: 4 / 5"));
   assert.ok(orbitAsset.byteLength > 20_000);
 });
