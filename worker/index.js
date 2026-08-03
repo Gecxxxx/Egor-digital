@@ -1,4 +1,4 @@
-const APP_ROUTES = new Set(["/", "/services", "/cases", "/pricing", "/process", "/about", "/contacts", "/privacy"]);
+const APP_ROUTES = new Set(["/", "/services", "/cases", "/cases/daria-kaminskene", "/cases/green-apple-dent", "/cases/krysha-mechty", "/pricing", "/process", "/about", "/contacts", "/privacy"]);
 
 export default {
   async fetch(request, env) {

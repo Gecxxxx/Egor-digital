@@ -67,12 +67,14 @@ const jsonLd = (route) => {
   ];
 
   if (route.path !== "/") {
+    const nested = route.parentPath && route.parentLabel;
     graph.push({
       "@type": "BreadcrumbList",
       "@id": `${SITE_URL}${route.path}#breadcrumb`,
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Главная", item: `${SITE_URL}/` },
-        { "@type": "ListItem", position: 2, name: route.label, item: `${SITE_URL}${route.path}` },
+        ...(nested ? [{ "@type": "ListItem", position: 2, name: route.parentLabel, item: `${SITE_URL}${route.parentPath}` }] : []),
+        { "@type": "ListItem", position: nested ? 3 : 2, name: route.label, item: `${SITE_URL}${route.path}` },
       ],
     });
   }
