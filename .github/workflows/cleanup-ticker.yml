@@ -1,0 +1,95 @@
+name: Cleanup ticker implementation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/cleanup-ticker.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Clean ticker source
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          def replace_once(path, old, new, label):
+              file = Path(path)
+              text = file.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected 1 match, found {count}")
+              file.write_text(text.replace(old, new), encoding="utf-8")
+
+          old_component = '''function BenefitTicker() {
+            const [paused, setPaused] = useState(false);
+            return <div className={paused ? "ticker is-paused" : "ticker"} aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div><button type="button" className="ticker-toggle" aria-pressed={paused} onClick={() => setPaused((current) => !current)}>{paused ? "Запустить" : "Пауза"}</button></div>;
+          }
+          '''
+          new_component = '''function BenefitTicker() {
+            return <div className="ticker" aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div></div>;
+          }
+          '''
+          replace_once("src/App.jsx", old_component, new_component, "BenefitTicker")
+
+          css_path = Path("src/styles.css")
+          css = css_path.read_text(encoding="utf-8")
+          patterns = [
+              (r'^\.ticker-toggle \{[^\n]*\}\n', "ticker toggle styles"),
+              (r'^\.ticker\.is-paused \.ticker-track \{[^\n]*\}\n', "paused state styles"),
+              (r'@media \(hover: hover\) and \(pointer: fine\) \{\n  \.ticker:hover \.ticker-track \{ animation-play-state: paused; \}\n\}\n\n', "hover pause styles"),
+          ]
+          for pattern, label in patterns:
+              css, count = re.subn(pattern, "", css, count=1, flags=re.MULTILINE)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected 1 match, found {count}")
+          css_path.write_text(css, encoding="utf-8")
+
+          replace_once("src/main.jsx", 'import "./ticker-fix.css";\n', "", "temporary stylesheet import")
+          replace_once(
+              "index.html",
+              '    <style>.ticker-toggle{display:none!important}.ticker:hover .ticker-track{animation-play-state:running!important;-webkit-animation-play-state:running!important}</style>\n',
+              "",
+              "temporary inline ticker styles",
+          )
+
+          fix_file = Path("src/ticker-fix.css")
+          if not fix_file.exists():
+              raise SystemExit("src/ticker-fix.css is missing")
+          fix_file.unlink()
+          PY
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:sites
+
+      - name: Commit clean implementation
+        shell: bash
+        run: |
+          rm .github/workflows/cleanup-ticker.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/App.jsx src/styles.css src/main.jsx index.html src/ticker-fix.css .github/workflows/cleanup-ticker.yml
+          git commit -m "fix: clean ticker controls and hover pause"
+          git push origin main
