@@ -1,10 +1,8 @@
 name: Cleanup ticker implementation
 
 on:
-  push:
+  pull_request:
     branches: [main]
-    paths:
-      - .github/workflows/cleanup-ticker.yml
 
 permissions:
   contents: write
@@ -15,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
