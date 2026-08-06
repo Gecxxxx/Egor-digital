@@ -193,13 +193,13 @@ test("traps and restores modal focus while hiding background content", async () 
   assert.match(app, /role="dialog" aria-modal="true"/);
 });
 
-test("provides an explicit ticker pause control", async () => {
+test("keeps the ticker moving without interactive pause controls", async () => {
   const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
-  assert.match(app, /className="ticker-toggle" aria-pressed=\{paused\}/);
-  assert.match(app, /paused \? "Запустить" : "Пауза"/);
-  assert.ok(css.includes(".ticker.is-paused .ticker-track { animation-play-state: paused;"));
+  assert.match(app, /function BenefitTicker\(\) \{\n  return <div className="ticker"/);
+  assert.doesNotMatch(app, /ticker-toggle|aria-pressed=\{paused\}|setPaused/);
+  assert.doesNotMatch(css, /ticker-toggle|ticker\.is-paused|ticker:hover \.ticker-track/);
 });
 
 test("keeps the mobile hero portrait fully visible behind the text", async () => {

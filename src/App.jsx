@@ -234,8 +234,7 @@ function CaseImage({ item, featured = false }) {
 }
 
 function BenefitTicker() {
-  const [paused, setPaused] = useState(false);
-  return <div className={paused ? "ticker is-paused" : "ticker"} aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div><button type="button" className="ticker-toggle" aria-pressed={paused} onClick={() => setPaused((current) => !current)}>{paused ? "Запустить" : "Пауза"}</button></div>;
+  return <div className="ticker" aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div></div>;
 }
 
 function Hero({ go, onLead }) { return <><section className="hero grid-surface"><div className="hero-copy"><Eyebrow>Digital Tools by Egor</Eyebrow><h1 aria-label="Сайты. CRM. Автоматизация."><span className="hero-line"><span>Сайты.</span></span><span className="hero-line"><span>CRM.</span></span><span className="hero-line accent"><span>Автоматизация.</span></span></h1><p className="hero-sub"><AnimatedChars text="От идеи до работающей " /><strong><AnimatedChars text="системы заявок" offset={22} /></strong></p><div className="hero-actions"><CTA href="/cases" go={go}>Смотреть кейсы</CTA><CTA secondary onClick={onLead}>Получить разбор</CTA></div><div className="hero-facts"><div><b>Сайт для бизнеса</b><strong><CountUp end={500} prefix="от $" /></strong></div><div><b><CountUp end={2} suffix=" месяца поддержки" /></b><strong>бесплатно</strong></div></div></div><div className="hero-person"><img src="/assets/images/egor-hero-cutout.webp" alt="Егор — разработчик сайтов и CRM" width="1086" height="1448" loading="eager" decoding="sync" fetchPriority="high" /></div></section><BenefitTicker /></>; }
