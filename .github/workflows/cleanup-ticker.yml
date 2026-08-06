@@ -68,6 +68,26 @@ jobs:
               "temporary inline ticker styles",
           )
 
+          old_test = '''test("provides an explicit ticker pause control", async () => {
+            const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+            const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+            assert.match(app, /className="ticker-toggle" aria-pressed=\\{paused\\}/);
+            assert.match(app, /paused \\? "Запустить" : "Пауза"/);
+            assert.ok(css.includes(".ticker.is-paused .ticker-track { animation-play-state: paused;"));
+          });
+          '''
+          new_test = '''test("keeps the ticker moving without interactive pause controls", async () => {
+            const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+            const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+            assert.match(app, /function BenefitTicker\\(\\) \\{\\n  return <div className="ticker"/);
+            assert.doesNotMatch(app, /ticker-toggle|aria-pressed=\\{paused\\}|setPaused/);
+            assert.doesNotMatch(css, /ticker-toggle|ticker\\.is-paused|ticker:hover \\.ticker-track/);
+          });
+          '''
+          replace_once("tests/sites-worker.test.mjs", old_test, new_test, "ticker behavior test")
+
           fix_file = Path("src/ticker-fix.css")
           if not fix_file.exists():
               raise SystemExit("src/ticker-fix.css is missing")
@@ -89,6 +109,6 @@ jobs:
           rm .github/workflows/cleanup-ticker.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/App.jsx src/styles.css src/main.jsx index.html src/ticker-fix.css .github/workflows/cleanup-ticker.yml
+          git add src/App.jsx src/styles.css src/main.jsx index.html src/ticker-fix.css tests/sites-worker.test.mjs .github/workflows/cleanup-ticker.yml
           git commit -m "fix: clean ticker controls and hover pause"
           git push origin main
