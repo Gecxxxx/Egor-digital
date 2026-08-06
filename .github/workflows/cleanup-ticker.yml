@@ -53,6 +53,7 @@ jobs:
               (r'^\.ticker-toggle \{[^\n]*\}\n', "ticker toggle styles"),
               (r'^\.ticker\.is-paused \.ticker-track \{[^\n]*\}\n', "paused state styles"),
               (r'@media \(hover: hover\) and \(pointer: fine\) \{\n  \.ticker:hover \.ticker-track \{ animation-play-state: paused; \}\n\}\n\n', "hover pause styles"),
+              (r'^  \.ticker-toggle \{ display: none; \}\n', "reduced motion ticker toggle styles"),
           ]
           for pattern, label in patterns:
               css, count = re.subn(pattern, "", css, count=1, flags=re.MULTILINE)
