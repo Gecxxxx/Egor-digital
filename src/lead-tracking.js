@@ -1,4 +1,4 @@
-export const METRIKA_ID = 111246146;
+export const METRIKA_ID = 111655243;
 
 const ATTRIBUTION_KEY = "egor-digital-attribution-v1";
 const UTM_FIELDS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];

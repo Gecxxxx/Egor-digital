@@ -294,11 +294,11 @@ test("ships approved client testimonials and Yandex Metrika", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
 
-  assert.match(html, /mc\.yandex\.ru\/metrika\/tag\.js\?id=111246146/);
-  assert.match(html, /ym\(111246146, "init"/);
+  assert.match(html, /mc\.yandex\.ru\/metrika\/tag\.js\?id=111655243/);
+  assert.match(html, /ym\(111655243, "init"/);
   assert.match(app, /Дарья Каминскене/);
   assert.match(app, /Green Apple Dent/);
   assert.match(app, /Крыша-мечты/);
-  assert.match(app, /window\.ym\?\.\(111246146, "hit"/);
+  assert.match(app, /window\.ym\?\.\(111655243, "hit"/);
   assert.match(app, /Яндекс Метрика и cookie/);
 });

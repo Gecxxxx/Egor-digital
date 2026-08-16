@@ -36,7 +36,7 @@ verify_public_headers() {
   local headers
   local csp
 
-  curl --fail --silent --show-error --max-time 5 https://egordigital.site/ | grep '111246146' >/dev/null
+  curl --fail --silent --show-error --max-time 5 https://egordigital.site/ | grep '111655243' >/dev/null
   headers="$(curl --fail --silent --show-error --head --max-time 5 https://egordigital.site/ | tr -d '\r')"
   csp="$(grep -i '^content-security-policy:' <<<"$headers")"
 
