@@ -160,13 +160,14 @@ test("keeps the original hero and ships three detailed real cases", async () => 
   assert.match(roof, /Калькулятор ориентировочной стоимости/);
 });
 
-test("keeps mobile navigation visible, ticker moving normally and reduced motion static", async () => {
+test("keeps mobile navigation visible and the compact ticker moving on mobile", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
   assert.ok(css.includes(".nav.open > a, .nav.open .mobile-nav-actions { opacity: 1; transform: none; }"));
   assert.ok(css.includes(".ticker-track { animation-duration: 18s; -webkit-animation-duration: 18s; }"));
-  assert.ok(css.includes(".ticker-track { transform: none !important; will-change: auto; }"));
-  assert.ok(!css.includes("animation: ticker-run 18s linear infinite !important"));
+  assert.ok(css.includes("@media (max-width: 820px) and (prefers-reduced-motion: reduce)"));
+  assert.ok(css.includes("animation: ticker-run 24s linear infinite !important"));
+  assert.ok(!css.includes(".ticker-track { transform: none !important;"));
 });
 
 test("shows the branded loader only once per session without delaying secondary assets", async () => {
