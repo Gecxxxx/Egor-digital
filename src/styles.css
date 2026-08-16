@@ -156,6 +156,20 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .case-card img { filter: saturate(.78); transform: scale(1.025); transition: filter .45s ease, transform .7s cubic-bezier(.22,1,.36,1); }
 .case-card:hover { border-color: rgba(194,76,255,.55); transform: translateY(-4px); }
 .case-card:hover img { filter: saturate(1); transform: scale(1.065); }
+.cases-lead-proof { display: grid; grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr); gap: clamp(34px, 5vw, 72px); align-items: center; padding-block: clamp(52px, 6vw, 80px); background: #070708; }
+.cases-lead-proof-copy .accent-title { max-width: 11ch; font-size: clamp(42px, 4.5vw, 68px); line-height: 1.03; }
+.cases-lead-proof-copy > p { max-width: 48ch; margin: 20px 0 14px; color: #aaaab0; line-height: 1.65; }
+.cases-lead-proof-copy > small { color: #77777e; font-size: 10px; text-transform: uppercase; }
+.cases-lead-proof-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.cases-lead-proof-card { min-width: 0; border: 1px solid var(--line); padding: 12px; color: white; text-decoration: none; background: #0b0b0d; transition: border-color .25s ease, transform .25s ease; }
+.cases-lead-proof-card:hover { border-color: rgba(194,76,255,.58); transform: translateY(-3px); }
+.cases-lead-proof-card > div { position: relative; height: clamp(170px, 18vw, 255px); overflow: hidden; background: #050506; }
+.cases-lead-proof-card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; filter: saturate(.78); transition: filter .3s ease, transform .45s cubic-bezier(.22,1,.36,1); }
+.cases-lead-proof-card:hover img { filter: saturate(1); transform: scale(1.025); }
+.cases-lead-proof-card > div > span { position: absolute; right: 9px; bottom: 9px; min-width: 30px; min-height: 30px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.18); background: rgba(6,6,8,.88); color: var(--cyan); font-family: Oswald, sans-serif; font-size: 10px; }
+.cases-lead-proof-card > strong { display: block; margin: 15px 2px 7px; font-family: Oswald, sans-serif; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.08; text-transform: uppercase; }
+.cases-lead-proof-card > p { min-height: 3em; margin: 0 2px 14px; color: #99999f; font-size: 12px; line-height: 1.5; }
+.cases-lead-proof-card > small { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--line); padding: 11px 2px 0; color: #c9c9cd; font-size: 9px; text-transform: uppercase; }
 .case-body { display: grid; grid-template-columns: 1fr auto; gap: 24px; padding: 26px; align-items: end; }
 .case-body p { color: #929299; line-height: 1.6; font-size: 13px; max-width: 65ch; }
 .case-body p:first-child { color: var(--cyan); text-transform: uppercase; font-size: 10px; }
@@ -476,6 +490,8 @@ footer p { color: #a0a0a5; font-size: 10px; text-transform: uppercase; }
   .section-head { align-items: flex-start; flex-direction: column; gap: 22px; margin-bottom: 36px; }
   .case-grid { grid-template-columns: 1fr; gap: 20px; }
   .case-card:first-child:nth-last-child(odd) { grid-column: auto; }
+  .cases-lead-proof { grid-template-columns: 1fr; gap: 30px; }
+  .cases-lead-proof-copy .accent-title { max-width: 14ch; }
   .case-body { grid-template-columns: 1fr; gap: 18px; padding: 22px; }
   .service-table { margin-top: 38px; }
   .service-row { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 14px; padding: 24px 0; }
@@ -593,6 +609,8 @@ footer p { color: #a0a0a5; font-size: 10px; text-transform: uppercase; }
   .about-orbit-card-telegram { right: 3%; bottom: 11%; }
   .about-facts { display: grid; grid-template-columns: 1fr; }
   .case-evidence-gallery { grid-template-columns: 1fr; }
+  .cases-lead-proof-list { grid-template-columns: 1fr; }
+  .cases-lead-proof-card > div { height: 220px; }
   .case-evidence-shot:nth-child(2) { transform: none; }
   .case-evidence-shot, .case-evidence-shot img { max-height: none; }
   .modal-backdrop { place-items: start center; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
