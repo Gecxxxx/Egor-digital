@@ -652,5 +652,14 @@ footer p { color: #a0a0a5; font-size: 10px; text-transform: uppercase; }
   .hero-line.accent::after, .not-found-copy h1 span:last-child::after { transform: none !important; }
   .case-image { clip-path: none !important; }
   .nav.open > a, .nav.open .mobile-nav-actions { opacity: 1 !important; transform: none !important; }
-  .ticker-track { transform: none !important; will-change: auto; }
+  .ticker-track { will-change: auto; }
+}
+
+/* Keep the compact proof ticker moving on mobile even when the OS reduces other motion. */
+@media (max-width: 820px) and (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: ticker-run 24s linear infinite !important;
+    -webkit-animation: ticker-run 24s linear infinite !important;
+    will-change: transform;
+  }
 }
