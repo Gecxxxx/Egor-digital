@@ -1,5 +1,5 @@
 export const SITE_URL = "https://egordigital.site";
-export const SOCIAL_IMAGE = `${SITE_URL}/assets/cases/greenappledent-1440.webp`;
+export const SOCIAL_IMAGE = `${SITE_URL}/og-egordigital.webp?v=2`;
 
 export const routes = [
   {
