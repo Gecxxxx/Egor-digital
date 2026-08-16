@@ -151,3 +151,10 @@ test("requires only name, contact and privacy consent", () => {
   assert.match(appSource, /name="privacy" type="checkbox" required/);
   assert.match(appSource, /name="website"/);
 });
+
+test("homepage offers website, audit and case actions", () => {
+  assert.match(appSource, /Мне нужен сайт/);
+  assert.match(appSource, /service: "website", serviceLabel: "Сайт", source: "hero_website"/);
+  assert.match(appSource, /source: "hero_audit"/);
+  assert.match(appSource, /href="\/cases" go=\{go\}>Кейсы/);
+});
