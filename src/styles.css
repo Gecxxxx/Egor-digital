@@ -211,7 +211,7 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .case-evidence-copy li { position: relative; padding: 11px 0 11px 24px; border-bottom: 1px solid var(--line); color: #d0d0d4; font-size: 11px; line-height: 1.45; text-transform: uppercase; }
 .case-evidence-copy li::before { content: ""; position: absolute; left: 2px; top: 15px; width: 7px; height: 7px; border: 1px solid var(--purple); box-shadow: 2px 2px 0 var(--cyan); }
 .case-evidence-copy small { color: #77777e; font-size: 10px; line-height: 1.5; text-transform: uppercase; }
-.case-evidence-gallery { min-width: 0; display: grid; grid-template-columns: 1.05fr .95fr; gap: 14px; align-items: center; }
+.case-evidence-gallery { min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: center; }
 .case-evidence-shot { position: relative; min-width: 0; max-height: 510px; overflow: hidden; border: 1px solid var(--line); padding: 0; background: #0b0b0d; color: white; cursor: zoom-in; box-shadow: 0 24px 56px rgba(0,0,0,.32); }
 .case-evidence-shot:nth-child(2) { transform: translateY(18px); }
 .case-evidence-shot img { display: block; width: 100%; height: auto; max-height: 510px; object-fit: cover; object-position: top; transition: transform .45s cubic-bezier(.22,1,.36,1); }
@@ -549,7 +549,7 @@ footer p { color: #a0a0a5; font-size: 10px; text-transform: uppercase; }
   .case-study-features h3 { margin-top: 28px; }
   .case-evidence { grid-template-columns: 1fr; gap: 34px; padding-block: 54px; }
   .case-evidence-copy .accent-title { max-width: 14ch; font-size: clamp(40px, 8vw, 56px); }
-  .case-evidence-gallery { grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+  .case-evidence-gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: start; }
   .case-evidence-shot, .case-evidence-shot img { max-height: 560px; }
   .case-evidence-shot:nth-child(2) { transform: translateY(18px); }
   .case-evidence-shot.is-expanded { position: relative; grid-column: 1 / -1; transform: none; }
