@@ -68,6 +68,16 @@ const caseStudyContent = {
     features: ["Многостраничная структура услуг клиники", "Формы записи и единая админка заявок", "Telegram и MAX-уведомления", "Лицензии, отзывы и результаты до/после"],
     facts: [["7", "основных разделов"], ["3", "канала связи"], ["1", "админка заявок"], ["сразу", "уведомление о заявке"]],
     result: "Клиника получила единую систему для презентации услуг, рекламы и обработки обращений. Заявки сохраняются в одном месте, а администратор видит их без поиска по разным чатам.",
+    evidence: {
+      channel: "Telegram",
+      title: "Сайт не просто запущен — с него приходят заявки",
+      text: "Формы услуг передают в Telegram контакт, выбранное направление и страницу обращения. Администратор сразу видит новую заявку и может связаться с пациентом.",
+      facts: ["заявка приходит автоматически", "видны услуга и страница", "контакт сразу у администратора"],
+      images: [
+        ["/assets/cases/leads/green-apple-leads-01.webp", 1375, 1144],
+        ["/assets/cases/leads/green-apple-leads-02.webp", 1369, 1149],
+      ],
+    },
     quote: "Нам нужно было не просто обновить сайт, а сделать удобную систему для работы с заявками. Егор перенёс сайт, создал отдельную админку, подключил уведомления в Telegram и MAX и настроил всю техническую часть. Теперь обращения сохраняются в одном месте, а администратору стало намного проще их контролировать.",
     quoteBy: "Анна · Green Apple Dent",
   },
@@ -80,6 +90,16 @@ const caseStudyContent = {
     features: ["Структура кровельных услуг под рекламу", "Калькулятор ориентировочной стоимости", "Формы заявок и быстрые контакты", "Адаптив и запуск на домене клиента"],
     facts: [["1", "калькулятор стоимости"], ["24/7", "сайт принимает заявки"], ["320+", "адаптивная ширина"], ["под ключ", "запуск на домене"]],
     result: "Получился понятный инструмент под рекламу и прямые обращения: клиент изучает услуги, получает ориентир по стоимости и оставляет заявку без лишних шагов.",
+    evidence: {
+      channel: "MAX",
+      title: "Заявки с сайта сразу попадают в работу",
+      text: "Обычная форма и калькулятор передают в MAX контакт и детали задачи: тип кровли, площадь, район, состав работ и желаемые сроки.",
+      facts: ["форма и квиз в одном канале", "параметры проекта уже в заявке", "менеджер получает контакт сразу"],
+      images: [
+        ["/assets/cases/leads/krysha-leads-01.webp", 851, 1847],
+        ["/assets/cases/leads/krysha-leads-02.webp", 852, 1847],
+      ],
+    },
     quote: "Егор разработал для нас полноценный сайт по кровельным работам: продумал структуру, оформил услуги, добавил калькулятор стоимости и формы заявок. Отдельно проработал мобильную версию и помог с запуском сайта на нашем домене.",
     quoteBy: "Команда Крыша-мечты",
   },
@@ -129,6 +149,7 @@ function useRevealOnScroll(path, ready) {
       ".about-grid > div:last-child", ".testimonials blockquote", ".contact-options > div",
       ".direct-contact-link", ".inline-lead", ".faq-item", ".final-cta > *", ".case-study-facts > div",
       ".case-study-story > div", ".case-study-story > aside", ".case-study-features article", ".case-study-result blockquote",
+      ".case-evidence-copy", ".case-evidence-shot",
     ].join(",");
     const targets = [...document.querySelectorAll(selector)];
     targets.forEach((element, index) => {
@@ -271,7 +292,11 @@ function CaseStudy({ path, go, onLead }) {
   const currentIndex = realCases.findIndex((candidate) => candidate.casePath === path);
   const nextCase = realCases[(currentIndex + 1) % realCases.length];
 
-  return <main className="case-study"><section className="case-study-hero grid-surface"><div className="case-study-heading"><SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink><Eyebrow>{detail.eyebrow}</Eyebrow><h1>{item.name}</h1><p>{detail.lead}</p><div className="case-study-actions"><a href={item.href} target="_blank" rel="noreferrer" onClick={() => trackCase(item, "case_detail")}>Открыть проект <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a><button type="button" onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "case_detail" })}>Обсудить похожий сайт</button></div></div><dl className="case-study-facts">{detail.facts.map(([value, label]) => <div key={label}><dt>{value}</dt><dd>{label}</dd></div>)}</dl></section><section className="case-study-preview section"><div className="case-study-browser"><div aria-hidden="true"><i /><i /><i /><span>{item.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span></div><CaseImage item={item} featured /></div></section><section className="section case-study-story"><div><Eyebrow>Контекст</Eyebrow><h2>Кто клиент</h2><p>{detail.client}</p></div><div><Eyebrow>Задача</Eyebrow><h2>Что нужно было решить</h2><p>{detail.challenge}</p></div><div><Eyebrow>Решение</Eyebrow><h2>Что я сделал</h2><p>{detail.solution}</p></div><aside><span>Моя роль</span><strong>Структура · дизайн · разработка · адаптив · запуск</strong><small>Проект вёл лично, специалистов подключал под отдельные задачи.</small></aside></section><section className="section case-study-features"><Eyebrow>Состав проекта</Eyebrow><AccentTitle>Что реализовано</AccentTitle><div>{detail.features.map((feature, index) => <article key={feature}><span>{String(index + 1).padStart(2, "0")}</span><h3>{feature}</h3></article>)}</div></section><section className="section case-study-result"><div><Eyebrow>Результат</Eyebrow><AccentTitle>Рабочий инструмент</AccentTitle><p>{detail.result}</p><CTA onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "case_result" })}>Рассчитать похожий проект</CTA></div><blockquote><p>“{detail.quote}”</p><cite>{detail.quoteBy}</cite></blockquote></section><section className="case-study-next grid-surface"><span>Следующий кейс</span><SiteLink href={nextCase.casePath} go={go}><strong>{nextCase.name}</strong><ArrowUpRight size={22} weight="bold" aria-hidden="true" /></SiteLink></section></main>;
+  return <main className="case-study"><section className="case-study-hero grid-surface"><div className="case-study-heading"><SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink><Eyebrow>{detail.eyebrow}</Eyebrow><h1>{item.name}</h1><p>{detail.lead}</p><div className="case-study-actions"><a href={item.href} target="_blank" rel="noreferrer" onClick={() => trackCase(item, "case_detail")}>Открыть проект <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a><button type="button" onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "case_detail" })}>Обсудить похожий сайт</button></div></div><dl className="case-study-facts">{detail.facts.map(([value, label]) => <div key={label}><dt>{value}</dt><dd>{label}</dd></div>)}</dl></section><section className="case-study-preview section"><div className="case-study-browser"><div aria-hidden="true"><i /><i /><i /><span>{item.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span></div><CaseImage item={item} featured /></div></section><section className="section case-study-story"><div><Eyebrow>Контекст</Eyebrow><h2>Кто клиент</h2><p>{detail.client}</p></div><div><Eyebrow>Задача</Eyebrow><h2>Что нужно было решить</h2><p>{detail.challenge}</p></div><div><Eyebrow>Решение</Eyebrow><h2>Что я сделал</h2><p>{detail.solution}</p></div><aside><span>Моя роль</span><strong>Структура · дизайн · разработка · адаптив · запуск</strong><small>Проект вёл лично, специалистов подключал под отдельные задачи.</small></aside></section><section className="section case-study-features"><Eyebrow>Состав проекта</Eyebrow><AccentTitle>Что реализовано</AccentTitle><div>{detail.features.map((feature, index) => <article key={feature}><span>{String(index + 1).padStart(2, "0")}</span><h3>{feature}</h3></article>)}</div></section>{detail.evidence && <CaseEvidence evidence={detail.evidence} projectName={item.name} />}<section className="section case-study-result"><div><Eyebrow>Результат</Eyebrow><AccentTitle>Рабочий инструмент</AccentTitle><p>{detail.result}</p><CTA onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "case_result" })}>Рассчитать похожий проект</CTA></div><blockquote><p>“{detail.quote}”</p><cite>{detail.quoteBy}</cite></blockquote></section><section className="case-study-next grid-surface"><span>Следующий кейс</span><SiteLink href={nextCase.casePath} go={go}><strong>{nextCase.name}</strong><ArrowUpRight size={22} weight="bold" aria-hidden="true" /></SiteLink></section></main>;
+}
+
+function CaseEvidence({ evidence, projectName }) {
+  return <section className="section case-evidence"><div className="case-evidence-copy"><Eyebrow>Результат в работе · {evidence.channel}</Eyebrow><AccentTitle>{evidence.title}</AccentTitle><p>{evidence.text}</p><ul>{evidence.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul><small>Персональные данные клиентов скрыты.</small></div><div className="case-evidence-gallery">{evidence.images.map(([src, width, height], index) => <button type="button" className="case-evidence-shot" onClick={(event) => event.currentTarget.classList.toggle("is-expanded")} aria-label={`${projectName}: увеличить пример заявки ${index + 1}`} key={src}><img src={src} width={width} height={height} alt={`Обезличенная заявка с сайта ${projectName}`} loading="lazy" decoding="async" /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div></section>;
 }
 
 const plans = [{ label: "Старт", title: "Маленькая задача", price: "$250", service: "audit", serviceLabel: "Аудит", text: "Аудит, правка, форма или небольшой модуль.", bullets: ["аудит сайта или формы", "доработка блока и адаптива", "форма заявки", "уведомления по задаче"] }, { label: "Лучший выбор", title: "Сайт для бизнеса", price: "$500", service: "website", serviceLabel: "Сайт", text: "Структура, дизайн, адаптив, форма и один канал заявок.", bullets: ["структура под доверие", "телефон и компьютер", "форма и аналитика", "Telegram, MAX или email"] }, { label: "Система контроля", title: "CRM / Автоматизация", price: "$1000", service: "crm", serviceLabel: "CRM", text: "Клиенты, источники, статусы и отчёты в одной системе.", bullets: ["CRM или админка", "статусы и заявки", "уведомления", "экспорт и аналитика"] }];
