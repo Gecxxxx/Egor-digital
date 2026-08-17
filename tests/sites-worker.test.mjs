@@ -137,21 +137,23 @@ test("prerenders route content with unique SEO metadata and crawlable links", as
   assert.match(services, /rel="canonical" href="https:\/\/egordigital\.site\/services"/);
   assert.match(services, /<a[^>]+href="\/cases"/);
   assert.match(services, /"@type":"BreadcrumbList"/);
-  assert.match(pricing, /<title>Стоимость создания сайта и CRM — от \$500<\/title>/);
+  assert.match(pricing, /<title>Стоимость создания сайта и CRM — от 50 000 ₽<\/title>/);
   assert.match(notFound, /<meta name="robots" content="noindex,follow"/);
   assert.match(robots, /Sitemap: https:\/\/egordigital\.site\/sitemap\.xml/);
   assert.match(sitemap, /<loc>https:\/\/egordigital\.site\/pricing<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/egordigital\.site\/cases\/green-apple-dent<\/loc>/);
 });
 
-test("keeps the original hero and ships three detailed real cases", async () => {
+test("keeps the result-focused hero and ships three detailed real cases", async () => {
   const home = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
   const daria = await readFile(new URL("../dist/client/cases/daria-kaminskene.html", import.meta.url), "utf8");
   const clinic = await readFile(new URL("../dist/client/cases/green-apple-dent.html", import.meta.url), "utf8");
   const roof = await readFile(new URL("../dist/client/cases/krysha-mechty.html", import.meta.url), "utf8");
 
-  assert.match(home, /Сайты\. CRM\. Автоматизация\./);
-  assert.match(home, /Смотреть кейсы/);
+  assert.match(home, /Сайт\. Заявки\. Контроль\./);
+  assert.match(home, /Создаю сайты и подключаю CRM/);
+  assert.match(home, /<span[^>]*class="count-up"[^>]*>50 000(?:<!-- -->)? ₽<\/span>/);
+  assert.match(home, /class="cta secondary" href="\/cases"/);
   assert.match(daria, /Что нужно было решить/);
   assert.match(daria, /Дарья Каминскене — маркетолог/);
   assert.match(clinic, /Telegram и MAX-уведомления/);

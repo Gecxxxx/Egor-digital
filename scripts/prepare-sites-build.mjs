@@ -52,7 +52,7 @@ const jsonLd = (route) => {
       url: SITE_URL,
       image: SOCIAL_IMAGE,
       description: routes[0].description,
-      priceRange: "$$",
+      priceRange: "20 000–100 000 ₽",
       founder: { "@id": `${SITE_URL}/#person` },
       areaServed: "Worldwide",
     },
