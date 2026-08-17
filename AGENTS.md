@@ -10,10 +10,11 @@ When implementing from a selected generated mock, treat that image as the source
 
 - Preserve the selected dark editorial layout inspired by ZelvixAI: black/charcoal surface, subtle grain, strict vertical grid, condensed uppercase display type, square controls, and generous negative space.
 - Use the existing Digital Tools by Egor logo and a restrained violet-to-cyan accent system; do not use lime green.
-- The approved next homepage hero headline is “Сайты для бизнеса от $500, которые объясняют услугу и приводят заявки”. Implement it in release 3 while preserving Egor as a natural-color cutout on the black grid with no photographic background.
+- The homepage hero is “Сайт. Заявки. Автоматизация.” with the explanation “Создаю сайты и автоматизирую заявки, чтобы бизнес не терял клиентов”. The homepage lead price is “Сайт для бизнеса — от 25 000 ₽”. Preserve Egor as a natural-color cutout on the black grid with no photographic background.
 - The About page uses the separate smiling portrait with Egor's raised peace-sign gesture; keep it in natural color as a clean cutout on the same black editorial grid, without the original outdoor photo background.
 - Keep the current site's seven-route information architecture and real content: home, services, cases, pricing, process, about, and contacts.
-- Preserve real prices and promises: website from $500, CRM/automation from $1000, audit/small task from $250, support from $50/month, and two months of support included after launch.
+- Use Russian-ruble pricing throughout: website from 50,000 ₽, website + CRM from 100,000 ₽, CRM/automation from 120,000 ₽, full audit and improvements from 25,000 ₽, support from 15,000 ₽/month, additional tasks priced individually, and two months of support included after launch.
+- Price count-ups must prerender their final numeric value for search engines and no-JavaScript fallbacks, then animate from zero only after client JavaScript is running.
 - Keep both contact paths visible: a direct Telegram link and the lead form must be available on the Contacts page and in the site footer.
 - Direct contacts: Telegram `@egecxxxx`, WhatsApp `+20 114 969 2210`, email `eggetsevich@gmail.com`, and Instagram `@_gecevich_`; show all four on the Contacts page and in the footer.
 - Display every case preview in a true 16:9 frame with the full screenshot visible; do not crop case artwork.
