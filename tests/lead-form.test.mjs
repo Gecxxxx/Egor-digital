@@ -24,7 +24,7 @@ test("submits the lead form to the VPS Telegram endpoint", () => {
 test("shows Russian accessible validation without browser-native English messages", () => {
   assert.match(appSource, /<form noValidate/);
   assert.match(appSource, /Введите имя\./);
-  assert.match(appSource, /Укажите Telegram, WhatsApp, телефон или email\./);
+  assert.match(appSource, /Введите номер телефона\./);
   assert.match(appSource, /Подтвердите согласие на обработку персональных данных\./);
   assert.match(appSource, /aria-describedby=\{fieldErrors\.name/);
   assert.match(appSource, /className="field-error" id=\{id\} role="alert"/);
@@ -142,7 +142,9 @@ test("filters cases by every matching category", () => {
 
 test("requires only name, contact and privacy consent", () => {
   assert.match(appSource, /name="name" required/);
-  assert.match(appSource, /name="contact" required/);
+  assert.match(appSource, /name="contact" type="tel" inputMode="tel" required/);
+  assert.match(appSource, /name="phone_code" defaultValue="\+7"/);
+  assert.match(appSource, /const contact = `\$\{phoneCode\} \$\{phoneNumber\}`\.trim\(\)/);
   assert.match(appSource, /name="service"/);
   assert.match(appSource, /name="current_website"/);
   assert.match(appSource, /Комментарий \(по желанию\)/);

@@ -364,7 +364,9 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .inline-lead h2 { margin: 20px 0 30px; font-family: Oswald, sans-serif; text-transform: uppercase; font-size: clamp(42px, 5vw, 64px); line-height: 1.08; }
 .inline-lead form { display: grid; gap: 20px; }
 .inline-lead label { display: grid; gap: 8px; color: #c2c2c8; text-transform: uppercase; font-size: 10px; }
-.inline-lead input, .inline-lead textarea { width: 100%; border: 1px solid var(--line); background: #070708; color: white; padding: 15px; resize: vertical; }
+.inline-lead input, .inline-lead textarea, .inline-lead select { width: 100%; border: 1px solid var(--line); background: #070708; color: white; padding: 15px; resize: vertical; }
+.phone-field { display: grid; grid-template-columns: minmax(118px, .72fr) minmax(0, 1.28fr); gap: 8px; }
+.phone-field select { min-width: 0; color-scheme: dark; cursor: pointer; }
 .inline-lead input::placeholder, .inline-lead textarea::placeholder, .modal input::placeholder, .modal textarea::placeholder { color: #a8a8ae; opacity: 1; }
 .inline-lead input:-webkit-autofill, .modal input:-webkit-autofill { -webkit-text-fill-color: #fff; -webkit-box-shadow: 0 0 0 1000px #070708 inset; caret-color: #fff; }
 .inline-lead input[aria-invalid="true"], .inline-lead textarea[aria-invalid="true"], .modal input[aria-invalid="true"], .modal textarea[aria-invalid="true"] { border-color: #e390ff; }
@@ -422,7 +424,7 @@ footer p { color: #a0a0a5; font-size: 10px; text-transform: uppercase; }
 .modal h2 { font-family: Oswald, sans-serif; text-transform: uppercase; font-size: 50px; line-height: 1.08; }
 .modal form { display: grid; gap: 20px; }
 .modal label { display: grid; gap: 8px; color: #c2c2c8; text-transform: uppercase; font-size: 10px; }
-.modal input, .modal textarea { width: 100%; border: 1px solid var(--line); background: #070708; color: white; padding: 15px; resize: vertical; }
+.modal input, .modal textarea, .modal select { width: 100%; border: 1px solid var(--line); background: #070708; color: white; padding: 15px; resize: vertical; }
 .modal form > button, .success-links a { min-height: 56px; border: 1px solid transparent; border-image: linear-gradient(90deg, var(--purple), var(--cyan)) 1; background: transparent; color: white; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 .success { display: flex; flex-direction: column; min-height: 450px; justify-content: center; }
 .success p { color: #999; line-height: 1.7; }
@@ -540,7 +542,7 @@ footer p { color: #a0a0a5; font-size: 10px; text-transform: uppercase; }
   .direct-contact-list { grid-template-columns: 1fr; }
   .inline-lead { padding: 28px 22px; }
   .inline-lead h2 { font-size: 42px; }
-  .inline-lead input, .inline-lead textarea, .modal input, .modal textarea { font-size: 16px; }
+  .inline-lead input, .inline-lead textarea, .inline-lead select, .modal input, .modal textarea, .modal select { font-size: 16px; }
   .faq-item > button { gap: 16px; }
   .faq-answer p { padding-right: 0; }
   .final-cta { min-height: auto; align-items: stretch; }

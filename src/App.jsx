@@ -16,6 +16,17 @@ const contactLinks = [
   { label: "Instagram", value: "@_gecevich_", href: "https://www.instagram.com/_gecevich_/", action: "Открыть профиль" },
 ];
 
+const phoneCodes = [
+  ["+7", "+7 · Россия / Казахстан"],
+  ["+20", "+20 · Египет"],
+  ["+375", "+375 · Беларусь"],
+  ["+380", "+380 · Украина"],
+  ["+374", "+374 · Армения"],
+  ["+995", "+995 · Грузия"],
+  ["+90", "+90 · Турция"],
+  ["+971", "+971 · ОАЭ"],
+];
+
 const leadServices = [
   { value: "website", label: "Сайт" },
   { value: "crm", label: "CRM" },
@@ -420,13 +431,16 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
 
     const values = new FormData(form);
     const name = String(values.get("name") || "").trim();
-    const contact = String(values.get("contact") || "").trim();
+    const phoneCode = String(values.get("phone_code") || "+7").trim();
+    const phoneNumber = String(values.get("contact") || "").trim();
+    const contact = `${phoneCode} ${phoneNumber}`.trim();
     const currentWebsite = String(values.get("current_website") || "").trim();
     const websiteField = form.elements.namedItem("current_website");
     const privacyAccepted = values.get("privacy") === "on";
     const nextFieldErrors = {};
     if (!name) nextFieldErrors.name = "Введите имя.";
-    if (!contact) nextFieldErrors.contact = "Укажите Telegram, WhatsApp, телефон или email.";
+    if (!phoneNumber) nextFieldErrors.contact = "Введите номер телефона.";
+    else if (phoneNumber.replace(/\D/g, "").length < 6) nextFieldErrors.contact = "Проверьте номер телефона.";
     if (currentWebsite && websiteField instanceof HTMLInputElement && !websiteField.validity.valid) nextFieldErrors.current_website = "Введите адрес сайта в формате https://example.com.";
     if (!privacyAccepted) nextFieldErrors.privacy = "Подтвердите согласие на обработку персональных данных.";
     if (Object.keys(nextFieldErrors).length > 0) {
@@ -487,7 +501,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
     return <div className="success" role="status"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка отправлена</h2><p>Заявка уже пришла Егору в Telegram. Он свяжется с вами по указанному контакту.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} onClick={() => trackContact(link, "form_success")} key={link.label}>{link.label}</a>)}</div></div>;
   }
 
-  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2>{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}<fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset><label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Способ связи<input id={fieldId("contact")} name="contact" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="off" maxLength="200" placeholder="Telegram, WhatsApp или email" /><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>Комментарий (по желанию)<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder="Что хотите запустить или улучшить" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
+  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2>{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}<fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset><label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Номер телефона<div className="phone-field"><select name="phone_code" defaultValue="+7" aria-label="Код страны">{phoneCodes.map(([code, label]) => <option value={code} key={label}>{label}</option>)}</select><input id={fieldId("contact")} name="contact" type="tel" inputMode="tel" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="tel-national" maxLength="30" placeholder="999 123-45-67" /></div><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>Комментарий (по желанию)<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder="Что хотите запустить или улучшить" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
 }
 
 function LeadModal({ onClose, onPrivacy, selection, returnFocusElement }) {
