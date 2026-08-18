@@ -155,6 +155,13 @@ test("keeps the result-focused hero and ships three detailed real cases", async 
   assert.match(home, /<span[^>]*class="count-up"[^>]*>25 000(?:<!-- -->)? ₽<\/span>/);
   assert.match(home, /class="char-word"/);
   assert.match(home, /class="cta secondary" href="\/cases"/);
+  assert.ok(home.indexOf("Сайты приводят заявки") < home.indexOf("Реальные проекты"));
+  const servicesStart = home.indexOf("services-home");
+  const servicesEnd = home.indexOf("lead-flow", servicesStart);
+  const homeServices = home.slice(servicesStart, servicesEnd);
+  assert.ok(homeServices.indexOf("Полный аудит и доработка") < homeServices.indexOf("Сайт для бизнеса"));
+  assert.ok(homeServices.indexOf("Сайт для бизнеса") < homeServices.indexOf(">CRM<"));
+  assert.ok(homeServices.indexOf(">CRM<") < homeServices.indexOf(">Автоматизация<"));
   assert.match(daria, /Что нужно было решить/);
   assert.match(daria, /Дарья Каминскене — маркетолог/);
   assert.match(clinic, /Telegram и MAX-уведомления/);

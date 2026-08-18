@@ -14,6 +14,7 @@ When implementing from a selected generated mock, treat that image as the source
 - The About page uses the separate smiling portrait with Egor's raised peace-sign gesture; keep it in natural color as a clean cutout on the same black editorial grid, without the original outdoor photo background.
 - Keep the current site's seven-route information architecture and real content: home, services, cases, pricing, process, about, and contacts.
 - Use Russian-ruble pricing throughout: website from 50,000 ₽, website + CRM from 100,000 ₽, CRM/automation from 120,000 ₽, full audit and improvements from 25,000 ₽, support from 15,000 ₽/month, additional tasks priced individually, and two months of support included after launch.
+- Present the main service order as audit and improvements, website, CRM, automation, support, then additional tasks. Keep the real-leads proof block immediately before the homepage cases section.
 - Price count-ups must prerender their final numeric value for search engines and no-JavaScript fallbacks, then animate from zero only after client JavaScript is running.
 - Keep both contact paths visible: a direct Telegram link and the lead form must be available on the Contacts page and in the site footer.
 - Direct contacts: Telegram `@egecxxxx`, WhatsApp `+20 114 969 2210`, email `eggetsevich@gmail.com`, and Instagram `@_gecevich_`; show all four on the Contacts page and in the footer.
