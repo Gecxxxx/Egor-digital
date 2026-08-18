@@ -308,6 +308,7 @@ test("shows pricing offers directly after a compact first screen", async () => {
   assert.match(app, /className="section pricing-plans-section"/);
   assert.ok(css.includes(".pricing-hero { height: auto; min-height: 340px"));
   assert.ok(css.includes(".pricing-hero { min-height: 0; gap: 26px"));
+  assert.match(css, /\.plan > div strong \{[^}]*white-space: nowrap;/);
 });
 
 test("ships approved client testimonials and Yandex Metrika", async () => {

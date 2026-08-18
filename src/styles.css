@@ -293,7 +293,7 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .plan > p { color: var(--purple); text-transform: uppercase; font-size: 10px; }
 .plan h3 { font-family: Oswald, Impact, sans-serif; text-transform: uppercase; font-size: clamp(28px, 2.4vw, 38px); line-height: 1.08; min-height: 92px; }
 .plan > div { border-block: 1px solid var(--line); padding: 22px 0; }
-.plan > div strong { font-family: Oswald, sans-serif; font-size: clamp(34px, 3vw, 50px); color: var(--cyan); }
+.plan > div strong { display: inline-block; white-space: nowrap; font-family: Oswald, sans-serif; font-size: clamp(32px, 2.65vw, 50px); letter-spacing: -.015em; color: var(--cyan); }
 .plan > span, .plan li { color: #9999a0; line-height: 1.55; font-size: 13px; }
 .plan ul { padding-left: 18px; flex: 1; }
 .plan li { margin: 10px 0; }
