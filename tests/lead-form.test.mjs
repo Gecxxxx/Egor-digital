@@ -144,6 +144,11 @@ test("requires only name, contact and privacy consent", () => {
   assert.match(appSource, /name="name" required/);
   assert.match(appSource, /name="contact" type="tel" inputMode="tel" required/);
   assert.match(appSource, /name="phone_code" defaultValue="\+7"/);
+  assert.match(appSource, /\["\+7", "\+7 · Россия"\]/);
+  assert.match(appSource, /\["\+7", "\+7 · Казахстан"\]/);
+  assert.match(appSource, /\["\+20", "\+20 · Египет"\]/);
+  assert.match(appSource, /\["\+1", "\+1 · США \/ Канада"\]/);
+  assert.doesNotMatch(appSource, /Россия \/ Казахстан/);
   assert.match(appSource, /const contact = `\$\{phoneCode\} \$\{phoneNumber\}`\.trim\(\)/);
   assert.match(appSource, /name="service"/);
   assert.match(appSource, /name="current_website"/);

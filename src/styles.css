@@ -365,7 +365,7 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opa
 .inline-lead form { display: grid; gap: 20px; }
 .inline-lead label { display: grid; gap: 8px; color: #c2c2c8; text-transform: uppercase; font-size: 10px; }
 .inline-lead input, .inline-lead textarea, .inline-lead select { width: 100%; border: 1px solid var(--line); background: #070708; color: white; padding: 15px; resize: vertical; }
-.phone-field { display: grid; grid-template-columns: minmax(118px, .72fr) minmax(0, 1.28fr); gap: 8px; }
+.phone-field { display: grid; grid-template-columns: minmax(158px, .9fr) minmax(0, 1.1fr); gap: 8px; }
 .phone-field select { min-width: 0; color-scheme: dark; cursor: pointer; }
 .inline-lead input::placeholder, .inline-lead textarea::placeholder, .modal input::placeholder, .modal textarea::placeholder { color: #a8a8ae; opacity: 1; }
 .inline-lead input:-webkit-autofill, .modal input:-webkit-autofill { -webkit-text-fill-color: #fff; -webkit-box-shadow: 0 0 0 1000px #070708 inset; caret-color: #fff; }
