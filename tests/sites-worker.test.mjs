@@ -151,10 +151,11 @@ test("keeps the result-focused hero and ships three detailed real cases", async 
   const roof = await readFile(new URL("../dist/client/cases/krysha-mechty.html", import.meta.url), "utf8");
 
   assert.match(home, /Сайт\. Заявки\. Автоматизация\./);
-  assert.match(home, /Создаю сайты и автоматизирую заявки/);
+  assert.match(home, /Создам сайт за 5–10 дней и автоматизирую заявки/);
   assert.match(home, /<span[^>]*class="count-up"[^>]*>25 000(?:<!-- -->)? ₽<\/span>/);
   assert.match(home, /class="char-word"/);
-  assert.match(home, /class="cta secondary" href="\/cases"/);
+  assert.match(home, /Рассчитать стоимость/);
+  assert.doesNotMatch(home, /class="cta secondary" href="\/cases"/);
   assert.ok(home.indexOf("Сайты приводят заявки") < home.indexOf("Реальные проекты"));
   const servicesStart = home.indexOf("services-home");
   const servicesEnd = home.indexOf("lead-flow", servicesStart);
@@ -228,6 +229,20 @@ test("keeps both homepage action labels visible at tablet widths", async () => {
   assert.ok(css.includes(".hero-actions .cta-copy { white-space: nowrap; }"));
   assert.ok(css.includes("max-width: 620px"));
   assert.ok(css.includes(".hero-actions { gap: 8px; }"));
+});
+
+test("keeps the desktop calculator compact and numbers options by columns", async () => {
+  const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.match(app, /--calculator-rows/);
+  assert.match(app, /placeholder="000 000-00-00"/);
+  assert.doesNotMatch(app, /placeholder="999 123-45-67"/);
+  assert.ok(css.includes(".calculator-heading h2 { white-space: nowrap; }"));
+  assert.ok(css.includes("grid-auto-flow: column"));
+  assert.ok(css.includes("grid-template-rows: repeat(var(--calculator-rows, 3)"));
+  assert.ok(css.includes(".calculator-contact .privacy-consent { display: grid; grid-template-columns: 24px minmax(0, 1fr) !important; margin: 0; padding: 5px 0; align-items: center; gap: 12px !important; }"));
+  assert.ok(css.includes(".calculator-contact .privacy-consent input { min-height: 24px; align-self: center; }"));
 });
 
 test("shows complete case-study images instead of cropping their previews", async () => {
