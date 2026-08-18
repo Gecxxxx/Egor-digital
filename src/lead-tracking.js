@@ -1,7 +1,7 @@
 export const METRIKA_ID = 111655243;
 
 const ATTRIBUTION_KEY = "egor-digital-attribution-v1";
-const UTM_FIELDS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
+const ATTRIBUTION_FIELDS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "yclid"];
 
 function clean(value, maxLength = 500) {
   return String(value || "").trim().slice(0, maxLength);
@@ -13,6 +13,8 @@ export function normalizeAttribution(value = {}) {
     utm_medium: clean(value.utm_medium, 160),
     utm_campaign: clean(value.utm_campaign, 240),
     utm_content: clean(value.utm_content, 240),
+    utm_term: clean(value.utm_term, 240),
+    yclid: clean(value.yclid, 240),
     first_url: clean(value.first_url, 1000),
     referrer: clean(value.referrer, 1000),
   };
@@ -27,7 +29,7 @@ export function captureAttribution() {
 
     const params = new URLSearchParams(window.location.search);
     const captured = normalizeAttribution({
-      ...Object.fromEntries(UTM_FIELDS.map((field) => [field, params.get(field) || ""])),
+      ...Object.fromEntries(ATTRIBUTION_FIELDS.map((field) => [field, params.get(field) || ""])),
       first_url: window.location.href,
       referrer: document.referrer,
     });
@@ -54,6 +56,8 @@ export function getGoalContext(extra = {}) {
     utm_medium: attribution.utm_medium,
     utm_campaign: attribution.utm_campaign,
     utm_content: attribution.utm_content,
+    utm_term: attribution.utm_term,
+    yclid: attribution.yclid,
     ...extra,
   };
 }
@@ -81,6 +85,8 @@ export function buildLeadMessage({ comment = "", serviceLabel = "", price = "", 
     attribution.utm_medium ? `UTM medium: ${clean(attribution.utm_medium, 160)}` : "",
     attribution.utm_campaign ? `UTM campaign: ${clean(attribution.utm_campaign, 240)}` : "",
     attribution.utm_content ? `UTM content: ${clean(attribution.utm_content, 240)}` : "",
+    attribution.utm_term ? `UTM term: ${clean(attribution.utm_term, 240)}` : "",
+    attribution.yclid ? `Yandex click ID: ${clean(attribution.yclid, 240)}` : "",
   ];
   return lines.filter(Boolean).join("\n");
 }

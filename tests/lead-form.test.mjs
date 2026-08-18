@@ -42,6 +42,8 @@ test("submits service, tariff and first-touch attribution", () => {
   assert.match(appSource, /utm_medium: attribution\.utm_medium/);
   assert.match(appSource, /utm_campaign: attribution\.utm_campaign/);
   assert.match(appSource, /utm_content: attribution\.utm_content/);
+  assert.match(appSource, /utm_term: attribution\.utm_term/);
+  assert.match(appSource, /yclid: attribution\.yclid/);
 });
 
 test("keeps the agreed analytics goal names stable", () => {
@@ -159,9 +161,22 @@ test("requires only name, contact and privacy consent", () => {
   assert.match(appSource, /name="website"/);
 });
 
-test("homepage offers website, audit and case actions", () => {
+test("homepage offers only the website form and calculator actions", () => {
   assert.match(appSource, /Мне нужен сайт/);
   assert.match(appSource, /service: "website", serviceLabel: "Сайт", source: "hero_website"/);
-  assert.match(appSource, /source: "hero_audit"/);
-  assert.match(appSource, /href="\/cases" go=\{go\}>Кейсы/);
+  assert.match(appSource, /Рассчитать стоимость/);
+  assert.match(appSource, /document\.getElementById\("cost-calculator"\)/);
+  assert.doesNotMatch(appSource, /source: "hero_audit"/);
+});
+
+test("calculator asks the approved questions and submits a checked estimate", () => {
+  for (const text of ["Что вам нужно?", "Какую задачу нужно решить?", "Какой объём проекта?", "Когда нужен результат?", "Ваш бюджет?"]) {
+    assert.match(appSource, new RegExp(text.replace(/[?]/g, "\\?")));
+  }
+  for (const messenger of ["MAX", "Telegram", "WhatsApp"]) assert.match(appSource, new RegExp(messenger));
+  assert.match(appSource, /Скидка: 10% закреплена за номером/);
+  assert.match(appSource, /Расчёт отправлю после личной проверки/);
+  assert.match(appSource, /calculator_answers: answers/);
+  assert.match(appSource, /trackGoal\("calculator_success"/);
+  assert.doesNotMatch(appSource, /Итоговая стоимость|Расчётная стоимость/);
 });

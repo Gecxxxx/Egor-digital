@@ -302,7 +302,12 @@ function BenefitTicker() {
   return <div className="ticker" aria-label="Преимущества"><div className="ticker-track">{[...tickerItems, ...tickerItems].map((item, index) => <span aria-hidden={index >= tickerItems.length ? "true" : undefined} key={`${item}-${index}`}>{item}</span>)}</div></div>;
 }
 
-function Hero({ go, onLead }) { return <><section className="hero grid-surface"><div className="hero-copy"><Eyebrow>Digital Tools by Egor</Eyebrow><h1 aria-label="Сайт. Заявки. Автоматизация."><span className="hero-line"><span>Сайт.</span></span><span className="hero-line"><span>Заявки.</span></span><span className="hero-line hero-line-long accent"><span>Автоматизация.</span></span></h1><p className="hero-sub"><AnimatedChars text="Создаю сайты и автоматизирую заявки, " /><strong><AnimatedChars text="чтобы бизнес не терял клиентов" offset={39} /></strong></p><div className="hero-actions"><CTA onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "hero_website" })}>Мне нужен сайт</CTA><CTA secondary onClick={() => onLead({ source: "hero_audit" })}>Получить разбор</CTA><CTA secondary href="/cases" go={go}>Кейсы</CTA></div><div className="hero-facts"><div><b>Сайт для бизнеса</b><strong>от <CountUp end={25000} suffix=" ₽" /></strong></div><div><b><CountUp end={2} suffix=" месяца поддержки" /></b><strong>бесплатно</strong></div></div></div><div className="hero-person"><img src="/assets/images/egor-hero-cutout.webp" alt="Егор — разработчик сайтов и CRM" width="1086" height="1448" loading="eager" decoding="sync" fetchPriority="high" /></div></section><BenefitTicker /></>; }
+function scrollToCalculator() {
+  trackGoal("calculator_open", getGoalContext({ placement: "hero" }));
+  document.getElementById("cost-calculator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function Hero({ onLead }) { return <><section className="hero grid-surface"><div className="hero-copy"><Eyebrow>Digital Tools by Egor</Eyebrow><h1 aria-label="Сайт. Заявки. Автоматизация."><span className="hero-line"><span>Сайт.</span></span><span className="hero-line"><span>Заявки.</span></span><span className="hero-line hero-line-long accent"><span>Автоматизация.</span></span></h1><p className="hero-sub"><AnimatedChars text="Создаю сайты за 5–10 дней и автоматизирую заявки, " /><strong><AnimatedChars text="чтобы бизнес не терял клиентов" offset={53} /></strong></p><div className="hero-actions"><CTA onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "hero_website" })}>Мне нужен сайт</CTA><CTA secondary onClick={scrollToCalculator}>Рассчитать стоимость</CTA></div><div className="hero-facts"><div><b>Сайт для бизнеса</b><strong>от <CountUp end={25000} suffix=" ₽" /></strong></div><div><b>Срок запуска</b><strong>5–10 дней</strong></div></div></div><div className="hero-person"><img src="/assets/images/egor-hero-cutout.webp" alt="Егор — разработчик сайтов и CRM" width="1086" height="1448" loading="eager" decoding="sync" fetchPriority="high" /></div></section><BenefitTicker /></>; }
 
 function NotFound({ go, onLead }) { return <main id="main-content" tabIndex="-1" className="not-found"><section className="not-found-hero grid-surface"><div className="not-found-copy"><Eyebrow>Ошибка 404</Eyebrow><p className="not-found-code" aria-hidden="true">404</p><h1><span>Страница</span><span>не найдена</span></h1><p className="not-found-text">Похоже, ссылка устарела или такой страницы больше нет. Вернитесь на главную либо расскажите о своей задаче — отвечу лично.</p><div className="not-found-actions"><CTA action="Перейти" href="/" go={go}>Вернуться на сайт</CTA><CTA secondary onClick={onLead}>Оставить заявку</CTA></div><nav className="not-found-links" aria-label="Полезные страницы"><span>Можно перейти сразу:</span><SiteLink href="/services" go={go}>Услуги</SiteLink><SiteLink href="/cases" go={go}>Кейсы</SiteLink><SiteLink href="/contacts" go={go}>Контакты</SiteLink></nav></div><div className="not-found-person"><img src="/assets/images/egor-about-cutout.webp" alt="Егор — Digital Tools by Egor" width="502" height="884" loading="eager" decoding="sync" fetchPriority="high" /></div></section></main>; }
 
@@ -322,7 +327,179 @@ function CasesLeadProof({ go }) {
   return <section className="section cases-lead-proof"><div className="cases-lead-proof-copy"><Eyebrow>Результат в работе</Eyebrow><AccentTitle>Сайты приводят заявки</AccentTitle><p>Не только красивый интерфейс: формы передают обращения в рабочий чат, а менеджер сразу получает нужные данные.</p><small>Персональные данные клиентов скрыты.</small></div><div className="cases-lead-proof-list">{proof.map((item, index) => <SiteLink className="cases-lead-proof-card" href={item.href} go={go} key={item.name}><div><img src={item.image} width={item.width} height={item.height} alt={`Обезличенная заявка — ${item.name}`} loading="lazy" decoding="async" /><span>{String(index + 1).padStart(2, "0")}</span></div><strong>{item.name}</strong><p>{item.text}</p><small>Смотреть подробный кейс <ArrowUpRight size={13} weight="bold" aria-hidden="true" /></small></SiteLink>)}</div></section>;
 }
 
-function Home({ go, onLead }) { return <main><Hero go={go} onLead={onLead} /><CasesLeadProof go={go} /><section className="section cases-home"><div className="section-head"><div><Eyebrow>Кейсы</Eyebrow><AccentTitle>Реальные проекты</AccentTitle></div><SiteLink className="text-link" href="/cases" go={go}>Все проекты</SiteLink></div><CaseGrid limit={3} go={go} /></section><section className="section services-home"><Eyebrow>Что я создаю</Eyebrow><AccentTitle>Система, а не декорация</AccentTitle><div className="service-table">{serviceRows.slice(0, 4).map(([n, title, text, price]) => <div className="service-row" key={n}><span>{n}</span><h3>{title}</h3><p>{text}</p><strong>{price}</strong></div>)}</div></section><section className="section lead-flow"><div><Eyebrow>Путь заявки</Eyebrow><AccentTitle>От формы до контроля</AccentTitle><p>Форма отправляет контакт в Telegram, фиксирует клиента в CRM и сохраняет источник обращения.</p></div><ol><li><span>01</span><b>Форма</b><small>контакт и задача</small></li><li><span>02</span><b>Telegram</b><small>уведомление сразу</small></li><li><span>03</span><b>CRM</b><small>статус сохранён</small></li><li><span>04</span><b>Аналитика</b><small>источник виден</small></li></ol></section><FinalCta onLead={onLead} /></main>; }
+const calculatorQuestions = [
+  {
+    key: "project",
+    title: "Что вам нужно?",
+    options: ["Лендинг", "Сайт для бизнеса", "Интернет-магазин", "CRM", "Автоматизация", "Аудит и доработка", "Пока не знаю"],
+  },
+  {
+    key: "task",
+    title: "Какую задачу нужно решить?",
+    options: ["Получать заявки из рекламы", "Представить компанию и услуги", "Продавать товары онлайн", "Автоматизировать работу с клиентами", "Обновить существующий сайт", "Пока не знаю"],
+  },
+  {
+    key: "scope",
+    title: "Какой объём проекта?",
+    options: ["Одна страница", "3–5 страниц", "6–10 страниц", "Более 10 страниц", "Пока не знаю"],
+    storeOptions: ["До 20 товаров", "21–50 товаров", "51–100 товаров", "Более 100 товаров", "Пока не знаю"],
+  },
+  {
+    key: "deadline",
+    title: "Когда нужен результат?",
+    options: ["Как можно скорее", "За 5–10 дней", "В течение месяца", "Точного срока нет"],
+  },
+  {
+    key: "budget",
+    title: "Ваш бюджет?",
+    options: ["До 25 000 ₽", "25 000–50 000 ₽", "50 000–100 000 ₽", "100 000–150 000 ₽", "Более 150 000 ₽", "Пока не определился"],
+  },
+];
+
+const messengerOptions = ["MAX", "Telegram", "WhatsApp"];
+
+function Calculator({ go }) {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [messenger, setMessenger] = useState("");
+  const [status, setStatus] = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const started = useRef(false);
+  const contactStep = calculatorQuestions.length + 1;
+  const totalSteps = calculatorQuestions.length + 2;
+  const currentQuestion = calculatorQuestions[step];
+
+  const recordStart = () => {
+    if (started.current) return;
+    started.current = true;
+    trackGoal("calculator_start", getGoalContext({ placement: "home" }));
+  };
+
+  const chooseAnswer = (key, value) => {
+    recordStart();
+    setAnswers((current) => {
+      const next = { ...current, [key]: value };
+      if (key === "project" && current.project !== value) delete next.scope;
+      return next;
+    });
+    trackGoal("calculator_step", getGoalContext({ step: key }));
+    window.setTimeout(() => setStep((current) => Math.min(current + 1, calculatorQuestions.length)), 140);
+  };
+
+  const chooseMessenger = (value) => {
+    recordStart();
+    setMessenger(value);
+    trackGoal("calculator_step", getGoalContext({ step: "messenger", messenger: value.toLowerCase() }));
+    window.setTimeout(() => setStep(contactStep), 140);
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (status === "sending") return;
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const name = String(values.get("name") || "").trim();
+    const phoneCode = String(values.get("phone_code") || "+7").trim();
+    const phoneNumber = String(values.get("contact") || "").trim();
+    const contact = `${phoneCode} ${phoneNumber}`.trim();
+    const privacyAccepted = values.get("privacy") === "on";
+    const nextFieldErrors = {};
+    if (!name) nextFieldErrors.name = "Введите имя.";
+    if (!phoneNumber) nextFieldErrors.contact = "Введите номер телефона.";
+    else if (phoneNumber.replace(/\D/g, "").length < 6) nextFieldErrors.contact = "Проверьте номер телефона.";
+    if (!privacyAccepted) nextFieldErrors.privacy = "Подтвердите согласие на обработку персональных данных.";
+    if (Object.keys(nextFieldErrors).length) {
+      setFieldErrors(nextFieldErrors);
+      window.requestAnimationFrame(() => form.querySelector("[aria-invalid='true']")?.focus());
+      return;
+    }
+
+    const attribution = captureAttribution();
+    const currentPage = getCurrentPage();
+    const serviceMap = {
+      "Лендинг": ["website", "Сайт"],
+      "Сайт для бизнеса": ["website", "Сайт"],
+      "Интернет-магазин": ["website", "Интернет-магазин"],
+      CRM: ["crm", "CRM"],
+      Автоматизация: ["crm", "Автоматизация"],
+      "Аудит и доработка": ["audit", "Аудит и доработка"],
+    };
+    const [service, serviceLabel] = serviceMap[answers.project] || ["website", "Не определено"];
+    const details = [
+      "Калькулятор стоимости",
+      `Что нужно: ${answers.project}`,
+      `Задача: ${answers.task}`,
+      `Объём: ${answers.scope}`,
+      `Срок: ${answers.deadline}`,
+      `Бюджет: ${answers.budget}`,
+      `Куда выслать расчёт: ${messenger}`,
+      "Скидка: 10% закреплена за номером",
+    ].join("\n");
+    const payload = {
+      name,
+      contact,
+      message: buildLeadMessage({ comment: details, serviceLabel, price: answers.budget, attribution, currentPage }),
+      comment: details,
+      website: String(values.get("website") || "").trim(),
+      current_website: "",
+      service,
+      service_label: serviceLabel,
+      price: answers.budget,
+      messenger,
+      calculator_answers: answers,
+      discount: "10%",
+      page: currentPage,
+      first_url: attribution.first_url,
+      referrer: attribution.referrer,
+      utm_source: attribution.utm_source,
+      utm_medium: attribution.utm_medium,
+      utm_campaign: attribution.utm_campaign,
+      utm_content: attribution.utm_content,
+      utm_term: attribution.utm_term,
+      yclid: attribution.yclid,
+    };
+
+    setFieldErrors({});
+    setStatus("sending");
+    setErrorMessage("");
+    try {
+      const response = await fetch("/api/brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || result?.ok === false || result?.success === false) throw new Error(result?.error || "Не удалось отправить расчёт. Попробуйте ещё раз.");
+      setStatus("success");
+      trackGoal("calculator_success", getGoalContext({ messenger: messenger.toLowerCase(), service }));
+      trackGoal("lead_form_success", getGoalContext({ form: "calculator", service, price: answers.budget }));
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Не удалось отправить расчёт. Попробуйте ещё раз.");
+      trackGoal("form_error", getGoalContext({ form: "calculator", service }));
+    }
+  };
+
+  const restart = () => {
+    setStep(0);
+    setAnswers({});
+    setMessenger("");
+    setStatus("idle");
+    setErrorMessage("");
+    setFieldErrors({});
+  };
+
+  if (status === "success") {
+    return <section className="section calculator-section" id="cost-calculator"><div className="calculator-shell calculator-success" role="status"><span className="calculator-discount">Скидка 10% закреплена за вашим номером</span><Eyebrow>Расчёт отправлен</Eyebrow><h2>Заявка получена</h2><p>Я проверю ответы и пришлю расчёт в выбранный мессенджер — {messenger}.</p><button type="button" onClick={restart}>Заполнить ещё раз</button></div></section>;
+  }
+
+  const progressStep = Math.min(step + 1, totalSteps);
+  const options = currentQuestion?.key === "scope" && answers.project === "Интернет-магазин" ? currentQuestion.storeOptions : currentQuestion?.options;
+  return <section className="section calculator-section" id="cost-calculator"><div className="calculator-shell"><div className="calculator-heading"><div><Eyebrow>Онлайн-калькулятор</Eyebrow><h2>Рассчитайте стоимость</h2></div><span className="calculator-discount">Пройдите расчёт и получите скидку 10%</span></div><div className="calculator-progress" aria-label={`Шаг ${progressStep} из ${totalSteps}`}><span>Шаг {String(progressStep).padStart(2, "0")} / {String(totalSteps).padStart(2, "0")}</span><i style={{ "--calculator-progress": `${(progressStep / totalSteps) * 100}%` }} /></div>{step < calculatorQuestions.length && currentQuestion ? <div className="calculator-question" key={currentQuestion.key}><h3>{currentQuestion.title}</h3><div className="calculator-options">{options.map((option, index) => <button type="button" className={answers[currentQuestion.key] === option ? "is-selected" : ""} aria-pressed={answers[currentQuestion.key] === option} onClick={() => chooseAnswer(currentQuestion.key, option)} key={option}><span>{String(index + 1).padStart(2, "0")}</span>{option}</button>)}</div></div> : step === calculatorQuestions.length ? <div className="calculator-question"><h3>Куда вам выслать расчёт?</h3><div className="calculator-options calculator-messengers">{messengerOptions.map((option) => <button type="button" className={messenger === option ? "is-selected" : ""} aria-pressed={messenger === option} onClick={() => chooseMessenger(option)} key={option}>{option}</button>)}</div></div> : <form className="calculator-contact" noValidate onSubmit={submit} onInput={() => { recordStart(); setFieldErrors({}); }} aria-busy={status === "sending"}><h3>Как с вами связаться?</h3><p>Расчёт придёт в {messenger}. Стоимость проверю лично перед отправкой.</p><label>Имя<input name="name" required aria-invalid={Boolean(fieldErrors.name)} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" /><FieldError id="calculator-name-error" message={fieldErrors.name} /></label><label>Номер телефона<div className="phone-field"><select name="phone_code" defaultValue="+7" aria-label="Код страны">{phoneCodes.map(([code, label]) => <option value={code} key={label}>{label}</option>)}</select><input name="contact" type="tel" inputMode="tel" required aria-invalid={Boolean(fieldErrors.contact)} autoComplete="tel-national" maxLength="30" placeholder="999 123-45-67" /></div><FieldError id="calculator-contact-error" message={fieldErrors.contact} /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent"><input name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("calculator"); go("/privacy"); }}>политику конфиденциальности</a>.<FieldError id="calculator-privacy-error" message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Получить расчёт"}</button></form>}<div className="calculator-navigation">{step > 0 && <button type="button" onClick={() => setStep((current) => Math.max(0, current - 1))}>← Назад</button>}<span>Расчёт отправлю после личной проверки</span></div></div></section>;
+}
+
+function Home({ go, onLead }) { return <main><Hero onLead={onLead} /><CasesLeadProof go={go} /><section className="section cases-home"><div className="section-head"><div><Eyebrow>Кейсы</Eyebrow><AccentTitle>Реальные проекты</AccentTitle></div><SiteLink className="text-link" href="/cases" go={go}>Все проекты</SiteLink></div><CaseGrid limit={3} go={go} /></section><Calculator go={go} /><section className="section services-home"><Eyebrow>Что я создаю</Eyebrow><AccentTitle>Система, а не декорация</AccentTitle><div className="service-table">{serviceRows.slice(0, 4).map(([n, title, text, price]) => <div className="service-row" key={n}><span>{n}</span><h3>{title}</h3><p>{text}</p><strong>{price}</strong></div>)}</div></section><section className="section lead-flow"><div><Eyebrow>Путь заявки</Eyebrow><AccentTitle>От формы до контроля</AccentTitle><p>Форма отправляет контакт в Telegram, фиксирует клиента в CRM и сохраняет источник обращения.</p></div><ol><li><span>01</span><b>Форма</b><small>контакт и задача</small></li><li><span>02</span><b>Telegram</b><small>уведомление сразу</small></li><li><span>03</span><b>CRM</b><small>статус сохранён</small></li><li><span>04</span><b>Аналитика</b><small>источник виден</small></li></ol></section><FinalCta onLead={onLead} /></main>; }
 
 function PageHero({ eyebrow, title, text, onLead, href, go, action = "Получить разбор", className = "" }) { return <section className={`page-hero grid-surface ${className}`.trim()}><div><Eyebrow>{eyebrow}</Eyebrow><h1><span>{title}</span></h1></div><div><p>{text}</p><CTA onClick={onLead} href={href} go={go}>{action}</CTA></div></section>; }
 function Offer({ title, price, text }) { return <article className="offer"><p>{price}</p><h3>{title}</h3><span>{text}</span></article>; }
@@ -415,7 +592,7 @@ function Testimonials() {
   return <section className="section testimonials"><Eyebrow>Отзывы</Eyebrow><AccentTitle>Что говорят клиенты</AccentTitle><div>{items.map((item) => <blockquote key={item.name}><p>“{item.text}”</p><cite><strong>{item.name}</strong><span>{item.role}</span></cite></blockquote>)}</div></section>;
 }
 function Faq() { const qs = [["Можно начать с маленькой задачи?", "Да. Аудит, форма или точечная доработка помогают быстро проверить формат работы."], ["Один канал заявок входит в сайт?", "Да: Telegram, MAX или email — выбираем удобный вариант."], ["Что значит поддержка 2 месяца?", "Исправляю технические ошибки, помогаю с мелкими правками и контролирую стабильность после запуска."], ["Можно добавить CRM позже?", "Да. Сайт строится так, чтобы CRM и автоматизацию можно было подключить по мере роста."]]; const [openIndex, setOpenIndex] = useState(0); return <section className="section faq"><Eyebrow>FAQ</Eyebrow><AccentTitle>Короткие ответы</AccentTitle><div className="faq-list">{qs.map(([q,a], index) => { const open = openIndex === index; return <div className={open ? "faq-item is-open" : "faq-item"} key={q}><button type="button" aria-expanded={open} aria-controls={`faq-answer-${index}`} onClick={() => setOpenIndex(open ? -1 : index)}><span>{q}</span><i aria-hidden="true" /></button><div className="faq-answer" id={`faq-answer-${index}`} aria-hidden={!open}><div><p>{a}</p></div></div></div>; })}</div></section>; }
-function FinalCta({ onLead }) { return <section className="final-cta grid-surface"><Eyebrow>Следующий шаг</Eyebrow><h2>Разберём задачу<br />без лишней сметы</h2><p>Напишите, какой у вас бизнес и что сейчас мешает заявкам. Предложу понятный первый шаг и ориентир по бюджету.</p><CTA onClick={onLead}>Получить разбор</CTA></section>; }
+function FinalCta({ onLead }) { return <section className="final-cta grid-surface"><Eyebrow>Следующий шаг</Eyebrow><h2>Получите понятный<br />план запуска</h2><p>Расскажите о бизнесе и задаче. Предложу подходящий формат сайта, срок запуска и ориентир по бюджету.</p><CTA onClick={onLead}>Обсудить проект</CTA></section>; }
 
 function FieldError({ id, message }) {
   return message ? <span className="field-error" id={id} role="alert">{message}</span> : null;
@@ -494,6 +671,8 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
       utm_medium: attribution.utm_medium,
       utm_campaign: attribution.utm_campaign,
       utm_content: attribution.utm_content,
+      utm_term: attribution.utm_term,
+      yclid: attribution.yclid,
     };
 
     setStatus("sending");

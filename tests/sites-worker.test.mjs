@@ -222,12 +222,11 @@ test("keeps the mobile hero portrait fully visible behind the text", async () =>
   assert.ok(!css.includes(".hero-person { top: 68px; right: -14px"));
 });
 
-test("keeps all three homepage action labels visible at tablet widths", async () => {
+test("keeps both homepage action labels visible at tablet widths", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
   assert.ok(css.includes(".hero-actions .cta-copy { white-space: nowrap; }"));
-  assert.ok(css.includes(".hero-actions .cta:nth-child(1), .hero-actions .cta:nth-child(2) { flex-grow: 1.2; }"));
-  assert.ok(css.includes(".hero-actions .cta:nth-child(3) { flex-grow: .7; }"));
+  assert.ok(css.includes("max-width: 620px"));
   assert.ok(css.includes(".hero-actions { gap: 8px; }"));
 });
 
