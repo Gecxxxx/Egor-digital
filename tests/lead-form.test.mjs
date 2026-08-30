@@ -139,6 +139,17 @@ test("labels concept work as demo projects and includes the detailed store case"
   assert.match(appSource, /fitness-coach\.webp/);
 });
 
+test("presents the TOYS case as a verifiable sales funnel", () => {
+  assert.match(appSource, /function ToysStoreCase/);
+  assert.match(appSource, /Просто витрина не решает задачу продаж/);
+  assert.match(appSource, /Пять шагов вместо переписки/);
+  assert.match(appSource, /Открыть read-only админку/);
+  assert.match(appSource, /Подключается отдельно/);
+  assert.match(appSource, /Цена пересчитывается на сервере/);
+  assert.match(appSource, /реального списания денег нет/);
+  assert.match(appSource, /path === "\/cases\/toys-store" \? <ToysStoreCase/);
+});
+
 test("filters cases by every matching category", () => {
   assert.match(appSource, /item\.categories\.includes\(filter\)/);
   assert.match(appSource, /item\.categories\.join\(" \/ "\)/);

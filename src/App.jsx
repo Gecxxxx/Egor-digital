@@ -551,6 +551,117 @@ function CaseStudy({ path, go, onLead }) {
   return <main className="case-study"><section className="case-study-hero grid-surface"><div className="case-study-heading"><SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink><Eyebrow>{detail.eyebrow}</Eyebrow><h1>{item.name}</h1><p>{detail.lead}</p><div className="case-study-actions"><a href={item.href} target="_blank" rel="noreferrer" onClick={() => trackCase(item, "case_detail")}>Открыть проект <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a><button type="button" onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "case_detail" })}>Обсудить похожий сайт</button></div></div><dl className="case-study-facts">{detail.facts.map(([value, label]) => <div key={label}><dt>{value}</dt><dd>{label}</dd></div>)}</dl></section><section className="case-study-preview section"><div className="case-study-browser"><div aria-hidden="true"><i /><i /><i /><span>{item.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span></div><CaseImage item={item} featured /></div></section><section className="section case-study-story"><div><Eyebrow>Контекст</Eyebrow><h2>Кто клиент</h2><p>{detail.client}</p></div><div><Eyebrow>Задача</Eyebrow><h2>Что нужно было решить</h2><p>{detail.challenge}</p></div><div><Eyebrow>Решение</Eyebrow><h2>Что я сделал</h2><p>{detail.solution}</p></div><aside><span>Моя роль</span><strong>Структура · дизайн · разработка · адаптив · запуск</strong><small>Проект вёл лично, специалистов подключал под отдельные задачи.</small></aside></section><section className="section case-study-features"><Eyebrow>Состав проекта</Eyebrow><AccentTitle>Что реализовано</AccentTitle><div>{detail.features.map((feature, index) => <article key={feature}><span>{String(index + 1).padStart(2, "0")}</span><h3>{feature}</h3></article>)}</div></section>{detail.evidence && <CaseEvidence evidence={detail.evidence} projectName={item.name} />}<section className="section case-study-result"><div><Eyebrow>Результат</Eyebrow><AccentTitle>Рабочий инструмент</AccentTitle><p>{detail.result}</p><CTA onClick={() => onLead({ service: "website", serviceLabel: "Сайт", source: "case_result" })}>Рассчитать похожий проект</CTA></div>{detail.quote ? <blockquote><p>“{detail.quote}”</p><cite>{detail.quoteBy}</cite></blockquote> : <aside className="case-study-note"><span>Важно</span><p>{detail.resultNote}</p><a href={item.href} target="_blank" rel="noreferrer">Открыть безопасное демо <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a></aside>}</section><section className="case-study-next grid-surface"><span>Следующий кейс</span><SiteLink href={nextCase.casePath} go={go}><strong>{nextCase.name}</strong><ArrowUpRight size={22} weight="bold" aria-hidden="true" /></SiteLink></section></main>;
 }
 
+const toysBuyerSteps = [
+  ["01", "Находит нужный товар", "Категории, поиск, фильтры и сортировка помогают быстро сузить выбор — без переписки с менеджером."],
+  ["02", "Проверяет всё важное", "В карточке собраны фотографии, цена, наличие, характеристики и понятное действие «В корзину»."],
+  ["03", "Собирает заказ", "Корзина пересчитывает количество и сумму, а система не позволяет заказать больше доступного остатка."],
+  ["04", "Оформляет без лишних шагов", "Контакты, доставка, комментарий и способ оплаты собираются в одном последовательном сценарии."],
+  ["05", "Возвращается за статусом", "После входа покупатель видит свои адреса и историю заказов, но не получает доступ к чужим данным."],
+];
+
+const toysCoreFeatures = [
+  ["Каталог", "Товары, категории, поиск, фильтры, сортировка и страницы с галереей."],
+  ["Продажи", "Корзина, контроль количества, серверный пересчёт и оформление заказа."],
+  ["Клиенты", "Регистрация, вход, восстановление пароля, адреса и история заказов."],
+  ["Управление", "Товары, изображения, цены, остатки, заказы, отзывы, пользователи и роли."],
+];
+
+const toysIntegrations = [
+  ["Оплата", "ЮKassa или другой российский эквайринг — после подключения кабинета и боевого договора."],
+  ["Доставка", "СДЭК, Почта России или собственные тарифы и зоны доставки."],
+  ["Учёт", "МойСклад, 1С или импорт каталога из согласованного источника."],
+  ["Коммуникации", "Email, Telegram или CRM-уведомления о новых заказах и смене статуса."],
+];
+
+function ToysScreen({ src, width, height, alt, number }) {
+  return <figure className="toys-screen"><img src={src} width={width} height={height} alt={alt} loading="lazy" decoding="async" /><figcaption><span>{number}</span>{alt}</figcaption></figure>;
+}
+
+function ToysStoreCase({ go, onLead }) {
+  const item = cases.find((candidate) => candidate.casePath === "/cases/toys-store");
+  const openLead = (source) => onLead({ service: "website", serviceLabel: "Интернет-магазин", source });
+  return <main className="toys-case">
+    <section className="toys-hero grid-surface">
+      <div className="toys-hero-copy">
+        <SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink>
+        <Eyebrow>Демо-система для интернет-торговли</Eyebrow>
+        <h1>Интернет-магазин, который продаёт — и не создаёт хаос</h1>
+        <p>TOYS показывает не отдельный красивый экран, а полный контур продаж: от выбора товара до управления заказом, остатками и клиентами.</p>
+        <div className="case-study-actions">
+          <a href="https://store.egordigital.site/" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Пройти путь покупателя <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
+          <button type="button" onClick={() => openLead("toys_hero")}>Обсудить свой магазин</button>
+        </div>
+        <small>Демо-проект · тестовые товары · реального списания денег нет</small>
+      </div>
+      <aside className="toys-hero-route" aria-label="Что можно проверить в демо">
+        <span>Проверить самостоятельно</span>
+        <h2>Не верить описанию. Открыть и пройти.</h2>
+        <a href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer"><b>01</b><span>Каталог и фильтры</span><ArrowUpRight size={16} /></a>
+        <a href="https://store.egordigital.site/product/nabor-lesnaya-pekarnya" target="_blank" rel="noreferrer"><b>02</b><span>Карточка товара</span><ArrowUpRight size={16} /></a>
+        <a href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer"><b>03</b><span>Read-only админка</span><ArrowUpRight size={16} /></a>
+      </aside>
+    </section>
+
+    <section className="section toys-opening">
+      <div><Eyebrow>Зачем это бизнесу</Eyebrow><AccentTitle>Просто витрина не решает задачу продаж</AccentTitle></div>
+      <div className="toys-opening-copy"><p>Когда ассортимент живёт в таблице, остатки — в голове, а заказы приходят в разные мессенджеры, владелец тратит время не на рост, а на ручную сверку. Покупатель тоже платит за этот хаос: ждёт ответ, повторяет адрес и не понимает, принят ли заказ.</p><p>Интернет-магазин нужен не ради самого сайта. Он собирает выбор, оплату, доставку и работу команды в один контролируемый процесс.</p></div>
+      <blockquote>Каждый ручной переход — место, где можно потерять заказ, перепутать цену или пообещать товар, которого уже нет.</blockquote>
+    </section>
+
+    <section className="section toys-journey" id="toys-system">
+      <div className="toys-section-intro"><Eyebrow>Сценарий покупателя</Eyebrow><AccentTitle>Пять шагов вместо переписки «а это есть?»</AccentTitle><p>Путь собран так, чтобы человек мог принять решение самостоятельно, а менеджер подключался только там, где действительно нужен.</p></div>
+      <ol>{toysBuyerSteps.map(([number, title, text]) => <li key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></li>)}</ol>
+    </section>
+
+    <section className="section toys-showcase toys-showcase-catalog">
+      <div className="toys-showcase-copy"><Eyebrow>Выбор без перегруза</Eyebrow><h2>Каталог помогает найти, а не просто показывает ассортимент</h2><p>Категории и фильтры сокращают путь к подходящему товару. Цена и наличие берутся из базы, поэтому одна и та же информация используется в каталоге, карточке и заказе.</p><ul><li>поиск по названию и артикулу;</li><li>фильтры по категории, цене и наличию;</li><li>сортировка и сохранение параметров в URL;</li><li>добавление в корзину прямо из каталога.</li></ul><a className="toys-inline-link" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer">Открыть живой каталог <ArrowUpRight size={15} /></a></div>
+      <ToysScreen src="/assets/cases/toys-store/catalog-desktop.webp" width="1440" height="810" alt="Каталог TOYS с товарами и фильтрами" number="01" />
+    </section>
+
+    <section className="section toys-showcase toys-showcase-product">
+      <ToysScreen src="/assets/cases/toys-store/product-desktop.webp" width="1440" height="810" alt="Карточка товара TOYS с галереей, ценой и наличием" number="02" />
+      <div className="toys-showcase-copy"><Eyebrow>Решение о покупке</Eyebrow><h2>Карточка отвечает на вопросы до того, как их зададут менеджеру</h2><p>Несколько фотографий можно листать, остаток ограничивает доступное количество, а старая цена и характеристики выводятся из управляемых данных — без ручной правки страницы.</p><ul><li>галерея изображений и понятная навигация;</li><li>актуальная цена и наличие;</li><li>характеристики, описание и артикул;</li><li>контроль количества до добавления в корзину.</li></ul><a className="toys-inline-link" href="https://store.egordigital.site/product/nabor-lesnaya-pekarnya" target="_blank" rel="noreferrer">Открыть карточку товара <ArrowUpRight size={15} /></a></div>
+    </section>
+
+    <section className="section toys-owner">
+      <div className="toys-owner-copy"><Eyebrow>Сторона бизнеса</Eyebrow><AccentTitle>Управление магазином — отдельно от витрины</AccentTitle><p>Покупатель видит аккуратный магазин. Владелец и команда работают в закрытой панели: меняют товары, цены и остатки, разбирают заказы и управляют доступами.</p><p>Публичная версия админки работает в безопасном режиме просмотра. Она показывает устройство системы, но не позволяет посетителю менять данные.</p><a className="toys-inline-link" href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer">Открыть read-only админку <ArrowUpRight size={15} /></a><small>Данные для входа указаны на странице авторизации.</small></div>
+      <ToysScreen src="/assets/cases/toys-store/admin-products.webp" width="1440" height="810" alt="Панель управления товарами магазина TOYS" number="03" />
+    </section>
+
+    <section className="section toys-capabilities">
+      <div className="toys-section-intro"><Eyebrow>Что уже есть в ядре</Eyebrow><AccentTitle>Система закрывает путь заказа целиком</AccentTitle><p>Это рабочая основа, которую можно адаптировать под другой бренд и ассортимент, не собирая корзину, аккаунты и админку заново.</p></div>
+      <div className="toys-capability-list">{toysCoreFeatures.map(([title, text], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
+    </section>
+
+    <section className="section toys-integrations">
+      <div><Eyebrow>Развитие под бизнес</Eyebrow><AccentTitle>Подключается к привычным сервисам</AccentTitle><p>В демо внешние сервисы не списывают деньги и не создают реальные отправления. При запуске интеграции выбираются под вашу схему работы, а не добавляются «для галочки».</p></div>
+      <div>{toysIntegrations.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p><span>Подключается отдельно</span></article>)}</div>
+    </section>
+
+    <section className="section toys-engine grid-surface">
+      <div><Eyebrow>Невидимая часть</Eyebrow><AccentTitle>То, из-за чего магазин не разваливается после запуска</AccentTitle></div>
+      <div className="toys-engine-copy"><p>Красивую витрину легко показать на макете. Надёжность начинается там, где браузеру перестают доверять деньги, остатки и права доступа.</p><dl><div><dt>Цена пересчитывается на сервере</dt><dd>Покупатель не может подменить стоимость или итог заказа в браузере.</dd></div><div><dt>Остаток меняется вместе с заказом</dt><dd>Проверка товаров, создание позиций и резерв выполняются одной операцией в PostgreSQL.</dd></div><div><dt>Заказ хранит снимок товара</dt><dd>Старая покупка не изменится, даже если позже поменять название или цену карточки.</dd></div><div><dt>Роли проверяются на сервере</dt><dd>Покупатель, менеджер и администратор получают только разрешённые им действия и данные.</dd></div></dl></div>
+    </section>
+
+    <section className="section toys-mobile-story">
+      <div><ToysScreen src="/assets/cases/toys-store/home-mobile.webp" width="390" height="844" alt="Мобильная главная страница магазина TOYS" number="04" /></div>
+      <div><Eyebrow>Не уменьшенная копия</Eyebrow><AccentTitle>Мобильный магазин проектируется под покупку одной рукой</AccentTitle><p>Навигация, карточки, корзина и оформление адаптированы под телефон. Крупные зоны нажатия, отсутствие горизонтальной прокрутки и короткие формы помогают не потерять человека в момент покупки.</p><p>Дизайн этого примера можно полностью заменить: оставить систему, но собрать другой характер бренда, структуру главной, категории и контент.</p></div>
+    </section>
+
+    <section className="section toys-fit">
+      <Eyebrow>Кому подходит</Eyebrow><AccentTitle>Не шаблон «для всех», а основа под вашу модель продаж</AccentTitle>
+      <div><p>Подойдёт бренду с собственным ассортиментом, локальному магазину, производителю, шоуруму или нишевой рознице, которым уже тесно в сообщениях и таблицах.</p><p>Перед оценкой определяем объём каталога, варианты товаров, способы оплаты и доставки, роли команды, импорт данных и нужные интеграции. После этого фиксируются состав, срок и стоимость — без цифр, взятых из воздуха.</p></div>
+    </section>
+
+    <section className="section toys-faq">
+      <div className="toys-section-intro"><Eyebrow>Частые вопросы</Eyebrow><AccentTitle>Что важно понять до запуска</AccentTitle></div>
+      <div><details><summary>Можно полностью поменять дизайн?</summary><p>Да. Визуальный стиль, главная страница, карточки, тексты и структура каталога адаптируются под бренд. Сохраняется проверенная логика магазина.</p></details><details><summary>Можно принимать оплату российской картой?</summary><p>Да, после подключения выбранного платёжного провайдера, например ЮKassa, и получения необходимых доступов. В публичном демо реального списания нет.</p></details><details><summary>Можно перенести существующие товары?</summary><p>Да, если заранее определить источник и качество данных. Импорт из таблицы, учётной системы или старого сайта оценивается отдельно.</p></details><details><summary>Демо-админка безопасна?</summary><p>Публичный аккаунт ограничен режимом просмотра. В рабочей версии действия защищаются серверной проверкой роли, а доступы выдаются конкретным сотрудникам.</p></details></div>
+    </section>
+
+    <section className="section toys-final grid-surface"><div><Eyebrow>Следующий шаг</Eyebrow><h2>Покажите, как вы принимаете заказы сейчас</h2><p>Я разберу текущий процесс и предложу состав магазина без лишних функций: что оставить в ядре, что изменить под ваш бизнес и какие интеграции подключать сначала.</p></div><div className="toys-final-actions"><CTA onClick={() => openLead("toys_final")}>Обсудить интернет-магазин</CTA><a href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Сначала открыть демо <ArrowUpRight size={15} /></a></div></section>
+  </main>;
+}
+
 function CaseEvidence({ evidence, projectName }) {
   return <section className={`section case-evidence ${evidence.layout === "screens" ? "case-evidence-screens" : ""}`}><div className="case-evidence-copy"><Eyebrow>Результат в работе · {evidence.channel}</Eyebrow><AccentTitle>{evidence.title}</AccentTitle><p>{evidence.text}</p><ul>{evidence.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul><small>{evidence.note || "Персональные данные клиентов скрыты."}</small></div><div className="case-evidence-gallery">{evidence.images.map(([src, width, height], index) => <button type="button" className="case-evidence-shot" onClick={(event) => event.currentTarget.classList.toggle("is-expanded")} aria-label={`${projectName}: увеличить пример ${index + 1}`} key={src}><img src={src} width={width} height={height} alt={evidence.imageAlts?.[index] || `Обезличенная заявка с сайта ${projectName}`} loading="lazy" decoding="async" /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div></section>;
 }
@@ -876,7 +987,7 @@ export function App({ initialPath = "/" }) {
     setLeadOpen(true);
     trackGoal("lead_modal_open", getGoalContext({ form: nextSelection.source || "general", service: nextSelection.service || "" }));
   };
-  const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : caseStudyContent[path] ? <CaseStudy path={path} go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
+  const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/cases/toys-store" ? <ToysStoreCase go={go} onLead={onLead} /> : caseStudyContent[path] ? <CaseStudy path={path} go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
   const openPrivacy = () => { setLeadOpen(false); go("/privacy"); };
   const closeLead = useCallback(() => setLeadOpen(false), []);
   return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><a className="skip-link" href="#page-content">Перейти к содержимому</a><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} /><div id="page-content" tabIndex="-1">{page}</div><Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={closeLead} onPrivacy={openPrivacy} selection={leadSelection} returnFocusElement={leadTriggerRef.current} />}</div></>;
