@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import test from "node:test";
 
@@ -102,8 +103,8 @@ server {
 
   await writeFile(serverPath, serverSource);
   await writeFile(nginxPath, nginxSource);
-  await execFileAsync(process.execPath, [new URL("../scripts/patch-vps-server.mjs", import.meta.url).pathname, serverPath]);
-  await execFileAsync(process.execPath, [new URL("../scripts/patch-vps-nginx.mjs", import.meta.url).pathname, nginxPath]);
+  await execFileAsync(process.execPath, [fileURLToPath(new URL("../scripts/patch-vps-server.mjs", import.meta.url)), serverPath]);
+  await execFileAsync(process.execPath, [fileURLToPath(new URL("../scripts/patch-vps-nginx.mjs", import.meta.url)), nginxPath]);
 
   const patchedServer = await readFile(serverPath, "utf8");
   const patchedNginx = await readFile(nginxPath, "utf8");
@@ -127,11 +128,14 @@ server {
   assert.match(deploySource, /Public CSP header is unexpectedly large/);
 });
 
-test("labels concept work as demo projects and includes the fitness case", () => {
+test("labels concept work as demo projects and includes the detailed store case", () => {
   assert.match(appSource, /name: "Илья Морозов", categories: \["Демо-проект", "Сайт", "Личный бренд"\]/);
   assert.match(appSource, /name: "NovaDent", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /name: "Casa Maris", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /name: "Level Home", categories: \["Демо-проект", "Сайт", "Автоматизация"\]/);
+  assert.match(appSource, /name: "TOYS — интернет-магазин", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
+  assert.match(appSource, /casePath: "\/cases\/toys-store"/);
+  assert.match(appSource, /Публичная версия использует тестовые товары и тестовое оформление заказа без списания денег/);
   assert.match(appSource, /fitness-coach\.webp/);
 });
 

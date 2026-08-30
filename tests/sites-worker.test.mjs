@@ -209,7 +209,7 @@ test("keeps the ticker moving without interactive pause controls", async () => {
   const app = await readFile(new URL("../src/App.jsx", import.meta.url), "utf8");
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
 
-  assert.match(app, /function BenefitTicker\(\) \{\n  return <div className="ticker"/);
+  assert.match(app, /function BenefitTicker\(\) \{\r?\n  return <div className="ticker"/);
   assert.doesNotMatch(app, /ticker-toggle|aria-pressed=\{paused\}|setPaused/);
   assert.doesNotMatch(css, /ticker-toggle|ticker\.is-paused|ticker:hover \.ticker-track/);
 });
