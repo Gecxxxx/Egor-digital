@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight } from "@phosphor-icons/react/ArrowUpRight";
+import { ShoppingCartSimple } from "@phosphor-icons/react/ShoppingCartSimple";
 import { getRoute, normalizePath, routes, SITE_URL } from "./site-config.js";
 import { buildLeadMessage, captureAttribution, getCurrentPage, getGoalContext, trackGoal } from "./lead-tracking.js";
 
@@ -552,28 +553,39 @@ function CaseStudy({ path, go, onLead }) {
 }
 
 const toysPainBenefits = [
-  ["Цена и наличие видны сразу", "Актуальные товары и остатки снимают повторяющиеся вопросы."],
-  ["Корзина фиксирует заказ", "Покупатель сам выбирает состав и количество — без переписки."],
-  ["Панель передаёт его команде", "Новый заказ появляется в одном месте со статусом и составом."],
+  ["Меньше одинаковых вопросов", "Цена, наличие и характеристики уже есть в карточке товара."],
+  ["Меньше ошибок в заказе", "Покупатель сам выбирает товар, количество и указывает контакты."],
+  ["Команда видит готовый заказ", "Состав, сумма, клиент и статус собраны в панели управления."],
 ];
 
 const toysJourney = [
-  { number: "01", title: "Каталог", text: "Покупатель выбирает товар", src: "/assets/cases/toys-store/catalog-desktop.webp", width: 1440, height: 810, alt: "Каталог интернет-магазина TOYS" },
-  { number: "02", title: "Карточка товара", text: "Видит цену, состав и наличие", src: "/assets/cases/toys-store/product-desktop.webp", width: 1440, height: 810, alt: "Карточка товара TOYS с ценой и наличием" },
-  { number: "03", title: "Корзина", text: "Проверяет состав заказа", src: "/assets/cases/toys-store/cart-desktop.png", width: 1280, height: 900, alt: "Корзина TOYS с выбранным товаром и итоговой суммой" },
-  { number: "04", title: "Панель", text: "Команда управляет магазином", src: "/assets/cases/toys-store/admin-products.webp", width: 1440, height: 810, alt: "Панель управления магазином TOYS" },
+  { number: "01", title: "Выбирает товар", text: "Каталог помогает быстро сравнить ассортимент.", src: "/assets/cases/toys-store/catalog-desktop.webp", width: 1440, height: 810, alt: "Каталог интернет-магазина TOYS" },
+  { number: "02", title: "Проверяет детали", text: "Цена, фотографии и остаток — в одном месте.", src: "/assets/cases/toys-store/product-desktop.webp", width: 1440, height: 810, alt: "Карточка товара TOYS с ценой и наличием" },
+  { number: "03", title: "Оформляет заказ", text: "Корзина сохраняет состав и итоговую сумму.", src: "/assets/cases/toys-store/cart-desktop.png", width: 1280, height: 900, alt: "Корзина TOYS с выбранным товаром и итоговой суммой" },
+  { number: "04", title: "Команда начинает работу", text: "Заказ появляется в закрытой панели со статусом.", src: "/assets/cases/toys-store/admin-products.webp", width: 1440, height: 810, alt: "Панель управления магазином TOYS" },
 ];
 
 const toysIntegrations = [
-  { brand: "ЮKassa", className: "yookassa", service: "Карты и СБП", benefit: "Принимать онлайн-оплату и связывать платёж с заказом." },
-  { brand: "СДЭК", className: "cdek", service: "Доставка", benefit: "Рассчитывать тариф, выбирать пункт выдачи и создавать отправление." },
-  { brand: "Почта России", className: "russian-post", service: "Доставка", benefit: "Показывать варианты доставки и передавать данные отправления." },
-  { brand: "МойСклад", className: "moysklad", service: "Учёт", benefit: "Синхронизировать товары, цены и остатки без ручного дублирования." },
-  { brand: "1С", className: "one-c", service: "Учёт", benefit: "Обмениваться каталогом, остатками и данными заказов." },
-  { brand: "amoCRM", className: "amocrm", service: "Продажи", benefit: "Передавать заказы в воронку и сохранять работу менеджеров." },
-  { brand: "Битрикс24", className: "bitrix", service: "Продажи", benefit: "Связывать магазин с задачами, клиентами и процессами команды." },
-  { brand: "Dadata", className: "dadata", service: "Адреса", benefit: "Подсказывать адрес и уменьшать ошибки при оформлении." },
-  { brand: "Telegram", className: "telegram", service: "Уведомления", benefit: "Сообщать команде и покупателю о новых заказах и статусах." },
+  { task: "Принимать оплату", benefit: "Карты и СБП прямо при оформлении заказа.", brands: [["ЮKassa", "yookassa"]] },
+  { task: "Рассчитывать доставку", benefit: "Тарифы, сроки и пункты выдачи без ручного уточнения.", brands: [["СДЭК", "cdek"], ["Почта России", "russian-post"]] },
+  { task: "Синхронизировать остатки", benefit: "Товары, цены и наличие обновляются из системы учёта.", brands: [["МойСклад", "moysklad"], ["1С", "one-c"]] },
+  { task: "Передавать заказы в продажи", benefit: "Менеджер получает клиента и заказ в привычной воронке.", brands: [["amoCRM", "amocrm"], ["Битрикс24", "bitrix"]] },
+  { task: "Снизить ошибки в адресах", benefit: "Покупатель выбирает корректный адрес из подсказок.", brands: [["Dadata", "dadata"]] },
+  { task: "Уведомлять без задержки", benefit: "Команда и покупатель получают сообщения о заказе и статусе.", brands: [["Telegram", "telegram"], ["Email", "email"]] },
+];
+
+const toysCoreFeatures = [
+  ["Витрина", "Каталог, категории, поиск, фильтры и карточки товаров."],
+  ["Продажа", "Корзина, оформление заказа и серверная проверка цены и остатка."],
+  ["Клиенты", "Регистрация, личный кабинет, адреса и история заказов."],
+  ["Управление", "Товары, фотографии, остатки, заказы, статусы и роли."],
+];
+
+const toysLaunchSteps = [
+  ["01", "Разбираем задачу", "За 15 минут определяем, что магазин должен продавать и автоматизировать."],
+  ["02", "Фиксируем состав", "Согласуем страницы, функции, интеграции, срок и точную стоимость."],
+  ["03", "Собираю магазин", "Адаптирую готовое ядро или создаю решение с нуля под ваш бренд."],
+  ["04", "Проверяем и запускаем", "Тестируем заказ, роли и мобильную версию, затем разворачиваем на VPS."],
 ];
 
 function ToysJourneyScreen({ step, eager = false }) {
@@ -587,46 +599,59 @@ function ToysStoreCase({ go, onLead }) {
     <section className="toys-sales-hero grid-surface">
       <div className="toys-sales-copy">
         <SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink>
-        <Eyebrow>Живой магазин · меньше ручной работы</Eyebrow>
-        <h1>Магазин, который <em>не теряет</em> заказы.</h1>
-        <p>Покупатель оформляет сам. Команда сразу видит заказ, остаток и статус.</p>
+        <Eyebrow>Интернет-магазин с каталогом, заказами и админкой</Eyebrow>
+        <h1>Покупатель оформляет заказ <em>сам</em>. Команда получает его готовым.</h1>
+        <p>Разработаю магазин с нуля или адаптирую готовое ядро под ваш бренд, ассортимент и рабочие процессы.</p>
         <div className="toys-sales-actions">
-          <a className="toys-outline-button" href="https://store.egordigital.site/" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Открыть живое демо <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
-          <button className="toys-outline-button" type="button" onClick={() => openLead("toys_hero")}>Обсудить свой магазин <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></button>
+          <a className="toys-outline-button" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Пройти путь покупателя <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
+          <button className="toys-text-button" type="button" onClick={() => openLead("toys_hero")}>Получить расчёт стоимости <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></button>
         </div>
-        <small>Отдельное приложение на VPS · PostgreSQL · закрытая админ-панель</small>
+        <div className="toys-proof-line"><strong>от 80 000 ₽</strong><span>7–10 дней*</span><span>15 минут бесплатно</span></div>
+        <small>* При готовых текстах, фотографиях, логотипе и информации о товарах. В демо работают каталог, корзина, оформление заказа, кабинет и админ-панель.</small>
       </div>
       <a className="toys-hero-proof" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer" aria-label="Открыть каталог TOYS"><img src="/assets/cases/toys-store/catalog-desktop.webp" width="1440" height="810" alt="Каталог интернет-магазина TOYS" loading="eager" decoding="async" /></a>
     </section>
 
     <section className="section toys-pain" id="toys-system">
-      <h2>Заказ не должен начинаться со слова <em>«уточню»</em>.</h2>
-      <p className="toys-section-lead">Пока покупатель ждёт ответ, выбор откладывается. Система показывает нужное сразу и передаёт оформленный заказ команде.</p>
+      <h2>Магазин должен принимать заказы, а не создавать <em>переписку</em>.</h2>
+      <p className="toys-section-lead">Если цену, наличие и доставку приходится уточнять вручную, клиент ждёт, а команда повторяет одну и ту же работу.</p>
       <div className="toys-pain-flow">
         <div className="toys-message-list" aria-label="Повторяющиеся вопросы покупателей"><span>Есть в наличии?</span><span>Какая цена?</span><span>Куда отправлять?</span></div>
-        <div className="toys-order-core"><strong>Покупатель оформляет сам.</strong><small>Магазин собирает и передаёт заказ.</small></div>
+        <div className="toys-order-core"><ShoppingCartSimple size={52} weight="light" aria-hidden="true" /><strong>Покупатель оформляет сам</strong><small>Магазин проверяет данные и передаёт готовый заказ.</small></div>
         <div className="toys-benefit-list">{toysPainBenefits.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div>
       </div>
     </section>
 
     <section className="section toys-journey">
-      <div className="toys-heading-row"><h2>Один путь. Одна <em>система</em>.</h2><p>Не набор разрозненных экранов, а связанный сценарий от выбора товара до работы команды.</p></div>
+      <div className="toys-heading-row"><h2>Проверьте весь заказ за <em>две минуты</em>.</h2><p>Это не макет: откройте демо и пройдите связанный сценарий от каталога до оформления.</p></div>
       <div className="toys-journey-grid">{toysJourney.map((step, index) => <ToysJourneyScreen key={step.number} step={step} eager={index === 0} />)}</div>
       <div className="toys-journey-links"><a href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer">Пройти путь покупателя <ArrowUpRight size={14} /></a><a href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer">Открыть read-only панель <ArrowUpRight size={14} /></a></div>
     </section>
 
+    <section className="section toys-core">
+      <div className="toys-heading-row"><div><Eyebrow>Готовое ядро</Eyebrow><h2>Базовые функции уже <em>связаны</em>.</h2></div><p>Не нужно заново собирать типовой магазин. Я адаптирую интерфейс и развиваю систему под согласованный сценарий бизнеса.</p></div>
+      <div className="toys-core-grid">{toysCoreFeatures.map(([title, text], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
+      <small className="toys-scope-note">Точный состав функций фиксируем до разработки — без скрытых обязательных модулей.</small>
+    </section>
+
     <section className="section toys-modules">
       <div className="toys-heading-row"><div><Eyebrow>Расширение магазина</Eyebrow><h2>Подключайте только <em>нужное</em>.</h2></div><p>Модули добавляются под реальный процесс бизнеса, чтобы убрать ручные операции, а не усложнить систему.</p></div>
-      <div className="toys-module-table">{toysIntegrations.map(({ brand, className, service, benefit }) => <article key={brand}><strong className={`toys-brand ${className}`}>{brand}</strong><span>{service}</span><p>{benefit}</p></article>)}</div>
-      <small className="toys-module-note">Подключения добавляются под задачи проекта; в демонстрационной версии они не активированы.</small>
+      <div className="toys-module-table">{toysIntegrations.map(({ task, benefit, brands }) => <article key={task}><div><strong>{task}</strong><p>{benefit}</p></div><div className="toys-brands">{brands.map(([brand, className]) => <span className={`toys-brand ${className}`} key={brand}>{brand}</span>)}</div></article>)}</div>
+      <small className="toys-module-note">Интеграции рассчитываются отдельно. В демонстрационной версии активных подключений нет.</small>
     </section>
 
     <section className="section toys-vps grid-surface">
-      <div><Eyebrow>Собственная инфраструктура</Eyebrow><h2>Работает на вашем <em>VPS</em>.</h2><p>Приложение и PostgreSQL разворачиваются отдельно от конструкторов. Функциональность можно развивать без привязки к шаблонной платформе.</p></div>
-      <ul><li>Контроль приложения и данных</li><li>Свобода в доработках и интеграциях</li><li>Нет комиссии платформы за каждый заказ</li></ul>
+      <div><Eyebrow>Собственная инфраструктура</Eyebrow><h2>Магазин и данные принадлежат <em>вам</em>.</h2><p>Это отдельное приложение с PostgreSQL на вашем VPS, а не магазин на Tilda или закрытой платформе. Его можно развивать и переносить без привязки к одному сервису.</p></div>
+      <ul><li>Контроль приложения и базы данных</li><li>Свобода в доработках и интеграциях</li><li>Нет комиссии платформы за каждый заказ</li><li>Можно сменить сервер или команду разработки</li></ul>
     </section>
 
-    <section className="section toys-sales-final grid-surface"><div><Eyebrow>Следующий шаг</Eyebrow><h2>Магазин под ваши <em>процессы</em>.</h2><p>Покажу живое приложение и разберу, какие функции и интеграции действительно нужны вашему бизнесу.</p></div><div className="toys-sales-final-actions"><a className="toys-outline-button" href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Открыть живое демо <ArrowUpRight size={15} /></a><button className="toys-outline-button" type="button" onClick={() => openLead("toys_final")}>Обсудить свой магазин <ArrowUpRight size={15} /></button></div></section>
+    <section className="section toys-launch">
+      <div className="toys-heading-row"><div><Eyebrow>Как проходит запуск</Eyebrow><h2>От задачи до рабочего магазина за <em>7–10 дней</em>.</h2></div><p>Срок действует, если у вас готовы тексты, фотографии, логотип и информация о товарах.</p></div>
+      <div className="toys-launch-grid">{toysLaunchSteps.map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
+      <div className="toys-price-row"><div><span>Стоимость</span><strong>от 80 000 ₽</strong></div><p>Итог зависит от дизайна, количества товаров, оплаты, доставки и внешних интеграций. До начала работ вы получаете зафиксированный состав и расчёт.</p><button className="toys-outline-button" type="button" onClick={() => openLead("toys_process")}>Получить расчёт <ArrowUpRight size={15} /></button></div>
+    </section>
+
+    <section className="section toys-sales-final grid-surface"><div><Eyebrow>Бесплатная консультация · 15 минут</Eyebrow><h2>Узнайте, какой магазин нужен именно вашему <em>бизнесу</em>.</h2><p>Разберём ассортимент, работу с заказами и нужные интеграции. После разговора подготовлю понятный расчёт стоимости.</p></div><div className="toys-sales-final-actions"><button className="toys-outline-button" type="button" onClick={() => openLead("toys_final")}>Получить расчёт стоимости <ArrowUpRight size={15} /></button><a href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Сначала посмотреть живое демо <ArrowUpRight size={14} /></a></div></section>
   </main>;
 }
 
@@ -709,6 +734,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [service, setService] = useState(selection.service || "website");
+  const isStoreLead = selection.serviceLabel === "Интернет-магазин";
   const started = useRef(false);
   const fieldId = (name) => `${titleId}-${name}`;
 
@@ -760,15 +786,16 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
     const currentPage = getCurrentPage();
     const comment = String(values.get("message") || "").trim();
     const chosenService = leadServices.find((item) => item.value === String(values.get("service") || service)) || leadServices[0];
+    const chosenServiceLabel = isStoreLead ? "Интернет-магазин" : chosenService.label;
     const payload = {
       name,
       contact,
-      message: buildLeadMessage({ comment, serviceLabel: chosenService.label, price: selection.price, currentWebsite, attribution, currentPage }),
+      message: buildLeadMessage({ comment, serviceLabel: chosenServiceLabel, price: selection.price, currentWebsite, attribution, currentPage }),
       comment,
       website: String(values.get("website") || "").trim(),
       current_website: currentWebsite,
       service: chosenService.value,
-      service_label: chosenService.label,
+      service_label: chosenServiceLabel,
       price: selection.price || "",
       page: currentPage,
       first_url: attribution.first_url,
@@ -808,7 +835,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
     return <div className="success" role="status"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка отправлена</h2><p>Заявка уже пришла Егору в Telegram. Он свяжется с вами по указанному контакту.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} onClick={() => trackContact(link, "form_success")} key={link.label}>{link.label}</a>)}</div></div>;
   }
 
-  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>Короткий бриф</Eyebrow><h2 id={titleId}>{heading}</h2>{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}<fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset><label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Номер телефона<div className="phone-field"><select name="phone_code" defaultValue="+7" aria-label="Код страны">{phoneCodes.map(([code, label]) => <option value={code} key={label}>{label}</option>)}</select><input id={fieldId("contact")} name="contact" type="tel" inputMode="tel" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="tel-national" maxLength="30" placeholder="000 000-00-00" /></div><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>Комментарий (по желанию)<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder="Что хотите запустить или улучшить" /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : "Отправить заявку"}</button></form>;
+  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>{isStoreLead ? "Бесплатная консультация · 15 минут" : "Короткий бриф"}</Eyebrow><h2 id={titleId}>{isStoreLead ? "Получить расчёт стоимости" : heading}</h2>{isStoreLead && <p className="lead-form-intro">Коротко разберём задачу, после чего я подготовлю состав и расчёт проекта.</p>}{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}{isStoreLead ? <input type="hidden" name="service" value="website" /> : <fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset>}<label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Номер телефона<div className="phone-field"><select name="phone_code" defaultValue="+7" aria-label="Код страны">{phoneCodes.map(([code, label]) => <option value={code} key={label}>{label}</option>)}</select><input id={fieldId("contact")} name="contact" type="tel" inputMode="tel" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="tel-national" maxLength="30" placeholder="000 000-00-00" /></div><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>{isStoreLead ? "Что планируете продавать? (по желанию)" : "Комментарий (по желанию)"}<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder={isStoreLead ? "Например: игрушки, одежду или товары для дома" : "Что хотите запустить или улучшить"} /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : isStoreLead ? "Получить расчёт" : "Отправить заявку"}</button></form>;
 }
 
 function LeadModal({ onClose, onPrivacy, selection, returnFocusElement }) {
@@ -920,6 +947,7 @@ export function App({ initialPath = "/" }) {
   }, [path]);
 
   useBrowserLayoutEffect(() => {
+    if (path !== "/") { setReady(true); return undefined; }
     let active = true;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let introSeen = false;
@@ -945,7 +973,7 @@ export function App({ initialPath = "/" }) {
       setReady(true);
     });
     return () => { active = false; document.body.classList.remove("is-intro-active"); };
-  }, []);
+  }, [path]);
 
   useEffect(() => { if (ready) document.body.classList.remove("is-intro-active"); }, [ready]);
   const onLead = (selection = {}) => {
@@ -958,5 +986,6 @@ export function App({ initialPath = "/" }) {
   const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/cases/toys-store" ? <ToysStoreCase go={go} onLead={onLead} /> : caseStudyContent[path] ? <CaseStudy path={path} go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
   const openPrivacy = () => { setLeadOpen(false); go("/privacy"); };
   const closeLead = useCallback(() => setLeadOpen(false), []);
-  return <><IntroLoader ready={ready} /><div className={ready ? "app is-ready" : "app"}><a className="skip-link" href="#page-content">Перейти к содержимому</a><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} /><div id="page-content" tabIndex="-1">{page}</div><Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={closeLead} onPrivacy={openPrivacy} selection={leadSelection} returnFocusElement={leadTriggerRef.current} />}</div></>;
+  const pageReady = path !== "/" || ready;
+  return <>{path === "/" && <IntroLoader ready={ready} />}<div className={pageReady ? "app is-ready" : "app"}><a className="skip-link" href="#page-content">Перейти к содержимому</a><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} /><div id="page-content" tabIndex="-1">{page}</div><Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={closeLead} onPrivacy={openPrivacy} selection={leadSelection} returnFocusElement={leadTriggerRef.current} />}</div></>;
 }

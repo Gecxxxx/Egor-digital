@@ -141,15 +141,27 @@ test("labels concept work as demo projects and includes the detailed store case"
 
 test("presents the TOYS case as a verifiable sales funnel", () => {
   assert.match(appSource, /function ToysStoreCase/);
-  assert.match(appSource, /Магазин, который <em>не теряет<\/em> заказы/);
-  assert.match(appSource, /Заказ не должен начинаться со слова <em>«уточню»<\/em>/);
-  assert.match(appSource, /Один путь\. Одна <em>система<\/em>/);
+  assert.match(appSource, /Покупатель оформляет заказ <em>сам<\/em>/);
+  assert.match(appSource, /Магазин должен принимать заказы/);
+  assert.match(appSource, /Проверьте весь заказ за <em>две минуты<\/em>/);
   assert.match(appSource, /Открыть read-only панель/);
-  assert.match(appSource, /Подключения добавляются под задачи проекта/);
-  assert.match(appSource, /Работает на вашем <em>VPS<\/em>/);
+  assert.match(appSource, /Интеграции рассчитываются отдельно/);
+  assert.match(appSource, /Магазин и данные принадлежат <em>вам<\/em>/);
+  assert.match(appSource, /от 80 000 ₽/);
+  assert.match(appSource, /7–10 дней/);
+  assert.match(appSource, /15 минут бесплатно/);
+  assert.match(appSource, /Получить расчёт стоимости/);
   assert.match(appSource, /PostgreSQL/);
-  assert.doesNotMatch(appSource, /Tilda/);
+  assert.match(appSource, /не магазин на Tilda/);
   assert.match(appSource, /path === "\/cases\/toys-store" \? <ToysStoreCase/);
+});
+
+test("uses a focused store estimate form and skips the intro on internal routes", () => {
+  assert.match(appSource, /const isStoreLead = selection\.serviceLabel === "Интернет-магазин"/);
+  assert.match(appSource, /isStoreLead \? "Получить расчёт стоимости" : heading/);
+  assert.match(appSource, /isStoreLead \? <input type="hidden" name="service" value="website"/);
+  assert.match(appSource, /if \(path !== "\/"\) \{ setReady\(true\); return undefined; \}/);
+  assert.match(appSource, /path === "\/" && <IntroLoader ready=\{ready\} \/>/);
 });
 
 test("filters cases by every matching category", () => {
