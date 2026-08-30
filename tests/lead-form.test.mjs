@@ -141,12 +141,14 @@ test("labels concept work as demo projects and includes the detailed store case"
 
 test("presents the TOYS case as a verifiable sales funnel", () => {
   assert.match(appSource, /function ToysStoreCase/);
-  assert.match(appSource, /Где магазин экономит деньги/);
-  assert.match(appSource, /Один заказ — три интерфейса/);
-  assert.match(appSource, /Открыть read-only админку/);
-  assert.match(appSource, /Отдельная интеграция/);
-  assert.match(appSource, /Пересчитывается на сервере/);
-  assert.match(appSource, /реального списания денег нет/);
+  assert.match(appSource, /Магазин, который <em>не теряет<\/em> заказы/);
+  assert.match(appSource, /Заказ не должен начинаться со слова <em>«уточню»<\/em>/);
+  assert.match(appSource, /Один путь\. Одна <em>система<\/em>/);
+  assert.match(appSource, /Открыть read-only панель/);
+  assert.match(appSource, /Подключения добавляются под задачи проекта/);
+  assert.match(appSource, /Работает на вашем <em>VPS<\/em>/);
+  assert.match(appSource, /PostgreSQL/);
+  assert.doesNotMatch(appSource, /Tilda/);
   assert.match(appSource, /path === "\/cases\/toys-store" \? <ToysStoreCase/);
 });
 
