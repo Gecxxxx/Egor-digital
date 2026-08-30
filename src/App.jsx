@@ -552,11 +552,10 @@ function CaseStudy({ path, go, onLead }) {
 }
 
 const toysBuyerSteps = [
-  ["01", "Находит нужный товар", "Категории, поиск, фильтры и сортировка помогают быстро сузить выбор — без переписки с менеджером."],
-  ["02", "Проверяет всё важное", "В карточке собраны фотографии, цена, наличие, характеристики и понятное действие «В корзину»."],
-  ["03", "Собирает заказ", "Корзина пересчитывает количество и сумму, а система не позволяет заказать больше доступного остатка."],
-  ["04", "Оформляет без лишних шагов", "Контакты, доставка, комментарий и способ оплаты собираются в одном последовательном сценарии."],
-  ["05", "Возвращается за статусом", "После входа покупатель видит свои адреса и историю заказов, но не получает доступ к чужим данным."],
+  ["01", "Меньше вопросов", "Поиск, фильтры, характеристики и наличие помогают выбрать без переписки.", "Менеджер не отвечает десять раз «есть ли размер и сколько стоит»."],
+  ["02", "Меньше ошибок", "Цена и остаток повторно проверяются на сервере перед созданием заказа.", "Нельзя оформить товар по старой цене или заказать больше, чем есть."],
+  ["03", "Быстрее обработка", "Новый заказ сразу попадает в панель со статусом, контактами и составом.", "Команда видит, что принято, что собирается и что уже отправлено."],
+  ["04", "Проще вернуться", "Аккаунт хранит адреса и историю покупок, а отзывы формируют доверие.", "Повторный заказ требует меньше действий и меньше помощи менеджера."],
 ];
 
 const toysCoreFeatures = [
@@ -585,8 +584,8 @@ function ToysStoreCase({ go, onLead }) {
       <div className="toys-hero-copy">
         <SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink>
         <Eyebrow>Демо-система для интернет-торговли</Eyebrow>
-        <h1>Интернет-магазин, который продаёт — и не создаёт хаос</h1>
-        <p>TOYS показывает не отдельный красивый экран, а полный контур продаж: от выбора товара до управления заказом, остатками и клиентами.</p>
+        <h1>Магазин, который продаёт и держит заказы под контролем</h1>
+        <p>Покупатель выбирает и оформляет сам. Команда получает заказ, остаток и статус в одной системе.</p>
         <div className="case-study-actions">
           <a href="https://store.egordigital.site/" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Пройти путь покупателя <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
           <button type="button" onClick={() => openLead("toys_hero")}>Обсудить свой магазин</button>
@@ -595,70 +594,48 @@ function ToysStoreCase({ go, onLead }) {
       </div>
       <aside className="toys-hero-route" aria-label="Что можно проверить в демо">
         <span>Проверить самостоятельно</span>
-        <h2>Не верить описанию. Открыть и пройти.</h2>
+        <h2>Не макет. Живой сценарий.</h2>
         <a href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer"><b>01</b><span>Каталог и фильтры</span><ArrowUpRight size={16} /></a>
         <a href="https://store.egordigital.site/product/nabor-lesnaya-pekarnya" target="_blank" rel="noreferrer"><b>02</b><span>Карточка товара</span><ArrowUpRight size={16} /></a>
         <a href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer"><b>03</b><span>Read-only админка</span><ArrowUpRight size={16} /></a>
       </aside>
     </section>
 
-    <section className="section toys-opening">
-      <div><Eyebrow>Зачем это бизнесу</Eyebrow><AccentTitle>Просто витрина не решает задачу продаж</AccentTitle></div>
-      <div className="toys-opening-copy"><p>Когда ассортимент живёт в таблице, остатки — в голове, а заказы приходят в разные мессенджеры, владелец тратит время не на рост, а на ручную сверку. Покупатель тоже платит за этот хаос: ждёт ответ, повторяет адрес и не понимает, принят ли заказ.</p><p>Интернет-магазин нужен не ради самого сайта. Он собирает выбор, оплату, доставку и работу команды в один контролируемый процесс.</p></div>
-      <blockquote>Каждый ручной переход — место, где можно потерять заказ, перепутать цену или пообещать товар, которого уже нет.</blockquote>
+    <section className="section toys-value" id="toys-system">
+      <div className="toys-section-intro"><Eyebrow>Польза для бизнеса</Eyebrow><AccentTitle>Где магазин экономит деньги</AccentTitle><p>Не «ещё один сайт», а меньше ручной работы и ошибок в каждом заказе.</p></div>
+      <div className="toys-value-list">{toysBuyerSteps.map(([number, title, text, result]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p><strong>{result}</strong></article>)}</div>
     </section>
 
-    <section className="section toys-journey" id="toys-system">
-      <div className="toys-section-intro"><Eyebrow>Сценарий покупателя</Eyebrow><AccentTitle>Пять шагов вместо переписки «а это есть?»</AccentTitle><p>Путь собран так, чтобы человек мог принять решение самостоятельно, а менеджер подключался только там, где действительно нужен.</p></div>
-      <ol>{toysBuyerSteps.map(([number, title, text]) => <li key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></li>)}</ol>
+    <section className="section toys-demo">
+      <div className="toys-section-intro"><Eyebrow>Живое доказательство</Eyebrow><AccentTitle>Один заказ — три интерфейса</AccentTitle><p>Каждый экран можно открыть и проверить, а не оценивать по обещаниям.</p></div>
+      <div className="toys-demo-grid">
+        <article><div><span>Покупатель находит товар</span><h3>Каталог</h3><p>Поиск, фильтры, цены и добавление в корзину.</p><a className="toys-inline-link" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer">Открыть каталог <ArrowUpRight size={15} /></a></div><ToysScreen src="/assets/cases/toys-store/catalog-desktop.webp" width="1440" height="810" alt="Каталог TOYS с товарами и фильтрами" number="01" /></article>
+        <article><div><span>Покупатель принимает решение</span><h3>Товар</h3><p>Галерея, наличие, характеристики и контроль количества.</p><a className="toys-inline-link" href="https://store.egordigital.site/product/nabor-lesnaya-pekarnya" target="_blank" rel="noreferrer">Открыть товар <ArrowUpRight size={15} /></a></div><ToysScreen src="/assets/cases/toys-store/product-desktop.webp" width="1440" height="810" alt="Карточка товара TOYS с галереей, ценой и наличием" number="02" /></article>
+        <article><div><span>Команда обрабатывает продажу</span><h3>Админка</h3><p>Товары, остатки, заказы, статусы, отзывы и роли.</p><a className="toys-inline-link" href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer">Открыть read-only админку <ArrowUpRight size={15} /></a><small>Данные для входа указаны на странице авторизации.</small></div><ToysScreen src="/assets/cases/toys-store/admin-products.webp" width="1440" height="810" alt="Панель управления товарами магазина TOYS" number="03" /></article>
+      </div>
     </section>
 
-    <section className="section toys-showcase toys-showcase-catalog">
-      <div className="toys-showcase-copy"><Eyebrow>Выбор без перегруза</Eyebrow><h2>Каталог помогает найти, а не просто показывает ассортимент</h2><p>Категории и фильтры сокращают путь к подходящему товару. Цена и наличие берутся из базы, поэтому одна и та же информация используется в каталоге, карточке и заказе.</p><ul><li>поиск по названию и артикулу;</li><li>фильтры по категории, цене и наличию;</li><li>сортировка и сохранение параметров в URL;</li><li>добавление в корзину прямо из каталога.</li></ul><a className="toys-inline-link" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer">Открыть живой каталог <ArrowUpRight size={15} /></a></div>
-      <ToysScreen src="/assets/cases/toys-store/catalog-desktop.webp" width="1440" height="810" alt="Каталог TOYS с товарами и фильтрами" number="01" />
+    <section className="section toys-system-compact">
+      <div><Eyebrow>Рабочее ядро</Eyebrow><AccentTitle>Что уже входит</AccentTitle><div className="toys-core-list">{toysCoreFeatures.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div></div>
+      <div><Eyebrow>Под ваш процесс</Eyebrow><AccentTitle>Что подключается</AccentTitle><div className="toys-connect-list">{toysIntegrations.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p><span>Отдельная интеграция</span></article>)}</div><small>В демо нет реальных списаний и отправлений. Боевые сервисы подключаются после выбора провайдера и получения доступов.</small></div>
     </section>
 
-    <section className="section toys-showcase toys-showcase-product">
-      <ToysScreen src="/assets/cases/toys-store/product-desktop.webp" width="1440" height="810" alt="Карточка товара TOYS с галереей, ценой и наличием" number="02" />
-      <div className="toys-showcase-copy"><Eyebrow>Решение о покупке</Eyebrow><h2>Карточка отвечает на вопросы до того, как их зададут менеджеру</h2><p>Несколько фотографий можно листать, остаток ограничивает доступное количество, а старая цена и характеристики выводятся из управляемых данных — без ручной правки страницы.</p><ul><li>галерея изображений и понятная навигация;</li><li>актуальная цена и наличие;</li><li>характеристики, описание и артикул;</li><li>контроль количества до добавления в корзину.</li></ul><a className="toys-inline-link" href="https://store.egordigital.site/product/nabor-lesnaya-pekarnya" target="_blank" rel="noreferrer">Открыть карточку товара <ArrowUpRight size={15} /></a></div>
+    <section className="section toys-safety grid-surface">
+      <div><Eyebrow>Надёжность</Eyebrow><AccentTitle>Заказ защищён логикой, а не обещаниями</AccentTitle></div>
+      <dl><div><dt>Цена</dt><dd>Пересчитывается на сервере — её нельзя подменить в браузере.</dd></div><div><dt>Остаток</dt><dd>Проверяется и резервируется в одной операции с заказом.</dd></div><div><dt>История</dt><dd>Заказ хранит свою цену и название даже после изменения товара.</dd></div><div><dt>Доступ</dt><dd>Покупатель, менеджер и администратор видят только разрешённое.</dd></div></dl>
     </section>
 
-    <section className="section toys-owner">
-      <div className="toys-owner-copy"><Eyebrow>Сторона бизнеса</Eyebrow><AccentTitle>Управление магазином — отдельно от витрины</AccentTitle><p>Покупатель видит аккуратный магазин. Владелец и команда работают в закрытой панели: меняют товары, цены и остатки, разбирают заказы и управляют доступами.</p><p>Публичная версия админки работает в безопасном режиме просмотра. Она показывает устройство системы, но не позволяет посетителю менять данные.</p><a className="toys-inline-link" href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer">Открыть read-only админку <ArrowUpRight size={15} /></a><small>Данные для входа указаны на странице авторизации.</small></div>
-      <ToysScreen src="/assets/cases/toys-store/admin-products.webp" width="1440" height="810" alt="Панель управления товарами магазина TOYS" number="03" />
-    </section>
-
-    <section className="section toys-capabilities">
-      <div className="toys-section-intro"><Eyebrow>Что уже есть в ядре</Eyebrow><AccentTitle>Система закрывает путь заказа целиком</AccentTitle><p>Это рабочая основа, которую можно адаптировать под другой бренд и ассортимент, не собирая корзину, аккаунты и админку заново.</p></div>
-      <div className="toys-capability-list">{toysCoreFeatures.map(([title, text], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
-    </section>
-
-    <section className="section toys-integrations">
-      <div><Eyebrow>Развитие под бизнес</Eyebrow><AccentTitle>Подключается к привычным сервисам</AccentTitle><p>В демо внешние сервисы не списывают деньги и не создают реальные отправления. При запуске интеграции выбираются под вашу схему работы, а не добавляются «для галочки».</p></div>
-      <div>{toysIntegrations.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p><span>Подключается отдельно</span></article>)}</div>
-    </section>
-
-    <section className="section toys-engine grid-surface">
-      <div><Eyebrow>Невидимая часть</Eyebrow><AccentTitle>То, из-за чего магазин не разваливается после запуска</AccentTitle></div>
-      <div className="toys-engine-copy"><p>Красивую витрину легко показать на макете. Надёжность начинается там, где браузеру перестают доверять деньги, остатки и права доступа.</p><dl><div><dt>Цена пересчитывается на сервере</dt><dd>Покупатель не может подменить стоимость или итог заказа в браузере.</dd></div><div><dt>Остаток меняется вместе с заказом</dt><dd>Проверка товаров, создание позиций и резерв выполняются одной операцией в PostgreSQL.</dd></div><div><dt>Заказ хранит снимок товара</dt><dd>Старая покупка не изменится, даже если позже поменять название или цену карточки.</dd></div><div><dt>Роли проверяются на сервере</dt><dd>Покупатель, менеджер и администратор получают только разрешённые им действия и данные.</dd></div></dl></div>
-    </section>
-
-    <section className="section toys-mobile-story">
+    <section className="section toys-adapt">
       <div><ToysScreen src="/assets/cases/toys-store/home-mobile.webp" width="390" height="844" alt="Мобильная главная страница магазина TOYS" number="04" /></div>
-      <div><Eyebrow>Не уменьшенная копия</Eyebrow><AccentTitle>Мобильный магазин проектируется под покупку одной рукой</AccentTitle><p>Навигация, карточки, корзина и оформление адаптированы под телефон. Крупные зоны нажатия, отсутствие горизонтальной прокрутки и короткие формы помогают не потерять человека в момент покупки.</p><p>Дизайн этого примера можно полностью заменить: оставить систему, но собрать другой характер бренда, структуру главной, категории и контент.</p></div>
-    </section>
-
-    <section className="section toys-fit">
-      <Eyebrow>Кому подходит</Eyebrow><AccentTitle>Не шаблон «для всех», а основа под вашу модель продаж</AccentTitle>
-      <div><p>Подойдёт бренду с собственным ассортиментом, локальному магазину, производителю, шоуруму или нишевой рознице, которым уже тесно в сообщениях и таблицах.</p><p>Перед оценкой определяем объём каталога, варианты товаров, способы оплаты и доставки, роли команды, импорт данных и нужные интеграции. После этого фиксируются состав, срок и стоимость — без цифр, взятых из воздуха.</p></div>
+      <div><Eyebrow>Адаптация</Eyebrow><AccentTitle>Ваш бренд сверху. Проверенная система внутри.</AccentTitle><p>Меняются дизайн, структура главной, поля товара, каталог и тексты. Корзину, заказы, аккаунты и админку не нужно проектировать с нуля.</p><ul><li>бренд или производитель;</li><li>локальный магазин и шоурум;</li><li>товары для дома, одежды, косметики или другой ниши;</li><li>импорт из таблицы, старого сайта или учётной системы.</li></ul></div>
     </section>
 
     <section className="section toys-faq">
       <div className="toys-section-intro"><Eyebrow>Частые вопросы</Eyebrow><AccentTitle>Что важно понять до запуска</AccentTitle></div>
-      <div><details><summary>Можно полностью поменять дизайн?</summary><p>Да. Визуальный стиль, главная страница, карточки, тексты и структура каталога адаптируются под бренд. Сохраняется проверенная логика магазина.</p></details><details><summary>Можно принимать оплату российской картой?</summary><p>Да, после подключения выбранного платёжного провайдера, например ЮKassa, и получения необходимых доступов. В публичном демо реального списания нет.</p></details><details><summary>Можно перенести существующие товары?</summary><p>Да, если заранее определить источник и качество данных. Импорт из таблицы, учётной системы или старого сайта оценивается отдельно.</p></details><details><summary>Демо-админка безопасна?</summary><p>Публичный аккаунт ограничен режимом просмотра. В рабочей версии действия защищаются серверной проверкой роли, а доступы выдаются конкретным сотрудникам.</p></details></div>
+      <div><details><summary>Можно полностью поменять дизайн?</summary><p>Да. Визуальная часть адаптируется под бренд, а логика магазина сохраняется.</p></details><details><summary>Можно принимать оплату российской картой?</summary><p>Да, после подключения ЮKassa или другого выбранного провайдера. В демо списания нет.</p></details><details><summary>Можно перенести существующие товары?</summary><p>Да. Источник и качество данных проверяются до оценки импорта.</p></details></div>
     </section>
 
-    <section className="section toys-final grid-surface"><div><Eyebrow>Следующий шаг</Eyebrow><h2>Покажите, как вы принимаете заказы сейчас</h2><p>Я разберу текущий процесс и предложу состав магазина без лишних функций: что оставить в ядре, что изменить под ваш бизнес и какие интеграции подключать сначала.</p></div><div className="toys-final-actions"><CTA onClick={() => openLead("toys_final")}>Обсудить интернет-магазин</CTA><a href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Сначала открыть демо <ArrowUpRight size={15} /></a></div></section>
+    <section className="section toys-final grid-surface"><div><Eyebrow>Следующий шаг</Eyebrow><h2>Разберём, где вы теряете заказы сейчас</h2><p>Покажите текущий процесс — предложу состав магазина, приоритетные интеграции и понятный план запуска.</p></div><div className="toys-final-actions"><CTA onClick={() => openLead("toys_final")}>Обсудить интернет-магазин</CTA><a href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Сначала открыть демо <ArrowUpRight size={15} /></a></div></section>
   </main>;
 }
 

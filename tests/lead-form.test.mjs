@@ -141,11 +141,11 @@ test("labels concept work as demo projects and includes the detailed store case"
 
 test("presents the TOYS case as a verifiable sales funnel", () => {
   assert.match(appSource, /function ToysStoreCase/);
-  assert.match(appSource, /Просто витрина не решает задачу продаж/);
-  assert.match(appSource, /Пять шагов вместо переписки/);
+  assert.match(appSource, /Где магазин экономит деньги/);
+  assert.match(appSource, /Один заказ — три интерфейса/);
   assert.match(appSource, /Открыть read-only админку/);
-  assert.match(appSource, /Подключается отдельно/);
-  assert.match(appSource, /Цена пересчитывается на сервере/);
+  assert.match(appSource, /Отдельная интеграция/);
+  assert.match(appSource, /Пересчитывается на сервере/);
   assert.match(appSource, /реального списания денег нет/);
   assert.match(appSource, /path === "\/cases\/toys-store" \? <ToysStoreCase/);
 });
