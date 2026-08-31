@@ -141,7 +141,7 @@ test("labels concept work as demo projects and includes the detailed store case"
 
 test("presents the Konstruktoriya case as a verifiable sales funnel", () => {
   assert.match(appSource, /function ToysStoreCase/);
-  assert.match(appSource, /Интернет-магазин, который принимает заказы без ручной переписки/);
+  assert.match(appSource, /Интернет-магазин, который принимает заказы и оплаты/);
   assert.match(appSource, /Когда заказ собирают в сообщениях/);
   assert.match(appSource, /Посмотрите, как покупатель проходит путь до заказа/);
   assert.match(appSource, /Посмотреть панель управления в демо/);

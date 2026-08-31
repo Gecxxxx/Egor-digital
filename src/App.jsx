@@ -600,7 +600,7 @@ function ToysStoreCase({ go, onLead }) {
       <div className="toys-sales-copy">
         <SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink>
         <Eyebrow>Интернет-магазин под ключ для товаров</Eyebrow>
-        <h1>Интернет-магазин, который принимает заказы без ручной переписки.</h1>
+        <h1>Интернет-магазин, который принимает заказы и оплаты</h1>
         <p>Покупатель сам выбирает товар, видит цену и наличие, оформляет заказ. Команда получает готовую заявку в панели управления — с составом, контактами и статусом.</p>
         <div className="toys-sales-actions">
           <a className="toys-outline-button" href="https://store.egordigital.site/" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Посмотреть живое демо <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
