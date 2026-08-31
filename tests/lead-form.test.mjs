@@ -130,9 +130,9 @@ server {
 
 test("labels concept work as demo projects and includes the detailed store case", () => {
   assert.match(appSource, /name: "Илья Морозов", categories: \["Демо-проект", "Сайт", "Личный бренд"\]/);
-  assert.match(appSource, /name: "NovaDent", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /name: "Casa Maris", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
-  assert.match(appSource, /name: "Level Home", categories: \["Демо-проект", "Сайт", "Автоматизация"\]/);
+  assert.doesNotMatch(appSource, /name: "NovaDent"/);
+  assert.doesNotMatch(appSource, /name: "Level Home"/);
   assert.match(appSource, /name: "Конструктория — интернет-магазин", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /casePath: "\/cases\/toys-store"/);
   assert.match(appSource, /Публичная версия использует тестовые товары и тестовое оформление заказа без списания денег/);
