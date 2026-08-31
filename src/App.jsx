@@ -559,10 +559,10 @@ const toysPainBenefits = [
 ];
 
 const toysJourney = [
-  { number: "01", title: "Выбирает товар", text: "Каталог помогает быстро найти и сравнить товары.", src: "/assets/cases/toys-store/catalog-desktop.webp", width: 1440, height: 810, alt: "Каталог интернет-магазина «Конструктория»" },
-  { number: "02", title: "Проверяет детали", text: "Цена, фотографии, характеристики и остаток собраны в карточке товара.", src: "/assets/cases/toys-store/product-desktop.webp", width: 1440, height: 810, alt: "Карточка товара «Конструктории» с галереей и отзывами" },
-  { number: "03", title: "Оформляет заказ", text: "Корзина сохраняет выбранные товары и показывает итоговую сумму.", src: "/assets/cases/toys-store/cart-desktop.webp", width: 1440, height: 810, alt: "Корзина «Конструктории» с выбранными товарами и итоговой суммой" },
-  { number: "04", title: "Команда начинает работу", text: "Новый заказ появляется в закрытой панели со всеми данными клиента и статусом.", src: "/assets/cases/toys-store/admin-desktop.webp", width: 1440, height: 810, alt: "Панель управления магазином в безопасном деморежиме" },
+  { number: "01", title: "Выбирает товар", text: "Каталог помогает быстро найти и сравнить товары.", href: "https://store.egordigital.site/catalog", src: "/assets/cases/toys-store/catalog-desktop.webp", width: 1440, height: 810, alt: "Каталог интернет-магазина «Конструктория»" },
+  { number: "02", title: "Проверяет детали", text: "Цена, фотографии, характеристики и остаток собраны в карточке товара.", href: "https://store.egordigital.site/product/retro-bolid", src: "/assets/cases/toys-store/product-desktop.webp", width: 1440, height: 810, alt: "Карточка товара «Конструктории» с галереей и отзывами" },
+  { number: "03", title: "Оформляет заказ", text: "Корзина сохраняет выбранные товары и показывает итоговую сумму.", href: "https://store.egordigital.site/cart", src: "/assets/cases/toys-store/cart-desktop.webp", width: 1440, height: 810, alt: "Корзина «Конструктории» с выбранными товарами и итоговой суммой" },
+  { number: "04", title: "Команда начинает работу", text: "Новый заказ появляется в закрытой панели со всеми данными клиента и статусом.", href: "https://store.egordigital.site/login?callbackUrl=/admin", src: "/assets/cases/toys-store/admin-desktop.webp", width: 1440, height: 810, alt: "Панель управления магазином в безопасном деморежиме" },
 ];
 
 const toysIntegrations = [
@@ -589,7 +589,7 @@ const toysLaunchSteps = [
 ];
 
 function ToysJourneyScreen({ step, eager = false }) {
-  return <article className="toys-journey-card"><header><span>{step.number}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></header><figure><img src={step.src} width={step.width} height={step.height} alt={step.alt} loading={eager ? "eager" : "lazy"} decoding="async" /></figure></article>;
+  return <article className="toys-journey-card"><header><span>{step.number}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></header><figure><a href={step.href} target="_blank" rel="noreferrer" aria-label={`${step.title}: открыть в живом демо`}><img src={step.src} width={step.width} height={step.height} alt={step.alt} loading={eager ? "eager" : "lazy"} decoding="async" /></a></figure></article>;
 }
 
 function ToysStoreCase({ go, onLead }) {

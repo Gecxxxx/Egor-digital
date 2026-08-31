@@ -145,6 +145,8 @@ test("presents the Konstruktoriya case as a verifiable sales funnel", () => {
   assert.match(appSource, /Когда заказ собирают в сообщениях/);
   assert.match(appSource, /Посмотрите, как покупатель проходит путь до заказа/);
   assert.match(appSource, /Посмотреть панель управления в демо/);
+  assert.match(appSource, /https:\/\/store\.egordigital\.site\/product\/retro-bolid/);
+  assert.match(appSource, /https:\/\/store\.egordigital\.site\/cart/);
   assert.match(appSource, /Интеграции рассчитываются отдельно/);
   assert.match(appSource, /Магазин, данные и доступы остаются у вас/);
   assert.match(appSource, /от 80 000 ₽/);
