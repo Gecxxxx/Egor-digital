@@ -133,26 +133,26 @@ test("labels concept work as demo projects and includes the detailed store case"
   assert.match(appSource, /name: "NovaDent", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /name: "Casa Maris", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /name: "Level Home", categories: \["Демо-проект", "Сайт", "Автоматизация"\]/);
-  assert.match(appSource, /name: "TOYS — интернет-магазин", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
+  assert.match(appSource, /name: "Конструктория — интернет-магазин", categories: \["Демо-проект", "Сайт", "CRM", "Автоматизация"\]/);
   assert.match(appSource, /casePath: "\/cases\/toys-store"/);
   assert.match(appSource, /Публичная версия использует тестовые товары и тестовое оформление заказа без списания денег/);
   assert.match(appSource, /fitness-coach\.webp/);
 });
 
-test("presents the TOYS case as a verifiable sales funnel", () => {
+test("presents the Konstruktoriya case as a verifiable sales funnel", () => {
   assert.match(appSource, /function ToysStoreCase/);
-  assert.match(appSource, /Покупатель оформляет заказ <em>сам<\/em>/);
-  assert.match(appSource, /Магазин должен принимать заказы/);
-  assert.match(appSource, /Проверьте весь заказ за <em>две минуты<\/em>/);
-  assert.match(appSource, /Открыть read-only панель/);
+  assert.match(appSource, /Интернет-магазин, который принимает заказы без ручной переписки/);
+  assert.match(appSource, /Когда заказ собирают в сообщениях/);
+  assert.match(appSource, /Посмотрите, как покупатель проходит путь до заказа/);
+  assert.match(appSource, /Посмотреть панель управления в демо/);
   assert.match(appSource, /Интеграции рассчитываются отдельно/);
-  assert.match(appSource, /Магазин и данные принадлежат <em>вам<\/em>/);
+  assert.match(appSource, /Магазин, данные и доступы остаются у вас/);
   assert.match(appSource, /от 80 000 ₽/);
   assert.match(appSource, /7–10 дней/);
   assert.match(appSource, /15 минут бесплатно/);
   assert.match(appSource, /Получить расчёт стоимости/);
   assert.match(appSource, /PostgreSQL/);
-  assert.match(appSource, /не магазин на Tilda/);
+  assert.match(appSource, /не магазин в закрытом конструкторе/);
   assert.match(appSource, /path === "\/cases\/toys-store" \? <ToysStoreCase/);
 });
 

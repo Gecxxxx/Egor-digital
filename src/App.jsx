@@ -74,7 +74,7 @@ const cases = [
   { name: "Green Apple Dent", categories: ["Сайт", "CRM", "Автоматизация"], tags: ["стоматология", "админка", "заявки"], image: "/assets/cases/greenappledent.webp", imageWidth: 1672, imageHeight: 941, description: "Сайт стоматологии с услугами, формами записи, админкой заявок и Telegram-уведомлениями.", result: "Готовая система для презентации клиники, заявок и рекламы", href: "https://greenappledent.ru/", casePath: "/cases/green-apple-dent" },
   { name: "Крыша-мечты", categories: ["Сайт", "Автоматизация"], tags: ["кровля", "калькулятор", "заявки"], image: "/assets/cases/roof-dream.webp", imageWidth: 1672, imageHeight: 941, description: "Сайт монтажа кровли под ключ с понятной презентацией услуг, преимуществами и расчётом стоимости.", result: "Готовая посадочная страница под рекламу и заявки", href: "https://xn-----6kcvwelc4aqi3di5bh.xn--p1ai/", casePath: "/cases/krysha-mechty" },
   { name: "Wingfoil Center Dahab", categories: ["Сайт"], tags: ["спорт", "SEO", "аналитика"], image: "/assets/cases/wingfoil-center-dahab.webp", imageWidth: 1536, imageHeight: 960, description: "Сайт школы вингфойла: услуги, доверие, путь до заявки, SEO-база и аналитика.", result: "Люди находят сайт и пишут заявки", href: "https://wingfoildahab.com/" },
-  { name: "TOYS — интернет-магазин", categories: ["Демо-проект", "Сайт", "CRM", "Автоматизация"], tags: ["e-commerce", "заказы", "админка"], image: "/assets/cases/toys-store-cover.webp", imageWidth: 1440, imageHeight: 810, description: "Полноценный прототип магазина: каталог, корзина, оформление заказа, аккаунты и управление товарами.", result: "Готовое ядро магазина, которое можно адаптировать под другой бренд и ассортимент", href: "https://store.egordigital.site/", casePath: "/cases/toys-store" },
+  { name: "Конструктория — интернет-магазин", categories: ["Демо-проект", "Сайт", "CRM", "Автоматизация"], tags: ["e-commerce", "заказы", "админка"], image: "/assets/cases/toys-store-cover.webp", imageWidth: 1440, imageHeight: 810, description: "Полноценный прототип магазина: каталог, корзина, оформление заказа, аккаунты и управление товарами.", result: "Готовое ядро магазина, которое можно адаптировать под другой бренд и ассортимент", href: "https://store.egordigital.site/", casePath: "/cases/toys-store" },
   { name: "NovaDent", categories: ["Демо-проект", "Сайт", "CRM", "Автоматизация"], tags: ["стоматология", "CRM", "админка"], image: "/assets/cases/novadent.webp", imageWidth: 1672, imageHeight: 941, description: "Демонстрационный многостраничный сайт стоматологии с записью, заявками, экспортом и Telegram-уведомлениями.", result: "Демо полноценной системы сайта и CRM", href: "https://novadent.egordigital.site/" },
   { name: "Casa Maris", categories: ["Демо-проект", "Сайт", "CRM", "Автоматизация"], tags: ["отель", "бронь", "админка"], image: "/assets/cases/casa-maris.webp", imageWidth: 1672, imageHeight: 941, description: "Демонстрационный концепт для бутик-отеля: номера, availability, заявки и отдельная админка.", result: "Демо системы для рекламы, заявок и презентации объекта", href: "https://casamaris.egordigital.site/" },
   { name: "Level Home", categories: ["Демо-проект", "Сайт", "Автоматизация"], tags: ["ремонт", "калькулятор", "кабинет"], image: "/assets/cases/level-home-case.webp", imageWidth: 1672, imageHeight: 941, description: "Демонстрационный премиальный сайт ремонта квартир с калькулятором, фиксированной сметой и кабинетом клиента.", result: "Демо премиального сервиса под рекламу", href: "https://level-home.pages.dev/" },
@@ -143,7 +143,7 @@ const caseStudyContent = {
   "/cases/toys-store": {
     eyebrow: "Демо-проект · интернет-магазин · админка",
     lead: "Разработал рабочий прототип интернет-магазина для российского рынка — от витрины и корзины до заказов, остатков и административной панели.",
-    client: "TOYS — демонстрационный проект, а не заказ конкретного клиента. Он показывает, как может выглядеть и работать интернет-магазин для бренда игрушек, товаров для дома или другого розничного бизнеса.",
+    client: "«Конструктория» — демонстрационный проект, а не заказ конкретного клиента. Он показывает, как может выглядеть и работать интернет-магазин для бренда игрушек, товаров для дома или другого розничного бизнеса.",
     challenge: "Нужно было собрать не просто красивый каталог, а цельное ядро магазина: безопасную авторизацию, актуальные цены и остатки, заказ с серверным пересчётом, историю покупок и управление данными в одном интерфейсе.",
     solution: "Спроектировал адаптивную витрину и модульную серверную часть на Next.js, PostgreSQL и Prisma. Связал каталог, корзину, оформление заказа, аккаунты и админку. Публичную демонстрацию развернул отдельно и ограничил режимом только для чтения там, где действия могут менять данные.",
     features: ["Каталог, категории, поиск, фильтры и сортировка", "Карточка товара с галереей и контролем остатка", "Корзина и оформление заказа с серверным пересчётом", "Аккаунт покупателя, адреса и история заказов", "Админка товаров, категорий, заказов, пользователей и отзывов", "PostgreSQL, роли доступа, тесты и автоматический деплой"],
@@ -156,11 +156,11 @@ const caseStudyContent = {
       facts: ["адаптив от телефона до компьютера", "цены и остатки берутся из PostgreSQL", "публичная админка ограничена режимом просмотра"],
       note: "В полной версии доступны регистрация, отзывы и изменение данных. В публичном демо эти действия безопасно отключены.",
       layout: "screens",
-      imageAlts: ["Каталог интернет-магазина TOYS", "Карточка товара с галереей и ценой", "Read-only управление товарами", "Мобильная главная страница TOYS"],
+      imageAlts: ["Каталог интернет-магазина «Конструктория»", "Карточка товара с галереей и отзывами", "Панель управления магазином в безопасном деморежиме", "Мобильная главная страница «Конструктории»"],
       images: [
         ["/assets/cases/toys-store/catalog-desktop.webp", 1440, 810],
         ["/assets/cases/toys-store/product-desktop.webp", 1440, 810],
-        ["/assets/cases/toys-store/admin-products.webp", 1440, 810],
+        ["/assets/cases/toys-store/admin-desktop.webp", 1440, 810],
         ["/assets/cases/toys-store/home-mobile.webp", 390, 844],
       ],
     },
@@ -553,39 +553,39 @@ function CaseStudy({ path, go, onLead }) {
 }
 
 const toysPainBenefits = [
-  ["Меньше одинаковых вопросов", "Цена, наличие и характеристики уже есть в карточке товара."],
-  ["Меньше ошибок в заказе", "Покупатель сам выбирает товар, количество и указывает контакты."],
-  ["Команда видит готовый заказ", "Состав, сумма, клиент и статус собраны в панели управления."],
+  ["Меньше одинаковых вопросов", "Цена, наличие, характеристики и условия доставки уже есть в карточке товара."],
+  ["Меньше ошибок в заказах", "Покупатель сам выбирает товар и количество, указывает контакты и адрес доставки."],
+  ["Команда получает готовый заказ", "Состав, сумма, клиент и текущий статус собраны в одной панели управления."],
 ];
 
 const toysJourney = [
-  { number: "01", title: "Выбирает товар", text: "Каталог помогает быстро сравнить ассортимент.", src: "/assets/cases/toys-store/catalog-desktop.webp", width: 1440, height: 810, alt: "Каталог интернет-магазина TOYS" },
-  { number: "02", title: "Проверяет детали", text: "Цена, фотографии и остаток — в одном месте.", src: "/assets/cases/toys-store/product-desktop.webp", width: 1440, height: 810, alt: "Карточка товара TOYS с ценой и наличием" },
-  { number: "03", title: "Оформляет заказ", text: "Корзина сохраняет состав и итоговую сумму.", src: "/assets/cases/toys-store/cart-desktop.png", width: 1280, height: 900, alt: "Корзина TOYS с выбранным товаром и итоговой суммой" },
-  { number: "04", title: "Команда начинает работу", text: "Заказ появляется в закрытой панели со статусом.", src: "/assets/cases/toys-store/admin-products.webp", width: 1440, height: 810, alt: "Панель управления магазином TOYS" },
+  { number: "01", title: "Выбирает товар", text: "Каталог помогает быстро найти и сравнить товары.", src: "/assets/cases/toys-store/catalog-desktop.webp", width: 1440, height: 810, alt: "Каталог интернет-магазина «Конструктория»" },
+  { number: "02", title: "Проверяет детали", text: "Цена, фотографии, характеристики и остаток собраны в карточке товара.", src: "/assets/cases/toys-store/product-desktop.webp", width: 1440, height: 810, alt: "Карточка товара «Конструктории» с галереей и отзывами" },
+  { number: "03", title: "Оформляет заказ", text: "Корзина сохраняет выбранные товары и показывает итоговую сумму.", src: "/assets/cases/toys-store/cart-desktop.webp", width: 1440, height: 810, alt: "Корзина «Конструктории» с выбранными товарами и итоговой суммой" },
+  { number: "04", title: "Команда начинает работу", text: "Новый заказ появляется в закрытой панели со всеми данными клиента и статусом.", src: "/assets/cases/toys-store/admin-desktop.webp", width: 1440, height: 810, alt: "Панель управления магазином в безопасном деморежиме" },
 ];
 
 const toysIntegrations = [
-  { task: "Принимать оплату", benefit: "Карты и СБП прямо при оформлении заказа.", brands: [["ЮKassa", "yookassa"]] },
-  { task: "Рассчитывать доставку", benefit: "Тарифы, сроки и пункты выдачи без ручного уточнения.", brands: [["СДЭК", "cdek"], ["Почта России", "russian-post"]] },
-  { task: "Синхронизировать остатки", benefit: "Товары, цены и наличие обновляются из системы учёта.", brands: [["МойСклад", "moysklad"], ["1С", "one-c"]] },
-  { task: "Передавать заказы в продажи", benefit: "Менеджер получает клиента и заказ в привычной воронке.", brands: [["amoCRM", "amocrm"], ["Битрикс24", "bitrix"]] },
-  { task: "Снизить ошибки в адресах", benefit: "Покупатель выбирает корректный адрес из подсказок.", brands: [["Dadata", "dadata"]] },
-  { task: "Уведомлять без задержки", benefit: "Команда и покупатель получают сообщения о заказе и статусе.", brands: [["Telegram", "telegram"], ["Email", "email"]] },
+  { task: "Принимать оплату онлайн", benefit: "Покупатель оплачивает заказ картой или через СБП прямо при оформлении.", brands: [["ЮKassa", "yookassa"]] },
+  { task: "Автоматически рассчитывать доставку", benefit: "Покупатель видит тарифы, сроки и пункты выдачи без уточнений у менеджера.", brands: [["СДЭК", "cdek"], ["Почта России", "russian-post"]] },
+  { task: "Актуализировать цены и остатки", benefit: "Данные обновляются из системы учёта, чтобы не продавать отсутствующие товары.", brands: [["МойСклад", "moysklad"], ["1С", "one-c"]] },
+  { task: "Передавать заказы в CRM", benefit: "Менеджер получает клиента и заказ в привычной воронке продаж.", brands: [["amoCRM", "amocrm"], ["Битрикс24", "bitrix"]] },
+  { task: "Сократить ошибки в адресах", benefit: "Покупатель выбирает корректный адрес из подсказок при оформлении.", brands: [["Dadata", "dadata"]] },
+  { task: "Уведомлять без задержки", benefit: "Команда и покупатель получают сообщения о новом заказе и его статусе.", brands: [["Telegram", "telegram"], ["Email", "email"]] },
 ];
 
 const toysCoreFeatures = [
-  ["Витрина", "Каталог, категории, поиск, фильтры и карточки товаров."],
-  ["Продажа", "Корзина, оформление заказа и серверная проверка цены и остатка."],
-  ["Клиенты", "Регистрация, личный кабинет, адреса и история заказов."],
-  ["Управление", "Товары, фотографии, остатки, заказы, статусы и роли."],
+  ["Витрина для покупателей", "Каталог, категории, поиск, фильтры и карточки товаров."],
+  ["Оформление заказа", "Корзина, заказ и проверка цены и остатка перед подтверждением."],
+  ["Личный кабинет клиента", "Регистрация, адреса, история и статусы заказов."],
+  ["Управление магазином", "Товары, фотографии, остатки, заказы, статусы и роли сотрудников."],
 ];
 
 const toysLaunchSteps = [
-  ["01", "Разбираем задачу", "За 15 минут определяем, что магазин должен продавать и автоматизировать."],
-  ["02", "Фиксируем состав", "Согласуем страницы, функции, интеграции, срок и точную стоимость."],
-  ["03", "Собираю магазин", "Адаптирую готовое ядро или создаю решение с нуля под ваш бренд."],
-  ["04", "Проверяем и запускаем", "Тестируем заказ, роли и мобильную версию, затем разворачиваем на VPS."],
+  ["01", "Разбираем задачу", "За 15 минут определяем ассортимент, путь заказа и операции, которые нужно автоматизировать."],
+  ["02", "Фиксируем состав работ", "Согласуем страницы, функции, интеграции, срок и точную стоимость до начала разработки."],
+  ["03", "Собираю магазин", "Адаптирую готовую систему под ваш бренд, ассортимент и рабочие процессы."],
+  ["04", "Проверяем и запускаем", "Тестируем оформление заказа, роли и мобильную версию, затем разворачиваем магазин на VPS."],
 ];
 
 function ToysJourneyScreen({ step, eager = false }) {
@@ -599,59 +599,59 @@ function ToysStoreCase({ go, onLead }) {
     <section className="toys-sales-hero grid-surface">
       <div className="toys-sales-copy">
         <SiteLink className="case-back" href="/cases" go={go}>← Все кейсы</SiteLink>
-        <Eyebrow>Интернет-магазин с каталогом, заказами и админкой</Eyebrow>
-        <h1>Покупатель оформляет заказ <em>сам</em>. Команда получает его готовым.</h1>
-        <p>Разработаю магазин с нуля или адаптирую готовое ядро под ваш бренд, ассортимент и рабочие процессы.</p>
+        <Eyebrow>Интернет-магазин под ключ для товаров</Eyebrow>
+        <h1>Интернет-магазин, который принимает заказы без ручной переписки.</h1>
+        <p>Покупатель сам выбирает товар, видит цену и наличие, оформляет заказ. Команда получает готовую заявку в панели управления — с составом, контактами и статусом.</p>
         <div className="toys-sales-actions">
-          <a className="toys-outline-button" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Пройти путь покупателя <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
-          <button className="toys-text-button" type="button" onClick={() => openLead("toys_hero")}>Получить расчёт стоимости <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></button>
+          <a className="toys-outline-button" href="https://store.egordigital.site/" target="_blank" rel="noreferrer" onClick={() => trackCase(item, "toys_hero")}>Посмотреть живое демо <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></a>
+          <button className="toys-text-button" type="button" onClick={() => openLead("toys_hero")}>Рассчитать магазин под мой бизнес <ArrowUpRight size={15} weight="bold" aria-hidden="true" /></button>
         </div>
         <div className="toys-proof-line"><strong>от 80 000 ₽</strong><span>7–10 дней*</span><span>15 минут бесплатно</span></div>
-        <small>* При готовых текстах, фотографиях, логотипе и информации о товарах. В демо работают каталог, корзина, оформление заказа, кабинет и админ-панель.</small>
+        <small>* Срок действует, если готовы тексты, фотографии, логотип и информация о товарах. В демо доступны каталог, корзина, оформление заказа, личный кабинет и админ-панель.</small>
       </div>
-      <a className="toys-hero-proof" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer" aria-label="Открыть каталог TOYS"><img src="/assets/cases/toys-store/catalog-desktop.webp" width="1440" height="810" alt="Каталог интернет-магазина TOYS" loading="eager" decoding="async" /></a>
+      <a className="toys-hero-proof" href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer" aria-label="Открыть каталог «Конструктории»"><img src="/assets/cases/toys-store/catalog-desktop.webp" width="1440" height="810" alt="Каталог интернет-магазина «Конструктория»" loading="eager" decoding="async" /></a>
     </section>
 
     <section className="section toys-pain" id="toys-system">
-      <h2>Магазин должен принимать заказы, а не создавать <em>переписку</em>.</h2>
-      <p className="toys-section-lead">Если цену, наличие и доставку приходится уточнять вручную, клиент ждёт, а команда повторяет одну и ту же работу.</p>
+      <h2>Когда заказ собирают в сообщениях, вы теряете время команды и часть покупателей.</h2>
+      <p className="toys-section-lead">Клиент ждёт ответа о наличии, цене и доставке. Менеджер повторяет одни и те же действия, а заказ всё равно может прийти с ошибкой.</p>
       <div className="toys-pain-flow">
         <div className="toys-message-list" aria-label="Повторяющиеся вопросы покупателей"><span>Есть в наличии?</span><span>Какая цена?</span><span>Куда отправлять?</span></div>
-        <div className="toys-order-core"><ShoppingCartSimple size={52} weight="light" aria-hidden="true" /><strong>Покупатель оформляет сам</strong><small>Магазин проверяет данные и передаёт готовый заказ.</small></div>
+        <div className="toys-order-core"><ShoppingCartSimple size={52} weight="light" aria-hidden="true" /><strong>Покупатель оформляет заказ сам</strong><small>Магазин проверяет данные и передаёт команде готовый заказ.</small></div>
         <div className="toys-benefit-list">{toysPainBenefits.map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div>
       </div>
     </section>
 
     <section className="section toys-journey">
-      <div className="toys-heading-row"><h2>Проверьте весь заказ за <em>две минуты</em>.</h2><p>Это не макет: откройте демо и пройдите связанный сценарий от каталога до оформления.</p></div>
+      <div className="toys-heading-row"><h2>Посмотрите, как покупатель проходит путь до заказа.</h2><p>Это не макет: откройте демо, выберите товар, добавьте его в корзину и оформите заказ. Затем посмотрите, как он появляется в панели управления.</p></div>
       <div className="toys-journey-grid">{toysJourney.map((step, index) => <ToysJourneyScreen key={step.number} step={step} eager={index === 0} />)}</div>
-      <div className="toys-journey-links"><a href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer">Пройти путь покупателя <ArrowUpRight size={14} /></a><a href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer">Открыть read-only панель <ArrowUpRight size={14} /></a></div>
+      <div className="toys-journey-links"><a href="https://store.egordigital.site/catalog" target="_blank" rel="noreferrer">Открыть живое демо магазина <ArrowUpRight size={14} /></a><a href="https://store.egordigital.site/login?callbackUrl=/admin" target="_blank" rel="noreferrer">Посмотреть панель управления в демо <ArrowUpRight size={14} /></a></div>
     </section>
 
     <section className="section toys-core">
-      <div className="toys-heading-row"><div><Eyebrow>Готовое ядро</Eyebrow><h2>Базовые функции уже <em>связаны</em>.</h2></div><p>Не нужно заново собирать типовой магазин. Я адаптирую интерфейс и развиваю систему под согласованный сценарий бизнеса.</p></div>
+      <div className="toys-heading-row"><div><Eyebrow>Готовая система продаж</Eyebrow><h2>Всё необходимое для приёма и обработки заказов — в одном магазине.</h2></div><p>Не нужно собирать каталог, корзину, личный кабинет и админку из разрозненных сервисов. Вы начинаете с готового сценария и адаптируете его под свой ассортимент и процессы.</p></div>
       <div className="toys-core-grid">{toysCoreFeatures.map(([title, text], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
-      <small className="toys-scope-note">Точный состав функций фиксируем до разработки — без скрытых обязательных модулей.</small>
+      <small className="toys-scope-note">До начала работ фиксируем состав функций, срок и стоимость — без скрытых обязательных модулей.</small>
     </section>
 
     <section className="section toys-modules">
-      <div className="toys-heading-row"><div><Eyebrow>Расширение магазина</Eyebrow><h2>Подключайте только <em>нужное</em>.</h2></div><p>Модули добавляются под реальный процесс бизнеса, чтобы убрать ручные операции, а не усложнить систему.</p></div>
+      <div className="toys-heading-row"><div><Eyebrow>Расширение магазина</Eyebrow><h2>Подключаем сервисы, которые сокращают ручную работу.</h2></div><p>Оплата, доставка, остатки, CRM и уведомления подключаются тогда, когда они действительно нужны вашему процессу.</p></div>
       <div className="toys-module-table">{toysIntegrations.map(({ task, benefit, brands }) => <article key={task}><div><strong>{task}</strong><p>{benefit}</p></div><div className="toys-brands">{brands.map(([brand, className]) => <span className={`toys-brand ${className}`} key={brand}>{brand}</span>)}</div></article>)}</div>
-      <small className="toys-module-note">Интеграции рассчитываются отдельно. В демонстрационной версии активных подключений нет.</small>
+      <small className="toys-module-note">Интеграции рассчитываются отдельно. В демонстрационной версии активные подключения не используются.</small>
     </section>
 
     <section className="section toys-vps grid-surface">
-      <div><Eyebrow>Собственная инфраструктура</Eyebrow><h2>Магазин и данные принадлежат <em>вам</em>.</h2><p>Это отдельное приложение с PostgreSQL на вашем VPS, а не магазин на Tilda или закрытой платформе. Его можно развивать и переносить без привязки к одному сервису.</p></div>
-      <ul><li>Контроль приложения и базы данных</li><li>Свобода в доработках и интеграциях</li><li>Нет комиссии платформы за каждый заказ</li><li>Можно сменить сервер или команду разработки</li></ul>
+      <div><Eyebrow>Собственная инфраструктура</Eyebrow><h2>Магазин, данные и доступы остаются у вас.</h2><p>Это отдельное приложение с базой данных на вашем сервере, а не магазин в закрытом конструкторе. Его можно развивать, переносить и передавать другой команде без привязки к одному сервису.</p></div>
+      <ul><li>Контроль над приложением и базой данных</li><li>Свобода в доработках и интеграциях</li><li>Нет комиссии платформы с каждого заказа</li><li>Можно сменить сервер или команду разработки</li></ul>
     </section>
 
     <section className="section toys-launch">
-      <div className="toys-heading-row"><div><Eyebrow>Как проходит запуск</Eyebrow><h2>От задачи до рабочего магазина за <em>7–10 дней</em>.</h2></div><p>Срок действует, если у вас готовы тексты, фотографии, логотип и информация о товарах.</p></div>
+      <div className="toys-heading-row"><div><Eyebrow>Как проходит запуск</Eyebrow><h2>От задачи до рабочего магазина за 7–10 дней.</h2></div><p>Срок реалистичен, если у вас готовы тексты, фотографии, логотип и информация о товарах.</p></div>
       <div className="toys-launch-grid">{toysLaunchSteps.map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
-      <div className="toys-price-row"><div><span>Стоимость</span><strong>от 80 000 ₽</strong></div><p>Итог зависит от дизайна, количества товаров, оплаты, доставки и внешних интеграций. До начала работ вы получаете зафиксированный состав и расчёт.</p><button className="toys-outline-button" type="button" onClick={() => openLead("toys_process")}>Получить расчёт <ArrowUpRight size={15} /></button></div>
+      <div className="toys-price-row"><div><span>Стоимость</span><strong>от 80 000 ₽</strong><small>Бесплатная консультация · 15 минут</small></div><p>Итог зависит от дизайна, количества товаров, доставки, оплаты и интеграций. До старта вы получаете зафиксированный состав работ и расчёт.</p><button className="toys-outline-button" type="button" onClick={() => openLead("toys_process")}>Рассчитать магазин под мой бизнес <ArrowUpRight size={15} /></button></div>
     </section>
 
-    <section className="section toys-sales-final grid-surface"><div><Eyebrow>Бесплатная консультация · 15 минут</Eyebrow><h2>Узнайте, какой магазин нужен именно вашему <em>бизнесу</em>.</h2><p>Разберём ассортимент, работу с заказами и нужные интеграции. После разговора подготовлю понятный расчёт стоимости.</p></div><div className="toys-sales-final-actions"><button className="toys-outline-button" type="button" onClick={() => openLead("toys_final")}>Получить расчёт стоимости <ArrowUpRight size={15} /></button><a href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Сначала посмотреть живое демо <ArrowUpRight size={14} /></a></div></section>
+    <section className="section toys-sales-final grid-surface"><div><Eyebrow>Бесплатная консультация · 15 минут</Eyebrow><h2>Получите план магазина и точный расчёт до старта разработки.</h2><p>За 15 минут разберём ассортимент, путь заказа и нужные интеграции. После разговора вы получите состав работ, срок и стоимость — без обязательств.</p></div><div className="toys-sales-final-actions"><button className="toys-outline-button" type="button" onClick={() => openLead("toys_final")}>Обсудить мой магазин <ArrowUpRight size={15} /></button><a href="https://store.egordigital.site/" target="_blank" rel="noreferrer">Сначала посмотреть живое демо <ArrowUpRight size={14} /></a></div></section>
   </main>;
 }
 
