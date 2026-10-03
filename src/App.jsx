@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { ArrowUpRight } from "@phosphor-icons/react/ArrowUpRight";
 import { ShoppingCartSimple } from "@phosphor-icons/react/ShoppingCartSimple";
 import { getRoute, normalizePath, routes, SITE_URL } from "./site-config.js";
+import CampaignLanding, { CampaignHeader, CampaignFooter } from "./CampaignLanding.jsx";
+import { campaignMap } from "./campaigns.js";
 import { buildLeadMessage, captureAttribution, getCurrentPage, getGoalContext, trackGoal } from "./lead-tracking.js";
 
 const nav = routes.filter(({ path, nav: showInNav }) => path !== "/privacy" && showInNav !== false).map(({ path, label }) => [path, label]);
@@ -733,6 +735,8 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
   const [fieldErrors, setFieldErrors] = useState({});
   const [service, setService] = useState(selection.service || "website");
   const isStoreLead = selection.serviceLabel === "Интернет-магазин";
+  const isCampaignLead = Boolean(selection.offer);
+  const isFocusedLead = isStoreLead || selection.focused;
   const started = useRef(false);
   const fieldId = (name) => `${titleId}-${name}`;
 
@@ -784,7 +788,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
     const currentPage = getCurrentPage();
     const comment = String(values.get("message") || "").trim();
     const chosenService = leadServices.find((item) => item.value === String(values.get("service") || service)) || leadServices[0];
-    const chosenServiceLabel = isStoreLead ? "Интернет-магазин" : chosenService.label;
+    const chosenServiceLabel = isStoreLead ? "Интернет-магазин" : isCampaignLead ? selection.serviceLabel : chosenService.label;
     const payload = {
       name,
       contact,
@@ -795,6 +799,7 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
       service: chosenService.value,
       service_label: chosenServiceLabel,
       price: selection.price || "",
+      offer: selection.offer || "",
       page: currentPage,
       first_url: attribution.first_url,
       referrer: attribution.referrer,
@@ -816,24 +821,24 @@ function LeadForm({ titleId, autoFocus = false, onPrivacy, heading = "Расск
         body: JSON.stringify(payload),
       });
       const result = await response.json().catch(() => null);
-      if (!response.ok || result?.ok === false || result?.success === false) {
+      if (!response.ok || result?.ok === false || result?.success === false || result?.ok !== true) {
         throw new Error(result?.error || "Не удалось отправить заявку. Попробуйте ещё раз или напишите напрямую.");
       }
       form.reset();
       setStatus("success");
-      trackGoal("lead_form_success", getGoalContext({ form: selection.source || "direct", service: chosenService.value, price: selection.price || "" }));
+      trackGoal("lead_form_success", getGoalContext({ form: selection.source || "direct", service: chosenService.value, price: selection.price || "", offer: selection.offer || "" }));
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Не удалось отправить заявку. Попробуйте ещё раз или напишите напрямую.");
       setStatus("error");
-      trackGoal("form_error", getGoalContext({ form: selection.source || "direct", service: chosenService.value }));
+      trackGoal("form_error", getGoalContext({ form: selection.source || "direct", service: chosenService.value, offer: selection.offer || "" }));
     }
   };
 
   if (status === "success") {
-    return <div className="success" role="status"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка отправлена</h2><p>Заявка уже пришла Егору в Telegram. Он свяжется с вами по указанному контакту.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} onClick={() => trackContact(link, "form_success")} key={link.label}>{link.label}</a>)}</div></div>;
+    return <div className="success" role="status"><Eyebrow>Готово</Eyebrow><h2 id={titleId}>Заявка отправлена</h2><p>Заявка принята. Егор свяжется с вами по указанному контакту.</p><div className="success-links">{contactLinks.map((link) => <a href={link.href} target={link.href.startsWith("mailto:") ? undefined : "_blank"} rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"} onClick={() => trackContact(link, "form_success")} key={link.label}>{link.label}</a>)}</div></div>;
   }
 
-  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>{isStoreLead ? "Бесплатная консультация · 15 минут" : "Короткий бриф"}</Eyebrow><h2 id={titleId}>{isStoreLead ? "Получить расчёт стоимости" : heading}</h2>{isStoreLead && <p className="lead-form-intro">Коротко разберём задачу, после чего я подготовлю состав и расчёт проекта.</p>}{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}{isStoreLead ? <input type="hidden" name="service" value="website" /> : <fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset>}<label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Номер телефона<div className="phone-field"><select name="phone_code" defaultValue="+7" aria-label="Код страны">{phoneCodes.map(([code, label]) => <option value={code} key={label}>{label}</option>)}</select><input id={fieldId("contact")} name="contact" type="tel" inputMode="tel" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="tel-national" maxLength="30" placeholder="000 000-00-00" /></div><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>{isStoreLead ? "Что планируете продавать? (по желанию)" : "Комментарий (по желанию)"}<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder={isStoreLead ? "Например: игрушки, одежду или товары для дома" : "Что хотите запустить или улучшить"} /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : isStoreLead ? "Получить расчёт" : "Отправить заявку"}</button></form>;
+  return <form noValidate onSubmit={submit} onInput={handleInput} aria-busy={status === "sending"}><Eyebrow>{isStoreLead ? "Бесплатная консультация · 15 минут" : "Короткий бриф"}</Eyebrow><h2 id={titleId}>{isCampaignLead ? selection.formHeading : isStoreLead ? "Получить расчёт стоимости" : heading}</h2>{isStoreLead && <p className="lead-form-intro">Коротко разберём задачу, после чего я подготовлю состав и расчёт проекта.</p>}{selection.selectionLabel && <p className="selected-plan">Вы выбрали: <strong>{selection.selectionLabel}</strong></p>}{isFocusedLead ? (isStoreLead ? <input type="hidden" name="service" value="website" /> : <input type="hidden" name="service" value={selection.service} />) : <fieldset className="service-choice"><legend>Что нужно</legend><div>{leadServices.map((item) => <label className={service === item.value ? "is-selected" : ""} key={item.value}><input type="radio" name="service" value={item.value} checked={service === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}</div></fieldset>}<label htmlFor={fieldId("name")}>Имя<input id={fieldId("name")} name="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? fieldId("name-error") : undefined} autoComplete="name" maxLength="120" placeholder="Как к вам обращаться" autoFocus={autoFocus} /><FieldError id={fieldId("name-error")} message={fieldErrors.name} /></label><label htmlFor={fieldId("contact")}>Номер телефона<div className="phone-field"><select name="phone_code" defaultValue="+7" aria-label="Код страны">{phoneCodes.map(([code, label]) => <option value={code} key={label}>{label}</option>)}</select><input id={fieldId("contact")} name="contact" type="tel" inputMode="tel" required aria-invalid={Boolean(fieldErrors.contact)} aria-describedby={fieldErrors.contact ? fieldId("contact-error") : undefined} autoComplete="tel-national" maxLength="30" placeholder="000 000-00-00" /></div><FieldError id={fieldId("contact-error")} message={fieldErrors.contact} /></label><label htmlFor={fieldId("current-website")}>Текущий сайт (по желанию)<input id={fieldId("current-website")} name="current_website" type="url" inputMode="url" aria-invalid={Boolean(fieldErrors.current_website)} aria-describedby={fieldErrors.current_website ? fieldId("current-website-error") : undefined} autoComplete="url" maxLength="1000" placeholder="https://example.com" /><FieldError id={fieldId("current-website-error")} message={fieldErrors.current_website} /></label><label htmlFor={fieldId("message")}>{isStoreLead ? "Что планируете продавать? (по желанию)" : "Комментарий (по желанию)"}<textarea id={fieldId("message")} name="message" rows="3" maxLength="3000" placeholder={isStoreLead ? "Например: игрушки, одежду или товары для дома" : "Что хотите запустить или улучшить"} /></label><input className="form-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" /><label className="privacy-consent" htmlFor={fieldId("privacy")}><input id={fieldId("privacy")} name="privacy" type="checkbox" required aria-invalid={Boolean(fieldErrors.privacy)} aria-describedby={fieldErrors.privacy ? fieldId("privacy-error") : undefined} /><span>Я согласен на обработку персональных данных и принимаю <a href="/privacy" onClick={(event) => { event.preventDefault(); trackPrivacy("lead_form"); onPrivacy(); }}>политику конфиденциальности</a>.<FieldError id={fieldId("privacy-error")} message={fieldErrors.privacy} /></span></label>{status === "error" && <div className="form-status form-error" role="alert">{errorMessage}</div>}<button type="submit" disabled={status === "sending"}>{status === "sending" ? "Отправляю..." : isStoreLead ? "Получить расчёт" : "Отправить заявку"}</button></form>;
 }
 
 function LeadModal({ onClose, onPrivacy, selection, returnFocusElement }) {
@@ -905,6 +910,7 @@ export function App({ initialPath = "/" }) {
   const initialMetrikaPath = useRef(path);
   const initialFocusPath = useRef(path);
   const isNotFound = !knownPaths.has(path);
+  const campaign = campaignMap.get(path);
   useRevealOnScroll(path, ready);
 
   useEffect(() => { captureAttribution(); }, []);
@@ -981,9 +987,9 @@ export function App({ initialPath = "/" }) {
     setLeadOpen(true);
     trackGoal("lead_modal_open", getGoalContext({ form: nextSelection.source || "general", service: nextSelection.service || "" }));
   };
-  const page = path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/cases/toys-store" ? <ToysStoreCase go={go} onLead={onLead} /> : caseStudyContent[path] ? <CaseStudy path={path} go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
+  const page = campaign ? <CampaignLanding key={campaign.id} campaign={campaign} cases={cases} caseImage={CaseImage} renderForm={(selection) => <LeadForm titleId={`campaign-${campaign.id}-form`} selection={selection} onPrivacy={() => { go("/privacy"); }} />} /> : path === "/" ? <Home go={go} onLead={onLead} /> : path === "/services" ? <Services onLead={onLead} /> : path === "/cases" ? <Cases go={go} onLead={onLead} /> : path === "/cases/toys-store" ? <ToysStoreCase go={go} onLead={onLead} /> : caseStudyContent[path] ? <CaseStudy path={path} go={go} onLead={onLead} /> : path === "/pricing" ? <Pricing onLead={onLead} /> : path === "/process" ? <Process onLead={onLead} /> : path === "/about" ? <About onLead={onLead} go={go} /> : path === "/contacts" ? <Contacts onLead={onLead} go={go} /> : path === "/privacy" ? <Privacy go={go} /> : <NotFound go={go} onLead={onLead} />;
   const openPrivacy = () => { setLeadOpen(false); go("/privacy"); };
   const closeLead = useCallback(() => setLeadOpen(false), []);
   const pageReady = path !== "/" || ready;
-  return <>{path === "/" && <IntroLoader ready={ready} />}<div className={pageReady ? "app is-ready" : "app"}><a className="skip-link" href="#page-content">Перейти к содержимому</a><Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} /><div id="page-content" tabIndex="-1">{page}</div><Footer go={go} onLead={onLead} />{leadOpen && <LeadModal onClose={closeLead} onPrivacy={openPrivacy} selection={leadSelection} returnFocusElement={leadTriggerRef.current} />}</div></>;
+  return <>{path === "/" && <IntroLoader ready={ready} />}<div className={pageReady ? "app is-ready" : "app"}><a className="skip-link" href="#page-content">Перейти к содержимому</a>{campaign ? <CampaignHeader campaign={campaign} /> : <Header path={path} go={go} onLead={onLead} modalOpen={leadOpen} />}<div id="page-content" tabIndex="-1">{page}</div>{campaign ? <CampaignFooter campaign={campaign} /> : <Footer go={go} onLead={onLead} />}{leadOpen && <LeadModal onClose={closeLead} onPrivacy={openPrivacy} selection={leadSelection} returnFocusElement={leadTriggerRef.current} />}</div></>;
 }

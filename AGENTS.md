@@ -58,3 +58,11 @@ When implementing from a selected generated mock, treat that image as the source
 - The TOYS offer covers either a store built from scratch or adaptation of the ready core. State the honest starting price of 80,000 ₽ and a 7–10 day launch only when the client supplies finished text, photos, logo, and product information. Use one lead offer: a free 15-minute consultation followed by a project-scope and cost calculation.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.
+
+## Advertising offer pages (3 October 2026)
+
+- The advertising experiment is isolated in `staging`; do not merge, push changes to `main`, or deploy to the production VPS without a new user instruction.
+- Add focused offers at `/offers/site-fix`, `/offers/landing-page`, and `/offers/lead-system`, using the approved dark design, existing portrait and real case assets. Keep them out of the main navigation.
+- Small campaign scopes start at 8,000 ₽ (one page, up to three fixes), 25,000 ₽ (one service landing page, up to six blocks), and 15,000 ₽ (one form, notifications, simple list with statuses). These are separate small-task packages; preserve the existing full-project pricing and homepage. Final cost and deadlines follow review.
+- Match advertisement, page offer and selected form service. Preserve first-touch UTM attribution, existing Metrika goals, explicit privacy consent and `/api/brief`; only `{ ok: true }` confirms success.
+- Campaign visuals use existing photo/case assets, with no invented revenue, conversion figures, reviews or guarantees. The advertising platform is not yet selected; supplied copy and visuals are drafts for testing, not a launched campaign.

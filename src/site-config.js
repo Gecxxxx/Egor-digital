@@ -1,3 +1,5 @@
+import { campaigns } from "./campaigns.js";
+
 export const SITE_URL = "https://egordigital.site";
 export const SOCIAL_IMAGE = `${SITE_URL}/og-egordigital.webp?v=2`;
 
@@ -86,6 +88,7 @@ export const routes = [
     title: "Политика конфиденциальности — Egor Digital",
     description: "Политика обработки персональных данных и использования Яндекс Метрики на сайте Egor Digital.",
   },
+  ...campaigns.map(({ path, label, title, description }) => ({ path, label, title, description, nav: false })),
 ];
 
 export const routeMap = new Map(routes.map((route) => [route.path, route]));
